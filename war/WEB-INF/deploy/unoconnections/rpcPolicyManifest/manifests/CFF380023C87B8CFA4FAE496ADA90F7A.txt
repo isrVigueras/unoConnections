@@ -1,0 +1,2 @@
+serviceClass: com.tikal.unoconnections.client.GreetingService
+path: 1F7B5CF55CD6E0BC8CA58C73078E8124.gwt.rpc

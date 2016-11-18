@@ -1,0 +1,3 @@
+# Module unoconnections
+# RPC service class, partial path of RPC policy file
+com.tikal.unoconnections.client.GreetingService, 1F7B5CF55CD6E0BC8CA58C73078E8124.gwt.rpc

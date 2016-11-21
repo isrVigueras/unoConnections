@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html ng-app="app">
+ 
+<head>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+  <script src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.min.js'></script>
+  <script src="//code.angularjs.org/1.2.19/i18n/angular-locale_es-es.js"></script>
+  <script src="script.js"></script>
+</head>
+ 
+<body>
+  <h1>Éste es el título y no cambia</h1>
+  <ul>
+    <li><a href="#pagina1">Ir a la pagina 1</a>
+    </li>
+    <li><a href="#pagina2">Ir a la pagina 2</a>
+    </li>
+    <li><a href="#pagina3">Ir a la pagina 3</a>
+    </li>
+    <li><a href="#pagina4">Ir a la pagina 4</a>
+    </li>
+  </ul>
+  <div ng-view></div>
+ 
+  <h3>Ésto es un pie y no cambia</h3>
+ 
+</body>
+ 
+</html>

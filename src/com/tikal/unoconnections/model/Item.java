@@ -1,12 +1,12 @@
 package com.tikal.unoconnections.model;
 
-import java.util.Date;
-
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
 @Entity
 public class Item {
+	
+	@Id Long idInterno;
 
 	private String modelo;
 	private String marca;
@@ -14,11 +14,10 @@ public class Item {
 	private String sintoma;
 	private String cliente;
 	private String ticket;
-	private Date fechaRecepcion;
+	private String fechaRecepcion;
 	private String serial;
+	private String estatus;
 	
-	@Id
-	private String idInterno; //Este atributo se va a cargar en automatico por el DataStore (como el auto increment)
 	
 	public String getModelo() {
 		return modelo;
@@ -56,10 +55,10 @@ public class Item {
 	public void setTicket(String ticket) {
 		this.ticket = ticket;
 	}
-	public Date getFechaRecepcion() {
+	public String getFechaRecepcion() {
 		return fechaRecepcion;
 	}
-	public void setFechaRecepcion(Date fechaRecepcion) {
+	public void setFechaRecepcion(String fechaRecepcion) {
 		this.fechaRecepcion = fechaRecepcion;
 	}
 	public String getSerial() {
@@ -68,13 +67,18 @@ public class Item {
 	public void setSerial(String serial) {
 		this.serial = serial;
 	}
-	public String getIdInterno() {
+	public long getIdInterno() {
 		return idInterno;
 	}
-	public void setIdInterno(String idInterno) {
+	public void setIdInterno(Long idInterno) {
 		this.idInterno = idInterno;
 	}
+	public String getEstatus() {
+		return estatus;
+	}
+	public void setEstatus(String estatus) {
+		this.estatus = estatus;
+	}
 	
-	
-	
+
 }

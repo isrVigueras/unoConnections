@@ -1,43 +1,52 @@
 <form>
 	<div class="row">
 		<div class="posts col-md-5">
-			<div class="form-group">
-				<label for="formGroupExampleInput">Modelo:</label> <input
-					type="text" class="form-control" id="modelo"
-					placeholder="Introduzca el modelo" ng-model="item.modelo">
+			<div class="row">
+				<div class="form-group col-sm-6">
+					<label for="formGroupExampleInput">Modelo:</label> <input
+						type="text" class="form-control" id="modelo"
+						placeholder="Introduzca el modelo" ng-model="item.modelo">
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="formGroupExampleInput2">Marca:</label> <input
+						type="text" class="form-control" id="marca"
+						placeholder="Introduzca la marca" ng-model="item.marca">
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-sm-6">
+					<label for="formGroupExampleInput2">Fecha de Fabricación:</label>
+					<input type="date" class="form-control" id="fechaFabricacion" ng-model="item.fechaFabricacion">
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="formGroupExampleInput2">Número de Serie del
+						Equipo:</label> <input type="text" class="form-control" id="serial"
+						placeholder="Introduzca el número de serie del equipo" ng-model="item.serial">
+				</div>
 			</div>
 			<div class="form-group">
-				<label for="formGroupExampleInput2">Marca:</label> <input
-					type="text" class="form-control" id="marca"
-					placeholder="Introduzca la marca" ng-model="item.marca">
-			</div>
-			<div class="form-group">
-				<label for="formGroupExampleInput2">Fecha de Fabricación:</label> <input
-					type="date" class="form-control" id="fechaFabricacion" ng-model="item.fechaFabricacion">
-			</div>
-			<div class="form-group">
-				<label for="formGroupExampleInput2">Número de Serie del
-					Equipo:</label> <input type="text" class="form-control" id="serial"
-					placeholder="Introduzca la marca" ng-model="item.serial">
-			</div>
-			<div class="form-group">
-				<label for="formGroupExampleInput2">Sintoma:</label> <input
-					type="text" class="form-control" id="sintoma"
+				<label for="formGroupExampleInput2">Sintoma:</label> 
+				<textarea class="form-control" id="sintoma"
 					placeholder="Introduzca el problema con el equipo" ng-model="item.sintoma">
+				</textarea>
 			</div>
-			<div class="form-group">
-				<label for="formGroupExampleInput2">Cliente:</label> <input
-					type="text" class="form-control" id="cliente"
-					placeholder="Introduzca el cliente" ng-model="item.cliente">
+			<div class="row">
+				<div class="form-group col-sm-6">
+					<label for="formGroupExampleInput2">Cliente:</label> <input
+						type="text" class="form-control" id="cliente"
+						placeholder="Introduzca el cliente" ng-model="item.cliente">
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="formGroupExampleInput2">Número de Ticket:</label> <input
+						type="text" class="form-control" id="ticket"
+						placeholder="Este seguramente lo generamos en automatico" ng-model="item.ticket">
+				</div>
 			</div>
-			<div class="form-group">
-				<label for="formGroupExampleInput2">Número de Ticket:</label> <input
-					type="text" class="form-control" id="ticket"
-					placeholder="Este seguramente lo generamos en automatico" ng-model="item.ticket">
-			</div>
-			<div class="form-group">
-				<label for="formGroupExampleInput2">Fecha de Generación de
-					Ticket:</label> <input type="date" class="form-control" id="fechaRecepcion" ng-model="item.fechaRecepcion">
+			<div class="row">
+				<div class="form-group col-sm-6">
+					<label for="formGroupExampleInput2">Generación deTicket:</label> 
+					<input type="date" class="form-control" id="fechaRecepcion" ng-model="item.fechaRecepcion">
+				</div>
 			</div>
 			<button class="btn btn-primary" ng-click="EnviarFormulario()">Enviar</button>
 			<button type="reset" class="btn btn-danger">Limpiar</button>

@@ -44,9 +44,9 @@ app.service('itemServicio', [
 				return d.promise;
 			};
 			
-			this.consultarPorEstatus = function(){
+			this.consultarPorEstatus = function(estatus){
 				var d = $q.defer();
-				$http.get("/items/contultarPorestatus" + estatus).then(function(response){
+				$http.get("/items/consultarPorEstatus/" + estatus).then(function(response){
 					d.resolve(response.data);
 				}, function(response) {
 				});
@@ -67,7 +67,7 @@ app.controller('controladorInsertarItem', [ '$scope', 'itemServicio',
 		} ]);
 
 app.controller('controladorActualizarItem', [ '$scope', 'itemServicio',
-		'$routeParams', '$location',function($scope, itemServicio, $routeParams,$location) {
+		'$routeParams', '$location',function($scope, itemServicio, $routeParams, $location) {
 	
 			itemServicio.consultar($routeParams.id).then(function(data) {
 				$scope.item = data;
@@ -97,11 +97,20 @@ app.controller('controladorListaItems', [ '$scope', 'itemServicio','$location',
 				$location.path("/vistaActualizar/"+id);
 			}
 		} ]);
-/*
+
 app.controller('controladorListaEstatus', ['$scope','itemServicio', 
 		function($scope, itemServicio){
-			itemServicio.consultarPorEstatus().then(function(data){
-				$scope.
+	$scope.estatus="Recepcion";
+			itemServicio.consultarPorEstatus($scope.estatus).then(function(data){
+				$scope.itemsLista=data;
 			})
+			
+			$scope.$watch('estatus', function(estatus){
+				console.log(estatus);
+				itemServicio.consultarPorEstatus(estatus).then(function(data){
+					$scope.itemsLista=data;
+					console.log(data);
+				})	
+			});
 }
-	]);*/
+	]);

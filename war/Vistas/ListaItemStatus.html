@@ -1,0 +1,40 @@
+<div ng-controller="controladorListaEstatus">	
+	<label for="estatusSelect"> Estatus: </label><br>
+	<select name="estatusSelect" ng-model="estatus">
+		<option value="Recepcion">Recepcion</option>
+		<option value="Diagnostico">Diagnostico</option>
+		<option value="Reparacion">Reparacion</option>
+		<option value="Empaquetado">Empaquetado</option>
+		<option value="Almacenado">Almacenado</option>
+		<option value="Vendido">Vendido</option>
+	</select><br>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Modelo</th>
+				<th>Marca</th>
+				<th>Fecha de Fabricación</th>
+				<th>Sintoma</th>
+				<th>Cliente</th>
+				<th>Ticket</th>
+				<th>Fecha de Recepción</th>
+				<th>Serial</th>
+				<th>Estatus</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in itemsLista">
+			  <td>{{item.modelo}}</td>
+			  <td>{{item.marca}}</td>
+			  <td>{{item.fechaFabricacion}}</td>
+			  <td>{{item.sintoma}}</td>
+			  <td>{{item.cliente}}</td>
+			  <td>{{item.ticket}}</td>
+			  <td>{{item.fechaRecepcion}}</td>
+			  <td>{{item.serial}}</td>
+			  <td>{{item.estatus}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

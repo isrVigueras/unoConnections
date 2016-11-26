@@ -39,7 +39,7 @@ public class ItemDaoImp implements ItemDao {
 
 	@Override
 	public List<Item> consultarPorEstatus(String estatus) {
-		return ofy().load().type(Item.class).filter(estatus, Item.class).list();
+		return ofy().load().type(Item.class).filter("estatus", estatus).list();
 	}
 
 

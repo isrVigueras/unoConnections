@@ -50,7 +50,7 @@ public class ItemControlador {
 	}
 	
 	@RequestMapping(value={"/consultarPorEstatus/{estatus}"}, method = RequestMethod.GET, produces = "application/json")
-	public void consultarPorEstatus(HttpServletRequest request, HttpServletResponse response, @RequestParam String estatus) throws IOException{
+	public void consultarPorEstatus(HttpServletRequest request, HttpServletResponse response, @PathVariable String estatus) throws IOException{
 		List<Item> lista=nuevoItemDao.consultarPorEstatus(estatus);
 		response.getWriter().println(JsonConvertidor.toJson(lista));
 		

@@ -1,4 +1,4 @@
-var app = angular.module("app", [ 'ngRoute' ]);
+var app = angular.module("app", [ 'ngRoute', 'ngTable' ]);
 app.config([ '$routeProvider', function($routeProvider) {
 
 	$routeProvider.when('/vistaInsertar', {
@@ -17,7 +17,7 @@ app.config([ '$routeProvider', function($routeProvider) {
 	});
 	
 	$routeProvider.when('/vistaListaEstatus', {
-		templateUrl : "Vistas/EstatusItems.html",
+		templateUrl : "Vistas/ListaItemStatus.html",
 		controller : "controladorListaEstatus"
 	});
 	

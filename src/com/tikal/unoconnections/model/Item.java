@@ -2,6 +2,7 @@ package com.tikal.unoconnections.model;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 @Entity
 public class Item {
@@ -16,7 +17,8 @@ public class Item {
 	private String ticket;
 	private String fechaRecepcion;
 	private String serial;
-	private String estatus;
+	
+	@Index String estatus;
 	
 	
 	public String getModelo() {
@@ -79,6 +81,4 @@ public class Item {
 	public void setEstatus(String estatus) {
 		this.estatus = estatus;
 	}
-	
-
 }

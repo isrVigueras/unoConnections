@@ -10,16 +10,5 @@
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
     
     
-    <!-- Implementaciones Dao -->
-    <bean class="com.tikal.unoconnections.implementacionesdao.ItemDaoImp"></bean>
-    
-    <!--  Registro de clases de Objectify -->
-    <bean class="com.tikal.unoconnections.util.RegistroEntidades"></bean>    
-        
-        <!-- Conytroladores de Spring -->
-        <context:component-scan base-package="com.tikal.unoconnections.springcontroladores" />
-        
-        
-        <mvc:annotation-driven />
 
 </beans>

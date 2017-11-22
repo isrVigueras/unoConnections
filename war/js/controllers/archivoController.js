@@ -203,17 +203,22 @@ app.controller('archivoController',['$scope','archivoService','fileService',func
 	
 	document.querySelector('input').addEventListener('change', function() {
 
-		  var reader = new FileReader();
-		  reader.onload = function() {
+		  
+		  for(var i= 0; i<this.files.length; i++){
+			  var reader = new FileReader();
+			  reader.onload = function() {
 
-		    var arrayBuffer = this.result;
-// array = new Uint8Array(arrayBuffer),
-// binaryString = String.fromCharCode.apply(null, array);
-		    console.log(arrayBuffer);
-		    $('#cadena').text(arrayBuffer);
+			    var arrayBuffer = this.result;
+	// array = new Uint8Array(arrayBuffer),
+	// binaryString = String.fromCharCode.apply(null, array);
+			    var cadena=$('#cadena').text();
+			    cadena= cadena+"CADENADEESCAPE"+arrayBuffer;
+			   
+			    $('#cadena').text(cadena);
+			  }
+			  $('#cadena').text("");
+			  reader.readAsText(this.files[i]);
 		  }
-		  reader.readAsText(this.files[0]);
-
 		}, false);
 	$scope.ok=function(){
 		var c= $('#cadena').text();

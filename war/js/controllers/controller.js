@@ -239,6 +239,11 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : "imagenController"
 	});
 	
+	$routeProvider.when('/facturacionMultiple', {
+		templateUrl : "facturacion/pages/multiple.html",
+		controller : "archivoController"
+	});
+	
 	$routeProvider.otherwise({
 		redirectTo : '/empresas/list'
 	});

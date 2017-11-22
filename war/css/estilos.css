@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+/*--HEADER--*/
+body {font-family: 'Lato', sans-serif; font-size:13px;}
+/* Nuevo */
+html {
+  min-height: 100%;
+  position: relative;
+}
+body {
+  margin: 0;
+  margin-bottom: 40px;
+}
+.captcha{
+	 text-align: -webkit-center;
+	 
+}
+
+/* Termina */
+.footertext{
+	color:#fff;
+}
+.logo-footer{
+	margin-top: 40px;
+}
+.footer {
+	padding-top: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+    margin-top: 20px;
+    
+    position: absolute;
+  	bottom: 0;
+  	width: 100%;
+  	height: 40px;
+}
+.footer-content{
+	background-color: #222222;
+}
+.navbar {
+	margin-bottom: 0;
+}
+.jumbotron {
+	background-image: url(/images/pentagon.jpg);
+	color:#fff;
+	padding:20px 0;
+}
+.botones{
+	 margin-top: 20px;
+	 text-align: center;
+	 
+}
+/*--FORMULARIO--*/
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: 30px
+    font-size: 12px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 0;
+   
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+   	background:#7d001b;
+	color:#fff;
+    border: 1px solid transparent;
+    border-radius:0px;
+}
+
+.btn2 {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    border-radius:0px;
+    
+}
+
+.facInp{
+	padding-left: 3px;
+	padding-bottom: 2px;
+    height: 23px;
+    padding-top: 2px;
+    margin-bottom: 5px;
+}
+
+/*--headers--*/
+
+.h3, .h4, .h5, .h6, h3, h4, h5, h6 {
+    
+    margin-left: 10px;}
+    
+/*--tablas--*/
+.table-bordered {
+    
+    margin-left: 10px;
+}
+
+td, th {
+    padding: 0;
+    border-top: 1px solid #3c763d;
+    padding-left: 10px;
+    vertical-align: middle;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #ffffff;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 5px;
+    line-height: 9px;
+    vertical-align: middle;
+    border-top: 1px solid #3c763d;
+}
+
+.form-inline .form-control {width:100%; margin-bottom:10px;}
+
+.form-inline#forma, .form-control#forma {margin-bottom:10px;}
+
+/*--POST--*/
+.main{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.post{
+	padding-bottom:20px;
+	margin-bottom: 20px;
+	border-bottom: 1px solid #999;
+}
+.post .post-title a{
+	color:#333;
+}
+.post .thumb{
+	margin-right:10px;
+	width:40%;
+}
+.separador{
+	margin-bottom: 100px;
+	padding-bottom: 100px;
+}
+.tablacfdi{
+	height: 10%;
+	padding 20px;
+	font-size: xx-small;
+	font-weight: bold;
+}
+.miga-de-pan{
+	margin-top: 0px;
+}
+.img{
+	height: 10%;
+}
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.post .thumb img{
+	width: 100%;
+
+/*--Media Querie--*/
+@media screen and (max-width: 768px){
+	.post .thumb {
+		width:100%;
+		margin-bottom: 20px;
+		margin-right: 0;
+	}
+}
+
+

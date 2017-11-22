@@ -1,0 +1,43 @@
+<section class="jumbotron">
+	<div class="container">
+	<h2>Ver y Modificar Informacion de la Empresa</h2>
+	<p>Cacao</p>
+	</div>
+</section>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+					<td><strong>NOMBRE</strong></td>
+					<td><strong>ACCIONES</strong></td>
+					<td><strong>AVISO</strong></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="alerta in empresas">
+						<td>{{alerta.empresa.nombre}}</td>
+						<td><button class="btn btn-small"
+								ng-click="ver(alerta.empresa)">
+								<i class="glyphicon glyphicon-eye-open"></i>
+							</button>
+							<button class="btn btn-small"
+								ng-click="editar(alerta.empresa)">
+								<i class="glyphicon glyphicon-edit"></i>
+							</button>
+							<button class="btn btn-small"
+								ng-click="eliminar(alerta.empresa.rfc)">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button></td>
+							<td>{{alerta.alerta}}</td>					
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<button class="btn" ng-click="add()">
+			<i class="fa fa-plus"></i>Agregar Empresa
+		</button>
+	</div>
+</div>

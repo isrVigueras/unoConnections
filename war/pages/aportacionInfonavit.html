@@ -1,0 +1,29 @@
+<section class="jumbotron">
+	<div class="container">
+		<h2>Aportacion Infonavit</h2>
+		<p>{{nombreEmpresa}}</p>
+		<submenu />
+	</div>
+	
+</section>
+<div class="container">
+	<div class="row">
+		<div>
+			<ol class="breadcrumb">
+				<li><button class="btn btn-small btn-link"
+						ng-click="regresaEmpresa()">Regresar a Detalles de
+						Empresas</button></li>						
+			</ol>
+		</div>
+			<div class="col-md-6">
+			Periodos<br>
+				<select ng-model="infonavit.periodos" class="form-control" ng-change="periodos(infonavit.periodos)">
+					<option ng-repeat="periodos in periodosInfonavit">{{periodos.descripcion}}</option>
+				</select>
+			</div>
+			<div class="col-md-6">
+			Aportaci&oacute;n Infonavit<br>
+				<input ng-model="infonavit.monto" ng-disabled="true" class="form-control" type="text"><br>
+			</div>
+	</div>
+</div>

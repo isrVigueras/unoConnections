@@ -1,0 +1,210 @@
+<section class="jumbotron">
+	<div class="container">
+		<h2>Facturas</h2>
+		<!-- 		<p>Cacao</p> -->
+		<submenu />
+	</div>
+</section>
+<div class="main container">
+	<div class="row">
+		<div class="col-md-3">
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="RFC Cliente" ng-model="buscar.rfc">
+				<div class="input-group-btn">
+					<button class="btn" type="submit" ng-click="buscarRfc(buscar.rfc)">
+						<i class="glyphicon glyphicon-search"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="input-group">
+				<select ng-model="filtroSerie" class="form-control" placeholder="Serie..." ng-options="r.serie for r in seriales">
+<!-- 					<option disabled selected>Serie...</option> -->
+<!-- 					<option>Z</option> -->
+				</select>
+				<div class="input-group-btn">
+					<button class="btn" type="submit" ng-click="buscarSerie(filtroSerie)">
+						<i class="glyphicon glyphicon-search"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="col-md-10">
+				<div class="input-group input-daterange">
+					<input type="text" class="form-control" ng-model="fechaInicio">
+					<div class="input-group-addon">-</div>
+					<input type="text" class="form-control" ng-model="fechaFin">
+				</div>
+			</div>
+			<div class="col-md-2">
+				<button class="btn btn-small" ng-click="buscar()">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+				</button>
+			</div>
+		</div>
+
+	</div>
+	<hr>
+	<div ng-hide="todos">
+		<button class="btn btn-small" ng-click="cargarFacturas(1)">Ver
+			Todos</button>
+	</div>
+	<div ng-show="todos">
+		<ul class="pagination .pagination-sm">
+			<li ng-repeat="abc in paginas" id="{{'pagA'+abc}}"
+				ng-click="cargarPagina(abc)"><a>{{abc}}</a></li>
+
+		</ul>
+	</div>
+
+	<div class="row">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Receptor</th>
+					<th>Serie/Folio</th>
+					<th>Fecha</th>
+					<th>Total</th>
+					<th>Estatus</th>
+					<th>Descargar</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="fact in facturas | filter:search:strict">
+					<td>{{fact.rfcReceptor}}</td>
+					<td>{{fact.serie}}{{fact.folio}}</td>
+					<td>{{fact.fechaCertificacion}}</td>
+					<td>{{fact.total}}</td>
+					<td>{{fact.estatus}}</td>
+
+					<td><a class="btn2 btn-small btn-danger"
+						href="/facturacion/obtenerPDF/{{fact.uuid}}" download="{{fact.serie+''+fact.folio+'.pdf'}}">PDF</a><a
+						class="btn2 btn-small btn-info"
+						href="/facturacion/obtenerXML/{{fact.uuid}}" download="{{fact.serie+''+fact.folio+'.xml'}}">XML</a> <!-- <a ng-show="fact.estatus === 'GENERADO'" class="btn2 btn-small btn-success" href="/facturacion/timbrar/{{fact.uuid}}">Timbrar</a> -->
+						<!-- 						<button class="btn2 btn-small btn-success" --> <!-- 							ng-show="fact.estatus === 'GENERADO'" type="button" -->
+						<!-- 							ng-click="timbrar(fact.uuid)">Timbrar</button> -->
+						<button class="btn2 btn-small btn-success" data-toggle="modal"
+							ng-show="fact.estatus === 'GENERADO'" type="button"
+							data-target="#myModal" ng-click="paraTimbrar(fact.uuid)">Timbrar</button>
+
+						<button class="btn2 btn-small btn-info"
+							ng-show="fact.estatus=='GENERADO'"
+							ng-click="editarFactura(fact.uuid)">Editar</button>
+
+						<button class="btn2 btn-small btn-info" data-toggle="modal"
+							ng-show="fact.estatus=='TIMBRADO'" data-target="#myModal2"
+							ng-click="paraCancelar(fact.uuid)">Cancelar</button>
+							<button class="btn2 btn-small btn-info" data-toggle="modal"
+							ng-show="fact.estatus=='TIMBRADO' || fact.estatus=='CANCELADO'" data-target="#mailModal"
+							ng-click="paraCorreo(fact.uuid)"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></button></td>
+				</tr>
+			</tbody>
+		</table>
+		<div ng-show="todos">
+			<ul class="pagination .pagination-sm">
+				<li ng-repeat="abc in paginas" id="{{'pagB'+abc}}"
+					ng-click="cargarPagina(abc)"><a>{{abc}}</a></li>
+
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="myModal" role="dialog" tabindex='-1'>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Selecciona un Email</h4>
+			</div>
+			<div class="modal-body">
+				<label class="col-2 col-form-label" ng-hide="Correo">Email:</label>
+				<div class="col-10">
+					<select ng-model="comprobante.email" class="form-control"
+						ng-hide="Correo">
+						<option ng-repeat="e in emails">{{e}}</option>
+					</select> <label class="col-2 col-form-label">Otro:</label> <input
+						type="checkbox" name="otro" value="Otro" ng-click="otro()">
+					<input class="form-control" type="text" value=""
+						ng-model="comprobante.email" ng-hide="OtroCorreo">
+				</div>
+				<div class="modal-footer">
+					<button ng-hide="terminado" type="submit" class="btn"
+						data-toggle="modal" data-dismiss="modal" data-target="#myModal3"
+						ng-click="timbrar()">Timbrar</button>
+					<button type="button" class="btn" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="mailModal" role="dialog" tabindex='-1'>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Selecciona un Email</h4>
+			</div>
+			<div class="modal-body">
+				<label class="col-2 col-form-label" ng-hide="Correo">Email:</label>
+				<div class="col-10">
+					<select ng-model="comprobante.email" class="form-control"
+						ng-hide="Correo">
+						<option ng-repeat="e in emails">{{e}}</option>
+					</select> <label class="col-2 col-form-label">Otro:</label> <input
+						type="checkbox" name="otro" value="Otro" ng-click="otro()">
+					<input class="form-control" type="text" value=""
+						ng-model="comprobante.email" ng-hide="OtroCorreo">
+				</div>
+				<div class="modal-footer">
+					<button ng-hide="terminado" type="submit" class="btn"
+						data-toggle="modal" data-dismiss="modal" data-target="#myModal3"
+						ng-click="enviarMail()">Enviar</button>
+					<button type="button" class="btn" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="myModal2" role="dialog" tabindex='-1'>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Cancelar Factura</h4>
+			</div>
+			<div class="modal-body">
+				<label class="col-2 col-form-label" ng-hide="Correo">Seguro
+					que desea cancelar la Factura</label>
+				<div class="modal-footer">
+					<button type="submit" class="btn"
+						ng-click="cancelarFactura()" data-dismiss="modal">Si,
+						Cancelar</button>
+					<button type="button" class="btn" data-dismiss="modal">Salir</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="myModal3" role="dialog" tabindex='-1'>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="row">
+					<label class="col-2 col-form-label">Procesando</label>
+				</div>
+				<div class="row">
+					<div class="loader col-md-offset-5"></div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>

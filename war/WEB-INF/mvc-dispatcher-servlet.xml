@@ -8,7 +8,83 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
-    
-    
+
+	<context:component-scan
+		base-package="com.tikal.cacao.springController, com.tikal.cacao.sat.calculos, com.tikal.cacao.factura, com.tikal.cacao.factura.ws" />
+		
+	<!-- Beans DAOs GAE storage implementation -->
+	<bean id="empresasdao" class="com.tikal.cacao.dao.impl.EmpresasDAOImpl"></bean>
+	<bean id="regimenesdao" class="com.tikal.cacao.dao.impl.RegimenesDAOImpl"></bean>
+	<bean id="employeedao" class="com.tikal.cacao.dao.impl.EmpleadosDAOImpl"></bean>
+	<bean id="tarifasdao" class="com.tikal.cacao.dao.impl.TarifasDAOImpl"></bean>
+	<bean id="pagosdao" class="com.tikal.cacao.dao.impl.PagosDAOImpl"></bean>
+	<bean id="tipoDeducciondao" class="com.tikal.cacao.dao.impl.TipoDeduccionDAOImpl"></bean>
+	<bean id="tipoPercepciondao" class="com.tikal.cacao.dao.impl.TipoPercepcionDAOImpl"></bean>
+	<bean id="tipoRegimenCdao" class="com.tikal.cacao.dao.impl.TipoRegimenContratacionDAOImpl"></bean>
+	<bean id="cpTipoPercepciondao"
+		class="com.tikal.cacao.dao.impl.ContabilidadPropiaTipoPercepcionDAOImpl"></bean>
+	<bean id="cpTipoDeducciondao"
+		class="com.tikal.cacao.dao.impl.ContabilidadPropiaTipoDeduccionDAOImpl"></bean>
+	<bean class="com.tikal.cacao.dao.impl.BitacoraDAOImp"></bean>
+	<bean class="com.tikal.cacao.dao.impl.ContadorEmpleadosDAOImpl"></bean>
+	<bean class="com.tikal.cacao.dao.impl.FacturaDAOImpl"></bean>
+	<bean class="com.tikal.cacao.dao.impl.EmisorDAOImpl"></bean>
+	<bean class="com.tikal.cacao.dao.impl.ConceptosDAOImp"></bean>
+	<bean class="com.tikal.cacao.dao.impl.SerialDAOImp"></bean>
+	<bean class="com.tikal.cacao.dao.impl.ImagenDAOImp"/>
+	<bean class="com.tikal.cacao.dao.impl.ReporteRenglonDAOImpl"/>
+
+	<!-- Spring Controllers -->
+	<!-- <bean class="com.tikal.cacao.springController.EmpresasController"></bean> -->
+	<!-- <bean class="com.tikal.cacao.springController.EmpleadosController"></bean> -->
+	<!-- <bean class="com.tikal.cacao.springController.RegimenController"></bean> -->
+	<!-- <bean class="com.tikal.cacao.springController.PruebaController"></bean> -->
+	<!-- <context:component-scan base-package="com.tikal.cacao.sat.calculos" 
+		/> -->
+	<!-- Register Bean for Objectify's Entities -->
+	<bean class="com.tikal.cacao.util.EntityRegister" scope="singleton"></bean>
+	<bean class="com.tikal.cacao.util.TDESEncrypter" scope="singleton"/>
+
+	<bean id="usuariodao" class="com.tikal.cacao.security.UsuarioDAOImp"></bean>
+	<bean id="perfildao" class="com.tikal.cacao.security.PerfilDAOImp"></bean>
+	<bean class="com.tikal.cacao.security.CustomUsuarioServicio"></bean>
+
+	<!-- Beans Components -->
+	<!-- <bean class="com.tikal.cacao.sat.calculos.MapaRecursos" scope="singleton"></bean> -->
+	<bean class="com.tikal.cacao.sat.calculos.Nomina" scope="singleton"></bean>
+
+	<bean id="procesadorPSueldos" class="com.tikal.cacao.sat.calculos.ProcesadorSueldos" />
+	<bean id="procesadorPAguinaldo" class="com.tikal.cacao.sat.calculos.ProcesadorAguinaldo" />
+	<bean id="procesadorPGastosMDH"
+		class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionReembolsoGastosMDH" />
+	
+	
+	<bean id="procesadorPContribucionesPagadasPatron" class="com.tikal.cacao.sat.calculos.ProcesadorContribucionesPagadasPorPatron" 
+		/>
+	<bean id="procesadorPPremiosPuntualidad"
+		class="com.tikal.cacao.sat.calculos.ProcesadorPremiosPuntualidad" />
+	<bean id="procesadorPHorasExtra" class="com.tikal.cacao.sat.calculos.ProcesadorHorasExtra" />
+
+	<bean id="procesadorPSeguroVida" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionPrimaSeguroDeVida" 
+		/> <bean id="procesadorPSeguroGMM" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionSeguroGastosMedicosMayores" 
+		/> <bean id="procesadorPCuotaSindical" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionCuotaSindical" 
+		/> <bean id="procesadorPBecas" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionBecas" 
+		/> <bean id="procesadorPPrimaDominical" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionPrimaDominical" 
+		/> <bean id="procesadorPPrimaVacacional" class="com.tikal.cacao.sat.calculos.ProcesadorPrimaVacacional" 
+		/> <bean id="procesadorPReembolsoFuneral" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionReembolsoFuneral" 
+		/> <bean id="procesadorPCuotasIMSSPagadasPatron" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionCuotasIMSSPagadasPatron" 
+		/> <bean id="procesadorPComisiones" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionComisiones" 
+		/> <bean id="procesadorPPremiosAsistencia" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionPremiosAsistencia" 
+		/> <bean id="procesadorPIngresosAsimilados" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionIngresosAsimiladosASalarios" 
+		/>
+
+
+	<bean id="procesadorDSeguridadSocial"
+		class="com.tikal.cacao.sat.calculos.ProcesadorDeduccionSeguridadSocial" />
+	<bean id="procesadorDISR" class="com.tikal.cacao.sat.calculos.ProcesadorDeduccionISR" />
+	<bean id="procesadorDOtros" class="com.tikal.cacao.sat.calculos.ProcesadorDeduccionOtros" />
+	<bean id="procesadorDIncapacidad" class="com.tikal.cacao.sat.calculos.ProcesadorDeduccionIncapacidad" />
+	<bean id="procesadorDAusentismo" class="com.tikal.cacao.sat.calculos.ProcesadorDeduccionAusentismo" />
+	<mvc:annotation-driven />
 
 </beans>

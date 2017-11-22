@@ -1,0 +1,63 @@
+<section class="jumbotron">
+	<div class="container">
+	<h2>Consulta y modificación de empleados</h2>
+	<p>{{nombreEmpresa}}</p>
+	<submenu/>
+	</div>
+</section>
+<div class="container">
+	<div class="row">
+		<div>
+			<ol class="breadcrumb">
+				<li><button class="btn btn-small btn-link" ng-click="regresaEmpresa()" ng-hide="IsShow">Regresar a Empresa</button></li>
+				<li><button class="btn btn-small btn-link" ng-click="regresaEsquemas()"ng-show="IsShow">Regresar a Esquemas</button></li>
+			</ol>
+		</div>
+		<div class="col-md-6">
+			<label>Buscar:</label> <br> <input type="text" class="col-md-2"
+				ng-model="search.busquedaAttr">
+		</div>		
+		<div class="col-md-12">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<td>No. Empleado</td>
+						<td>Nombre</td>
+						<td>RFC</td>
+						<td>Esquema</td>
+						<td>Acciones</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="empleado in empleados | filter:search:strict">
+						<td>{{empleado.empleado.numEmpleado}}</td>
+						<td>{{empleado.empleado.nombre.nombresDePila}} {{empleado.empleado.nombre.apellidoPaterno}} {{empleado.empleado.nombre.apellidoMaterno}} </td>
+						<td>{{empleado.empleado.RFC}}</td>
+						<td>{{empleado.nombreRegimen}}</td>
+						<td><button class="btn btn-small btn-primary"
+								ng-click="verEmpleados(empleado.empleado.numEmpleado)">
+								<i class="glyphicon glyphicon-eye-open"></i>
+							</button>
+							<button class="btn btn-small btn-primary"
+								ng-click="editarEmpleados(empleado.empleado.numEmpleado)">
+								<i class="glyphicon glyphicon-edit"></i>
+							</button>
+							<button class="btn btn-small btn-primary"
+								ng-click="eliminarEmpleados(empleado.empleado.numEmpleado)">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+	
+		<button class="btn btn-primary" ng-click="add()">
+			<i class="fa fa-plus"></i>Agregar Empleado
+		</button>
+		<a class="btn btn-primary" href="#/archivo">
+			<i class="fa fa-plus"></i>Agregar Empleados desde Archivo
+		</a>
+	</div>
+</div>

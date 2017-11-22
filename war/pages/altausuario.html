@@ -1,0 +1,62 @@
+<section class="jumbotron">
+	<div class="container">
+		<h2>Registra Usuarios</h2>
+		<p>TikalCacao</p>
+	</div>
+</section>
+
+<section class="main container">
+	<div class="row">
+		<section class="posts col-md-9">
+			<div class="miga-de-pan">
+				<ol class="breadcrumb">
+					<li><a href="#/index.html">Ir a Inicio</a></li>
+				</ol>
+			</div>
+			<form name="form" ng-submit="EnviarFormulario()">
+				<article class="post clearfix">
+					<br> Nombre del Usuario: <input type="text"
+						class="form-control" ng-model="usuario.usuario" required>
+					<br> Contrase&ntilde;a: <input type="password" class="form-control" name="pass" id="pass"
+						ng-model="usuario.pass" ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*)[A-Za-z\d]{8,}$/" required ng-change="validatePass()">
+					<br>Confirmar Contrase&ntilde;a: <input type="password" class="form-control" name="passconfirm" id="passconfirm"
+						ng-model="usuario.passconfirm" ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*)[A-Za-z\d]{8,}$/" required ng-change="validatePass()"> 
+					<br><label ng-show="!form.pass.$valid">Debe contener 8 car&aacute;cteres, m&iacute;nimo, una may&uacute;scula, una min&uacute;scula y un n&uacute;mero.</label>
+					<div ng-show="!form.passconfirm.$untouched"><br><label ng-show="IsMatchP">Las contrase&ntilde;as ingresadas no coinciden</label></div>
+					<br> Email: <input
+						type="email" ng-model="usuario.email" name="email" id="email"
+						class="form-control" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required ng-change="validate()"> 
+					<br> Confirmar Email: <input
+						type="email" ng-model="usuario.emailconfirm" name="emailconfirm" id="emailconfirm"
+						class="form-control" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required ng-change="validate()"> 
+					<div ng-show="!form.emailconfirm.$untouched"><br><label ng-show="IsMatch">Los correos ingresados no coinciden</label></div>
+					<br> Perfil:<select ng-model="usuario.perfil">
+						<option ng-repeat="x in perfiles" value="{{x.tipo}}" required ng-if="x.tipo!='AdministradorRoot'">{{x.tipo}}</option>
+					</select>
+					<button type="submit" value="Guardar" class="btn" ng-show="acceptSubmit()">
+						Guardar</button>
+					<button type="submit" value="Limpiar" class="btn">Limpiar</button>
+				</article>
+			</form>
+			<nav>
+				<div class="center-blog"></div>
+			</nav>
+		</section>
+	</div>
+</section>
+
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-6">
+				<p>Tikal</p>
+			</div>
+			<div class="col-xs-6">
+				<ul class="list-inline text-right">
+					<li><a href="index.html">Inicio</a></li>
+					<li><a href="contacto.html">Contacto</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</footer>

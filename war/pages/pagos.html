@@ -1,0 +1,514 @@
+<section class="jumbotron">
+	<div class="container">
+		<h2>Pago</h2>
+		<p>{{nombreEmpresa}}</p>
+		<submenu />
+	</div>
+</section>
+<div class="container">
+	<div class="row">
+		<div>
+			<ol class="breadcrumb">
+				<li><button class="btn btn-small btn-link"
+						ng-click="regresaEmpresa()">Regresar a Detalles de
+						Empresas</button></li>
+				<li><button class="btn btn-small btn-link"
+						ng-click="irPagosRealizados()">Ver a pagos Guardados</button></li>
+			</ol>
+		</div>
+		<form id="forma" novalidate>
+			<div class="col-md-12">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<td>No. Empleado</td>
+							<td>Nombre</td>
+							<td>RFC</td>
+							<td>Pago</td>
+							<td>Fecha de Pago</td>
+							<td>Ajustes</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="pago in pagos.lista">
+							<td>{{pago.idEmpleado}}</td>
+							<td>{{pago.Nombre}}</td>
+							<td>{{pago.rfc}}</td>
+							<td>{{pago.fechaDePago}}</td>
+							<td>{{"$"+ pago.cantidadAPagar}}</td>
+							<td><button class="btn btn-small btn-primary"
+									data-toggle="modal" data-target="#myModal"
+									ng-click="editar(pago)">
+									<i class="glyphicon glyphicon-wrench"></i>
+								</button></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="modal fade" id="myModal" role="dialog" tabindex='-1'>
+					<div class="modal-dialog">
+
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">Agregar Ajustes -
+									{{pagoEdita.Nombre}}</h4>
+							</div>
+							<div class="modal-body">
+								<div class="col-md-7">
+									<h3>Percepciones</h3>
+								</div>
+								<!-- 								<div class="col-md-7"> -->
+								<!-- 									Catalogo<br> <select ng-model="tipocat" -->
+								<!-- 										class="form-control" ng-change="catalPer()"> -->
+								<!-- 										<option ng-repeat="cat in catalogos">{{cat.tipo}}</option> -->
+								<!-- 									</select> -->
+								<!-- 								</div> -->
+
+
+								<!-- 								<div ng-hide="ClaveSat" class="col-md-7"> -->
+								<!-- 									Clave del Catalogo Sat<br> <select -->
+								<!-- 										ng-model="inputPerc.clave" class="form-control" -->
+								<!-- 										ng-change="valor()" id="pend"> -->
+								<!-- 										<option ng-repeat="percep in percepciones" -->
+								<!-- 											value="{{percep.clave}}">{{percep.clave}}</option> -->
+								<!-- 									</select> -->
+								<!-- 								</div> -->
+								<!-- 								<div ng-hide="DescripcionSat" class="col-md-7"> -->
+								<!-- 									Descripcion del Catalogo del Sat <br> <select -->
+								<!-- 										ng-model="inputPerc.clave" class="form-control" -->
+								<!-- 										ng-change="valor()" id="pend2"> -->
+								<!-- 										<option ng-repeat="percep in percepciones" -->
+								<!-- 											value="{{percep.clave}}">{{percep.descripcion}}</option> -->
+								<!-- 									</select> -->
+								<!-- 								</div> -->
+
+
+								<div ng-hide="ClaveEmpresa" class="col-md-7">
+									Clave Catalogo de la Empresa <br> <select
+										ng-model="inputPerc.clave" class="form-control"
+										ng-change="valor()" id="claveEmpresa">
+										<option ng-repeat="percep in tablacompleta"
+											value="{{percep.percepcionCont.clave}}">{{percep.percepcionCont.clave}}</option>
+									</select>
+								</div>
+								<div ng-hide="DescripcionEmpresa" class="col-md-7">
+									Clave del Catalogo Sat<br> <select
+										ng-model="inputPerc.clave" class="form-control"
+										ng-change="valor()" id="claveSat">
+										<option ng-repeat="percep in tablacompleta"
+											value="{{percep.percepcionCont.clave}}">{{percep.percepcionSat.clave}}</option>
+									</select>
+								</div>
+								<div ng-hide="DescripcionEmpresa" class="col-md-7">
+									Descripcion Catalogo de la Empresa <br> <select
+										ng-model="inputPerc.clave" class="form-control"
+										ng-change="valor()" id="descripcionEmpresa">
+										<option ng-repeat="percep in tablacompleta"
+											value="{{percep.percepcionCont.clave}}">
+											{{percep.percepcionCont.descripcion}}</option>
+									</select>
+								</div>
+								<br>
+								<div ng-hide="IsShow">
+
+									<div class="col-md-7">
+										Cantidad:<br> <input type="number"
+											ng-model="inputPerc.cantidad" class="form-control">
+									</div>
+								</div>
+								<br>
+								<div ng-hide="Horas" class="col-md-7">Numero de Horas
+									Extras por Semana:</div>
+								<div class="col-md-7">
+									<div ng-hide="Semanal">
+										Semana 1 <select ng-model="inputPerc.horasExtra[0]"
+											class="form-control">
+											<option ng-repeat="horasExtraSemana in horasExtra">{{horasExtraSemana.horas}}</option>
+										</select>
+									</div>
+									<div ng-hide="Quincenal">
+										Semana 2 <select ng-model="inputPerc.horasExtra[1]"
+											class="form-control">
+											<option ng-repeat="horasExtraSemana in horasExtra">{{horasExtraSemana.horas}}</option>
+										</select>
+									</div>
+									<div ng-hide="Decenal">
+										Semana 3 <select ng-model="inputPerc.horasExtra[2]"
+											class="form-control">
+											<option ng-repeat="horasExtraSemana in horasExtra">{{horasExtraSemana.horas}}</option>
+										</select>
+									</div>
+									<div ng-hide="Mensual">
+										Semana 4 <select ng-model="inputPerc.horasExtra[3]"
+											class="form-control">
+											<option ng-repeat="horasExtraSemana in horasExtra">{{horasExtraSemana.horas}}</option>
+										</select>
+									</div>
+								</div>
+								<div ng-hide="Beneficiario" class="col-md-7">
+									Beneficiario <select ng-model="inputPerc.beneficiario"
+										class="form-control">
+										<option ng-repeat="benefic in beneficiarios">{{benefic.descripcion}}</option>
+									</select>
+								</div>
+								<div ng-hide="Contratante" class="col-md-7">
+									Contratante <select ng-model="inputPerc.contratante"
+										class="form-control">
+										<option ng-repeat="contr in contratante">{{contr.descripcion}}</option>
+									</select>
+								</div>
+								<div ng-hide="Riesgos" class="col-md-7">
+									Riesgos Amparados <select ng-model="inputPerc.riesgosAmparados"
+										class="form-control">
+										<option ng-repeat="riesgo in riesgosAmparados">{{riesgo.descripcion}}</option>
+									</select>
+								</div>
+								<!-- 								</div> -->
+
+								<div class="col-md-12">
+									<button ng-click="addPer(inputPerc)" class="btn btn-primary"
+										value="Guardar">Agregar</button>
+								</div>
+
+
+								<br>
+								<div class="col-md-7">
+									<h3>Deducciones</h3>
+								</div>
+								<!-- 								<div class="col-md-7"> -->
+								<!-- 									Catalogo<br> <select ng-model="tipocatded" -->
+								<!-- 										class="form-control" ng-change="catalDed()"> -->
+								<!-- 										<option ng-repeat="catalo in catalogosDed">{{catalo.tipo}}</option> -->
+								<!-- 									</select> -->
+								<!-- 								</div> -->
+
+								<!-- 								<div ng-hide="ClaveSatDed" class="col-md-7"> -->
+								<!-- 									Clave del Catalogo Sat<br> <select -->
+								<!-- 										ng-model="inputDeduc.clave" class="form-control" -->
+								<!-- 										ng-change="valordos()" id="pend"> -->
+								<!-- 										<option ng-repeat="deduc in deducciones" -->
+								<!-- 											value="{{deduc.clave}}">{{deduc.clave}}</option> -->
+								<!-- 									</select> -->
+								<!-- 								</div> -->
+								<!-- 								<div ng-hide="DescripcionSatDed" class="col-md-7"> -->
+								<!-- 									Descripcion del Catalogo del Sat <br> <select -->
+								<!-- 										ng-model="inputDeduc.clave" class="form-control" -->
+								<!-- 										ng-change="valordos()" id="pend2"> -->
+								<!-- 										<option ng-repeat="deduc in deducciones" -->
+								<!-- 											value="{{deduc.clave}}">{{deduc.descripcion}}</option> -->
+								<!-- 									</select> -->
+								<!-- 								</div> -->
+
+								<div ng-hide="ClaveEmpresaDed" class="col-md-7">
+									Clave Catalogo de la Empresa <br> <select
+										ng-model="inputDeduc.clave" class="form-control"
+										ng-change="valordos()" id="claveEmpresaDed">
+										<option ng-repeat="dedu in tablacompletaDed"
+											value="{{dedu.deduccionCont.clave}}">{{dedu.deduccionCont.clave}}</option>
+									</select>
+								</div>
+								<div ng-hide="DescripcionEmpresaDed" class="col-md-7">
+									Clave del Catalogo Sat<br> <select
+										ng-model="inputDeduc.clave" class="form-control"
+										ng-change="valordos()" id="claveSatDed">
+										<option ng-repeat="dedu in tablacompletaDed"
+											value="{{dedu.deduccionCont.clave}}">{{dedu.deduccionSat.clave}}</option>
+									</select>
+								</div>
+								<div ng-hide="DescripcionEmpresaDed" class="col-md-7">
+									Descripcion Catalogo de la Empresa <br> <select
+										ng-model="inputDeduc.clave" class="form-control"
+										ng-change="valordos()" id="descripcionEmpresaDed">
+										<option ng-repeat="dedu in tablacompletaDed"
+											value="{{dedu.deduccionCont.clave}}">
+											{{dedu.deduccionCont.descripcion}}</option>
+									</select>
+								</div>
+
+
+								<br>
+								<div ng-hide="Descuento" class="col-md-7">
+									Descuento <input type="text" ng-model="inputDeduc.descuento"
+										class="form-control">
+								</div>
+								<br>
+								<div ng-hide="Credito" class="col-md-7">
+									Modalidad de Descuento <select ng-model="inputDeduc.modalidad"
+										class="form-control">
+										<option ng-repeat="modalidad in listTipoDescuento">{{modalidad.descripcion}}</option>
+									</select>
+								</div>
+								<div ng-hide="Credito" class="col-md-7">
+									Valor <input type="number" ng-model="inputDeduc.valorDeCredito"
+										class="form-control">
+								</div>
+								<div ng-hide="Incapacidad" class="col-md-7">
+									Tipo de Incapacidad <select ng-model="inputDeduc.incapacidad"
+										class="form-control">
+										<option ng-repeat="incapacidad in listTipoIncapacidad">{{incapacidad.descripcion}}</option>
+									</select>
+								</div>
+								<div ng-hide="Incapacidad" class="col-md-7">
+									Dias de Incapacidad <input type="number"
+										ng-model="inputDeduc.diasIncapacidad" class="form-control">
+								</div>
+								<div ng-hide="Porcentaje" class="col-md-7">
+									Porcentaje<br> <input type="text"
+										ng-model="inputDeduc.descuento" class="form-control">
+								</div>
+								<div ng-hide="Ausencia" class="col-md-7">
+									Dias de Ausencia <input type="number"
+										ng-model="inputDeduc.diasAusente" class="form-control">
+								</div>
+								<div class="col-md-7">
+									<button ng-click="addDed()" class="btn btn-primary"
+										value="Guardar">Agregar</button>
+								</div>
+								<!-- 								<h3>Percepciones</h3> -->
+								<!-- 								Tipo -->
+								<!-- 								<div class="col-md-12"> -->
+								<!-- 									<select ng-model="inputPerc.clave" class="form-control" -->
+								<!-- 										ng-change="valor()"> -->
+								<!-- 										<option ng-repeat="percepciones in listpercecpciones" -->
+								<!-- 											value="{{percepciones.clave}}">{{percepciones.clave}}</option> -->
+								<!-- 									</select> -->
+								<!-- 								</div> -->
+								<!-- 								<br>Clave -->
+								<!-- 								<div class="col-md-12"> -->
+								<!-- 									<select ng-model="inputPerc.clave" class="form-control" -->
+								<!-- 										ng-change="valor()"> -->
+								<!-- 										<option ng-repeat="percepciones in listpercecpciones" -->
+								<!-- 											value="{{percepciones.clave}}">{{percepciones.clave}}</option> -->
+								<!-- 									</select> -->
+								<!-- 								</div> -->
+								<!-- 								<br> Descripcion -->
+								<!-- 								<div class="col-md-12"> -->
+								<!-- 									<select ng-model="inputPerc.clave" class="form-control" -->
+								<!-- 										ng-change="valor()"> -->
+								<!-- 										<option ng-repeat="percepciones in listpercecpciones" -->
+								<!-- 											value="{{percepciones.clave}}"> -->
+								<!-- 											{{percepciones.descripcion}}</option> -->
+								<!-- 									</select> -->
+								<!-- 								</div> -->
+								<!-- 								<br> -->
+								<!-- 								<div ng-hide="Cantidad"> -->
+								<!-- 									Cantidad: -->
+								<!-- 									<div class="col-md-12"> -->
+								<!-- 										<input type="number" ng-model="inputPerc.cantidad" -->
+								<!-- 											class="form-control"> -->
+								<!-- 									</div> -->
+								<!-- 								</div> -->
+
+								<!-- 								<div ng-hide="Domingos"> -->
+								<!-- 									Numero de Domingos Trabajados: -->
+								<!-- 									<div class="col-md-12" ng-hide="Domingos"> -->
+								<!-- 										<input type="number" ng-model="inputPerc.cantidad" -->
+								<!-- 											class="form-control"> -->
+								<!-- 									</div> -->
+								<!-- 								</div> -->
+								<!-- 								<div ng-hide="Horas"> -->
+								<!-- 									Numero de Horas Extras por Semana: -->
+								<!-- 									<div class="col-md-12"> -->
+								<!-- 										<div ng-hide="Semanal"> -->
+								<!-- 											Semana 1 <select ng-model="inputPerc.horasExtra[0]" -->
+								<!-- 												class="form-control"> -->
+								<!-- 												<option ng-repeat="horasExtraSemana in horasExtra">{{horasExtraSemana.horas}}</option> -->
+								<!-- 											</select> -->
+								<!-- 										</div> -->
+								<!-- 										<div ng-hide="Quincenal"> -->
+								<!-- 											Semana 2 <select ng-model="inputPerc.horasExtra[1]" -->
+								<!-- 												class="form-control"> -->
+								<!-- 												<option ng-repeat="horasExtraSemana in horasExtra">{{horasExtraSemana.horas}}</option> -->
+								<!-- 											</select> -->
+								<!-- 										</div> -->
+								<!-- 										<div ng-hide="Decenal"> -->
+								<!-- 											Semana 3 <select ng-model="inputPerc.horasExtra[2]" -->
+								<!-- 												class="form-control"> -->
+								<!-- 												<option ng-repeat="horasExtraSemana in horasExtra">{{horasExtraSemana.horas}}</option> -->
+								<!-- 											</select> -->
+								<!-- 										</div> -->
+								<!-- 										<div ng-hide="Mensual"> -->
+								<!-- 											Semana 4 <select ng-model="inputPerc.horasExtra[3]" -->
+								<!-- 												class="form-control"> -->
+								<!-- 												<option ng-repeat="horasExtraSemana in horasExtra">{{horasExtraSemana.horas}}</option> -->
+								<!-- 											</select> -->
+								<!-- 										</div> -->
+								<!-- 									</div> -->
+								<!-- 								</div> -->
+								<!-- 								<br> -->
+								<!-- 								<div> -->
+								<!-- 									<button ng-click="addPer(inputPerc)" class="btn btn-primary" -->
+								<!-- 										value="Guardar">Agregar</button> -->
+								<!-- 								</div> -->
+								<!-- 								<div class="form-group"> -->
+								<!-- 									<h3>Deducciones</h3> -->
+								<!-- 									Clave -->
+								<!-- 									<div class="col-md-12"> -->
+								<!-- 										<select ng-model="inputDeduc.clave" class="form-control" -->
+								<!-- 											ng-change="valordos()"> -->
+								<!-- 											<option ng-repeat="ded in listdeducciones" -->
+								<!-- 												value="{{ded.clave}}">{{ded.clave}}</option> -->
+								<!-- 										</select> -->
+								<!-- 									</div> -->
+								<!-- 									<br> Descripcion -->
+								<!-- 									<div class="col-md-12"> -->
+								<!-- 										<select ng-model="inputDeduc.clave" class="form-control" -->
+								<!-- 											ng-change="valordos()"> -->
+								<!-- 											<option ng-repeat="ded in listdeducciones" -->
+								<!-- 												value="{{ded.clave}}">{{ded.descripcion}}</option> -->
+								<!-- 										</select> -->
+								<!-- 									</div> -->
+								<!-- 									<br> -->
+								<!-- 									<div ng-hide="Porcentaje"> -->
+								<!-- 										Porcentaje -->
+								<!-- 										<div class="col-md-12"> -->
+								<!-- 											<input type="text" ng-model="inputDeduc.descuento" -->
+								<!-- 												class="form-control"> -->
+								<!-- 										</div> -->
+								<!-- 									</div> -->
+								<!-- 									<div ng-hide="Incapacidad"> -->
+								<!-- 										Tipo de Incapacidad -->
+								<!-- 										<div class="col-md-12"> -->
+								<!-- 											<select ng-model="inputDeduc.incapacidad" -->
+								<!-- 												class="form-control"> -->
+								<!-- 												<option ng-repeat="incapacidad in listTipoIncapacidad">{{incapacidad.descripcion}}</option> -->
+								<!-- 											</select> -->
+								<!-- 										</div> -->
+								<!-- 									</div> -->
+								<!-- 									<div ng-hide="Credito"> -->
+								<!-- 										Modalidad de Descuento -->
+								<!-- 										<div class="col-md-12"> -->
+								<!-- 											<select ng-model="inputDeduc.modalidad" class="form-control"> -->
+								<!-- 												<option ng-repeat="modalidad in listTipoDescuento">{{modalidad.descripcion}}</option> -->
+								<!-- 											</select> -->
+								<!-- 										</div> -->
+								<!-- 									</div> -->
+								<!-- 									<div ng-hide="Credito"> -->
+								<!-- 										Valor -->
+								<!-- 										<div class="col-md-12"> -->
+								<!-- 											<input type="num" ng-model="inputDeduc.valorDeCredito" -->
+								<!-- 												class="form-control"> -->
+								<!-- 										</div> -->
+								<!-- 									</div> -->
+								<!-- 									<div ng-hide="Incapacidad"> -->
+								<!-- 										Dias de Incapacidad -->
+								<!-- 										<div class="col-md-12"> -->
+								<!-- 											<input type="number" ng-model="inputDeduc.diasIncapacidad" -->
+								<!-- 												class="form-control"> -->
+								<!-- 										</div> -->
+								<!-- 									</div> -->
+								<!-- 									<div ng-hide="Descuento"> -->
+								<!-- 										Descuento -->
+								<!-- 										<div class="col-md-12"> -->
+								<!-- 											<input type="text" ng-model="inputDeduc.descuento" -->
+								<!-- 												class="form-control"> -->
+								<!-- 										</div> -->
+								<!-- 									</div> -->
+								<!-- 									<div ng-hide="Ausencia"> -->
+								<!-- 										Dias de Ausencia -->
+								<!-- 										<div class="col-md-12"> -->
+								<!-- 											<input type="num" ng-model="inputDeduc.descuento" -->
+								<!-- 												class="form-control"> -->
+								<!-- 										</div> -->
+								<!-- 									</div> -->
+								<!-- 									<br> -->
+								<!-- 									<button ng-click="addDed(inputDeduc)" class="btn btn-primary" -->
+								<!-- 										value="Guardar">Agregar</button> -->
+								<!-- 								</div> -->
+
+								<h2 class="col-md-7">Percepciones</h2>
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Clave</th>
+											<th>Descripcion</th>
+											<th>Cantidad</th>
+											<th>Eliminar</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="percEdita in pagoEdita.percepciones" )>
+											<td>{{percEdita.clave}}</td>
+											<td>{{percEdita.descripcion}}</td>
+											<td>{{percEdita.cantidad}}</td>
+											<td><button class="btn btn-small btn-primary"
+													ng-click="eliminarPercepcion(per)">
+													<i class="glyphicon glyphicon-remove"></i></td>
+										</tr>
+									</tbody>
+								</table>
+								<h2 class="col-md-7">Deducciones</h2>
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Clave</th>
+											<th>Descripcion</th>
+											<th>Cantidad</th>
+											<th>Eliminar</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="dedEdita in pagoEdita.deducciones">
+											<td>{{dedEdita.clave}}</td>
+											<td>{{dedEdita.descripcion}}</td>
+											<td>{{dedEdita.descuento}}</td>
+											<td><button class="btn btn-small btn-primary"
+													ng-click="eliminarDeduccion(deduc)">
+													<i class="glyphicon glyphicon-remove"></i></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+			<button ng-hide="Pagos" class="btn btn-primary"
+				ng-click="recalcular()">Recalcular Pagos</button>
+						<button ng-hide="Pagos" class="btn btn-primary" data-toggle="modal"
+							data-target="#myModal2">Ejecutar N&oacute;mina</button>
+		</form>
+
+		<!-- 		<form method="post" action="/pdf/recibo" target="_blank"> -->
+		<!-- 			<input type="hidden" name="cadena" value="{{pagos}}"> -->
+		<div class="modal fade" id="myModal2" role="dialog" tabindex='-1'>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Guardar los Pagos</h4>
+					</div>
+					<div class="modal-body">
+						<div ng-show="procesando" class="container">
+							<button class="btn btn-lg btn-warning">
+								<span
+									class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+								Procesando Nómina...
+							</button>
+						</div>
+						<p>{{mensajeEjec}}</p>
+					</div>
+					<div class="modal-footer">
+						<button ng-hide="terminado"  type="submit" class="btn btn-default"
+							ng-click="guardarPagos()">Ejecutar N&oacute;mina</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<!-- 		</form> -->
+	</div>
+	<div class="row">
+		<!--<button class="btn btn-primary" ng-click="add()">
+			<i class="fa fa-plus"></i>Agregar Empresa
+		</button>-->
+	</div>
+</div>

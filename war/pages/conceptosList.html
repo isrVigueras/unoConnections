@@ -1,0 +1,56 @@
+<section class="jumbotron">
+	<div class="container">
+		<h2>Consulta y modificación de conceptos</h2>
+		<p>{{nombreEmpresa}}</p>
+		<submenu />
+	</div>
+</section>
+<div class="container">
+	<div class="row"> <label>Buscar:</label> <br>
+	<input type="text" class="col-md-2" ng-model="search.busquedaAttr">
+	<div class="col-md-12">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<td>Clave</td>
+					<td>Descripci&oacute;n</td>
+					<td>Valor Unitario</td>
+					<td style="width: 10%;">Acciones</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="concepto in conceptos | filter:search:strict">
+					<td>{{concepto.noIdentificacion}}</td>
+					<td style="line-height: normal;">{{concepto.descripcion}}</td>
+					<td>{{concepto.valorUnitario}}</td>
+					<td>
+						<button class="btn btn-small"
+							ng-click="editarConcepto(concepto.indice)">
+							<i class="glyphicon glyphicon-edit"></i>
+						</button>
+						<button class="btn btn-small"
+							ng-click="eliminarConcepto(concepto.indice)">
+							<i class="glyphicon glyphicon-remove"></i>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="row">
+		<button class="btn" ng-click="nuevoConcepto()">
+			<i class="fa fa-plus"></i>Agregar Concepto
+		</button>
+	</div>
+</div>
+
+<div class="row">
+
+	<!-- 		<button class="btn btn-primary" ng-click="add()"> -->
+	<!-- 			<i class="fa fa-plus"></i>Agregar Empleado -->
+	<!-- 		</button> -->
+	<!-- 		<a class="btn btn-primary" href="#/archivo"> -->
+	<!-- 			<i class="fa fa-plus"></i>Agregar Empleados desde Archivo -->
+	<!-- 		</a> -->
+</div>
+</div>

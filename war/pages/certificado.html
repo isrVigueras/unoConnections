@@ -1,0 +1,29 @@
+
+<section class="jumbotron">
+	<div class="container">
+		<h2>Certificado</h2>
+		<p>{{nombreEmpresa}}</p>
+		<submenu /> 
+	</div>
+</section>
+<br>
+<div class="container">
+	<div>
+	<label>Certificado</label>
+	<input id="b_pics" accept="*.cer" type="file" class="file"
+		multiple="true" multiple-File-Model="b_pics1" required /><br>
+	</div>
+	<div>
+	<label>Clave</label>
+	<input id="b_pics" accept="*.key" type="file" class="file"
+		multiple="true" multiple-File-Model="b_pics2" required /><br>
+	</div>
+	
+	<div>
+	<label>Password</label>
+	<input type="password" ng-model="pass" required/><br>
+	</div>
+	<hr>
+	<button type="button" class="btn"
+		ng-click="enviar()">Agregar</button>
+</div>

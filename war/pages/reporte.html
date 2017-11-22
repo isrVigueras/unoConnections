@@ -1,0 +1,28 @@
+<section class="jumbotron">
+	<div class="container">
+		<h2>Facturas</h2>
+		<!-- 		<p>Cacao</p> -->
+		<p>{{nombreEmpresa}}</p>
+		<submenu />
+	</div>
+</section>
+
+<div class="main container">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="col-md-10">
+				<div class="input-group input-daterange">
+					<input type="text" class="form-control" ng-model="fechaInicio">
+					<div class="input-group-addon">-</div>
+					<input type="text" class="form-control" ng-model="fechaFin">
+				</div>
+			</div>
+			<div class="col-md-2">
+				<a class="btn btn-small" href="{{'/reportes/fechas/'+rfcEmpresa+'/'+fechaInicio+'/'+fechaFin}}" download="Reporte.xls">
+					Descargar Reporte
+				</a>
+			</div>
+		</div>
+
+	</div>
+</div>

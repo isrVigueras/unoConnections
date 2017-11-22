@@ -1,0 +1,180 @@
+app.service('conceptosService', [
+	'$http',
+	'$q',
+	'$location',
+	'$rootScope',
+	'$window',
+	function($http, $q, $location,$rootScope, $window) {
+		this.registraConcepto = function(newConcepto) {
+			var d = $q.defer();
+//			console.log($rootScope)
+			var send={
+					rfc:$rootScope.empresaActual,
+					conceptos:[newConcepto]
+			}
+			$http.post("/conceptos/add/", send).then(
+				function(response) {
+//					console.log(response); 
+					d.resolve(response.data);
+				});
+			return d.promise;
+		}
+		this.cargaConceptos = function(rfc) {
+			var d = $q.defer();
+//			console.log($rootScope)
+			$http.get("/conceptos/cargar/"+rfc).then(
+				function(response) {
+//					console.log(response); 
+					d.resolve(response.data);
+				});
+			return d.promise;
+		}
+		this.editaConcepto = function(send) {
+			var d = $q.defer();
+			$http.post("/conceptos/edit/"+send.id,send).then(function(response) {
+				console.log(response);
+				d.resolve(response.data);
+			}, function(response) {
+				d.reject(response);
+			});
+			return d.promise;
+		};
+		this.eliminaConcepto = function(send) {
+			var d = $q.defer();
+			$http.post("/conceptos/delete/"+send.id,send).then(function(response) {
+				console.log(response);
+				d.resolve(response.data);
+			}, function(response) {
+				d.reject(response);
+			});
+			return d.promise;
+		};
+	
+}])
+app.controller("conceptosController",[
+	'$scope',
+	'conceptosService',
+	'$routeParams',
+	'$location',
+	'$window',
+	'$rootScope','archivoService',
+	'$cookieStore',
+	function($scope, conceptosService, $routeParams,$location,$window,$rootScope,archivoService,$cookieStore){
+		$scope.tipoCarga=1;
+		$scope.newConcepto={
+				unidad:"No Aplica"
+		}
+		$scope.guardarConcepto=function(){
+			conceptosService.registraConcepto($scope.newConcepto).then(function(data){
+				alert("Concepto Guardado");
+				$location.path("/conceptosList/"+$routeParams.rfc);
+				$window.location.reload();
+			});
+		}		
+		
+		document.querySelector('#b_pics').addEventListener('change', function() {
+
+			  var reader = new FileReader();
+			  reader.onload = function() {
+
+			    var arrayBuffer = this.result;
+			      array = new Uint8Array(arrayBuffer),
+			      binaryString = String.fromCharCode.apply(null, array);
+			    console.log(binaryString);
+			    $('#cadena').text(arrayBuffer);
+			  }
+			  reader.readAsText(this.files[0]);
+//			  reader.readAsArrayBuffer(this.files[0]);
+
+			}, false);
+		$scope.ok=function(){
+			var c= $('#cadena').text();
+			archivoService.sendfile2(c,"/conceptos/addMultiple/"+$cookieStore.get("rfcEmpresa")).then(function(data){
+				console.log(data);
+				alert("Conceptos guardados");
+				$location.path("/conceptosList/"+$routeParams.rfc);
+				$window.location.reload();
+			});
+		}
+}]);
+
+
+
+app.controller("conceptosListController",[
+	'$scope',
+	'conceptosService',
+	'$routeParams',
+	'$location',
+	'$window',
+	'$rootScope',
+	'$cookieStore',
+	function($scope, conceptosService, $routeParams,$location,$window,$rootScope,$cookieStore){
+		$scope.cargar=function(){
+			conceptosService.cargaConceptos($routeParams.rfc).then(function(data){
+				$scope.conceptos=data.conceptos;
+				console.log($scope.conceptos);
+				for (var i = 0; i < $scope.conceptos.length; i++) {
+					$scope.conceptos[i].indice=i;
+					$scope.conceptos[i].busquedaAttr = $scope.conceptos[i].noIdentificacion+" "+$scope.conceptos[i].descripcion;
+//					+ $scope.empleados[i].empleado.nombre.apellidoPaterno
+//					+ " "
+//					+ $scope.empleados[i].empleado.nombre.apellidoMaterno
+//					+ " "
+//					+ $scope.empleados[i].empleado.numEmpleado
+//					+ " "
+//					+ $scope.empleados[i].empleado.RFC
+				}
+			})
+		}
+		$scope.cargar();
+		$scope.editarConcepto = function(id) {
+			$cookieStore.put('indice', id);
+			$location.path("/conceptosEdit/"+$routeParams.rfc+"/"+id);
+			console.log($cookieStore.get('indice'));
+		}
+		$scope.eliminarConcepto = function(id){
+			var send={
+					id: id,
+					rfc: $cookieStore.get('rfcEmpresa')
+			}
+			console.log(send);
+			conceptosService.eliminaConcepto(send).then(function(send) {	
+				alert("Concepto Eliminado");
+				$window.location.reload();
+				$location.path("/conceptosList/"+$routeParams.rfc);
+			})
+		}
+		$scope.nuevoConcepto = function(){
+			$location.path("/conceptos/"+$routeParams.rfc);
+		}	
+	}]);
+
+app.controller("conceptosEditController",[
+	'$scope',
+	'conceptosService',
+	'$routeParams',
+	'$location',
+	'$window',
+	'$cookieStore',
+	function($scope, conceptosService, $routeParams,$location, $window, $cookieStore){
+		conceptosService.cargaConceptos($routeParams.rfc).then(function(data){
+			$scope.newConcepto=data.conceptos[$routeParams.ind];
+		})
+		
+		$scope.editaConcepto = function(newConcepto) {
+			var send={
+						conceptos: [newConcepto],
+						id: $cookieStore.get('indice'),
+						rfc: $cookieStore.get('rfcEmpresa')
+			}
+		console.log(send);		
+		conceptosService.editaConcepto(send).then(function(send) {
+					alert("Concepto Modificado");
+					$window.location.reload();
+					$location.path("/conceptosList/"+$routeParams.rfc);
+				})
+	}	
+		
+}]);
+		
+	

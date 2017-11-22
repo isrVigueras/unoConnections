@@ -29,7 +29,7 @@
   <env-variables>
     <env-var name="DEFAULT_ENCODING" value="UTF-8" />
   </env-variables>
-
+<sessions-enabled>true</sessions-enabled>
   <!--
     HTTP Sessions are disabled by default. To enable HTTP sessions specify:
 

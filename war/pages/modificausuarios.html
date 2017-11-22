@@ -1,0 +1,64 @@
+<section class="main container">
+	<div class="row">
+		<section class="posts col-md-9">
+			<div class="miga-de-pan">
+				<ol class="breadcrumb">
+					<li><a href="#/index.html">Ir a Inicio</a></li>
+				</ol>
+			</div>
+			<article class="post clearfix">
+				<div>
+					<table ng-controller="controladorListaUsuarios"
+						class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Usuario</th>
+								<th>Perfil</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="usuario in usuariosLista" ng-if="usuario.usuario!='root'">
+								<td>{{usuario.usuario}}</td>
+								<td><select ng-model="usuario.perfil">
+										<option ng-repeat="x in perfiles" value="{{x.tipo}}" ng-if="x.tipo!='AdministradorRoot'">{{x.tipo}}</option>
+									</select></td>
+								<td><button type="button" class="btn btn-success"
+										ng-click="actualizarUsuario(usuario)">Actualizar</button>
+										<button type="button" class="btn btn-danger"
+										ng-click="eliminarUsuario(usuario)">Eliminar</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</article>
+			<nav>
+				<div class="center-blog"></div>
+			</nav>
+
+<!-- 		</section> -->
+<!-- 		<aside class="col-md-3 hiden-xs hidden-sm"> -->
+<!-- 			<h4>Podrás Administrar</h4> -->
+<!-- 			<div class="list-group"> -->
+<!-- 				<a href="#" class="list-group-item">Empresas</a> <a href="#" -->
+<!-- 					class="list-group-item">Regímenes</a> <a href="#" -->
+<!-- 					class="list-group-item">Empleados</a> -->
+<!-- 			</div> -->
+<!-- 		</aside> -->
+<!-- 	</div> -->
+<!-- </section> -->
+
+<!-- <footer> -->
+<!-- 	<div class="container"> -->
+<!-- 		<div class="row"> -->
+<!-- 			<div class="col-xs-6"> -->
+<!-- 				<p>Tikal</p> -->
+<!-- 			</div> -->
+<!-- 			<div class="col-xs-6"> -->
+<!-- 				<ul class="list-inline text-right"> -->
+<!-- 					<li><a href="index.html">Inicio</a></li> -->
+<!-- 					<li><a href="contacto.html">Contacto</a></li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- </footer> -->

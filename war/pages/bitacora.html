@@ -1,0 +1,61 @@
+<section class="jumbotron">
+	<div class="container">
+		<h2>Bit&aacute;cora</h2>
+	</div>
+</section>
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<label>Bit&aacute;cora</label>
+			<select ng-model="tipo">
+				<option>Operacional</option>
+				<option>Otra</option>
+			</select>
+		</div>
+		<div class="col-md-6">
+			<label>Buscar</label>
+			<select ng-model="filtro">
+				<option>Reciente</option>
+				<option>Intervalo de Fechas</option>
+				<option>Usuario</option>
+			</select>
+			<button ng-click="cargar()" ng-show="filtro"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+		</div>
+	</div>
+	<div class="row" ng-show="filtro=='Intervalo de Fechas'">
+		<div class="col-md-6">
+			<label>Fecha de Inicio</label>
+			<input type="date" ng-model="params.fechai"/>
+		</div>
+		<div class="col-md-6">
+			<label>Fecha final</label>
+			<input type="date" ng-model="params.fechaf"/>
+		</div>
+	</div>
+	<div class="row" ng-show="filtro=='Usuario'">
+	<div class="col-md-6">
+			<label>Nombre de Usuario</label>
+			<input type="text" ng-model="params.usuario"/>
+		</div>
+	</div>
+	<div class="row" ng-show="bitacora">
+		<table class="table table-stripped" ng-show="bitacora.length >0">
+			<thead>
+				<tr> 
+					<td>Fecha</td>
+					<td>Usuario</td>
+					<td>tipo</td>
+					<td>Acci&oacute;n</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="e in bitacora">
+					<td>{{e.fecha}}</td>
+					<td>{{e.usuario}}</td>
+					<td>{{e.tipo}}</td>
+					<td>{{e.evento}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>	
+</div>

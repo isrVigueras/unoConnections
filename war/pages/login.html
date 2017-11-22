@@ -1,0 +1,29 @@
+	<!--Aqui va-->
+<section class="jumbotron">
+	<div class="container">
+	<h2>Inicio de Sesi&oacute;n</h2>
+	</div>
+</section>>
+
+	<section class="main container">
+		<div class="row">
+			<section class="posts col-md-6 col-md-offset-3">
+
+				<form role="form" ng-submit="login()">
+					<article class="post clearfix">
+						Nombre de Usuario: <input type="text" class="form-control"
+							id="usuario" name="usuario" ng-model="credentials.username">
+						Contrase&ntilde;a: <input type="password" class="form-control" id="pass"
+							name="pass" ng-model="credentials.password"> <br>
+						<div class="captcha">
+							<button type="submit" value="Guardar" class="btn">Ingresar</button>
+						</div>
+						<div  class="botones">
+							<a href="#/resetPass">Restablecer Contrase&ntilde;a</a>
+						</div>
+					</article>
+				</form>
+			</section>
+
+		</div>
+	</section>

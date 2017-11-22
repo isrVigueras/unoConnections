@@ -1,0 +1,40 @@
+<section class="jumbotron">
+	<div class="container">
+	<h2>Ver y Modificar Informacion de los Seriales</h2>
+	<p>Cacao</p>
+	<submenu/>
+	</div>
+</section>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+					<td><strong>Serial</strong></td>
+					<td><strong>Folio Siguiente</strong></td>
+					<td></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="s in seriales">
+						<td>{{s.serie}}</td>
+						<td>{{s.folio}}</td>
+						<td><button class="btn btn-small"
+								ng-click="editar($index)">
+								<i class="glyphicon glyphicon-edit"></i>
+							</button>
+							<button class="btn btn-small"
+								ng-click="eliminar($index)">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button></td>										
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<a class="btn" href="#/{{'altaSerie/'+empresaActual}}">
+			<i class="fa fa-plus"></i>Agregar Serie
+		</a>
+	</div>
+</div>

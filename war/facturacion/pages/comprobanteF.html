@@ -1,0 +1,1021 @@
+<br>
+<div class="container">
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<li class="nav-item"><a class="nav-link active" id="home-tab"
+			data-toggle="tab" href="" ng-click="showTab('comprobante')"
+			role="tab" aria-controls="comprobante" aria-expanded="true">Comprobante</a>
+		</li>
+		<li class="nav-item"><a class="nav-link" id="emisor-tab"
+			data-toggle="tab" href="" ng-click="showTab('emisorCont')" role="tab"
+			aria-controls="emisor" aria-expanded="false">Emisor</a></li>
+		<li class="nav-item"><a class="nav-link" id="receptor-tab"
+			data-toggle="tab" href="" ng-click="showTab('receptorCont')"
+			role="tab" aria-controls="receptor" aria-expanded="false">Receptor</a></li>
+		<!--     <li class="nav-item dropdown"> -->
+		<!--       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false"> -->
+		<!--         Dropdown -->
+		<!--       </a> -->
+		<!--       <div class="dropdown-menu"> -->
+		<!--         <a class="dropdown-item" id="dropdown1-tab" href="#dropdown1" role="tab" data-toggle="tab" aria-controls="dropdown1">@fat</a> -->
+		<!--         <a class="dropdown-item" id="dropdown2-tab" href="#dropdown2" role="tab" data-toggle="tab" aria-controls="dropdown2">@mdo</a> -->
+		<!--       </div> -->
+		<!--     </li> -->
+	</ul>
+
+
+
+	<div class="tab-content" id="myTabContent">
+		<div role="tabpanel" class="tab-pane fade active show"
+			id="comprobante" aria-labelledby="comprobante-tab"
+			aria-expanded="true">
+			<div class="row">
+				<div class="col-md-3">
+					<label for="example-text-input" class="col-2 col-form-label ">*Fecha
+						y Hora de Expedici&oacute;n:</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="date" value="" id="fecha"
+							ng-model="comprobante.fecha">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<label for="example-text-input" class="col-2 col-form-label">*Lugar
+						de Expedici&oacute;n:</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="text" value="" id="lugar"
+							name="lugar" ng-model="comprobante.lugarExpedicion">
+					</div>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+			<div class="row">
+				<div class="form-group ">
+					<div class="col-md-3">
+						<label for="example-text-input" class="col-2 col-form-label">Serie:</label>
+						<div class="col-10">
+							<input class="form-control facInp" type="text" value="" id="serie"
+								name="serie" ng-model="comprobante.serie">
+						</div>
+					</div>
+					<div class="col-md-3">
+						<label for="example-text-input" class="col-2 col-form-label">Folio:</label>
+						<div class="col-10">
+							<input class="form-control facInp" type="text" value="" id="folio"
+								name="folio" ng-model="comprobante.folio">
+						</div>
+					</div>
+					<div class="col-md-3">
+						<label for="example-text-input" class="col-2 col-form-label">*Tipo
+							de Comprobante:</label>
+						<div class="col-10">
+							<input class="form-control facInp" type="text" value=""
+								id="tipoComprobante" name="tipoComprobante" ng-model="comprobante.tipoDeComprobante">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="example-text-input" class="col-2 col-form-label">Moneda:</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="text" value="" id="moneda"
+							name="moneda" ng-model="comprobante.moneda">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<label for="example-text-input" class="col-2 col-form-label">Tipo
+						de Cambio:</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="text" value="" id="tipoCambio"
+							name="tipoCambio" ng-model="comprobante.tipoCambio">
+					</div>
+				</div>
+				<div class="col-md-3">.</div>
+				<div class="col-md-12">
+					<label>Aplica solo en caso de moneda extranjera</label>
+				</div>
+
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group ">
+						<label for="example-text-input" class="col-2 col-form-label">*M&eacute;todo
+							de Pago:</label>
+						<div class="col-10">
+							<input class="form-control facInp" type="text" value="" id="metodo"
+								name="metodo" ng-model="comprobante.metodoPago">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<label for="example-text-input" class="col-2 col-form-label">*Forma
+						de Pago:</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="text" ng-model="comprobante.formaPago">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero
+						de cuenta de Pago:</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="text" value="" id="numCuenta"
+							name="numCuenta">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group ">
+						<label for="example-text-input" class="col-2 col-form-label">Condiciones
+							de Pago:</label>
+						<div class="col-10">
+							<input class="form-control facInp" type="text" value="" id="condPago"
+								name="condPago" ng-model="comprobante.condicionesDePago">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group ">
+				<div class="checkbox">
+					<label><input type="checkbox" ng-model="parcialidades">Pago
+						en Parcialidades(Datos del comprobante que ampara el monto total
+						de la operaci&oacute;n)</label>
+				</div>
+			</div>
+			<div class="row" ng-show="parcialidades">
+				<div class="col-md-3">
+					<label for="example-text-input" class="col-2 col-form-label">Folio:</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="text" value="" id="folio"
+							name="folio" ng-model="comprobante.complemento.folio">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<label for="example-text-input" class="col-2 col-form-label">Serie:</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="text" value="" id="serie"
+							name="serie" ng-model="comprobante.Complemento.Serie">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<label for="example-text-input" class="col-2 col-form-label">Fecha
+						de Expedici&oacute;n:</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="text" value="" id="fechaExp"
+							name="fechaExp" ng-model="comprobante.complemento.fechaDeExpedicion">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<label for="example-text-input" class="col-2 col-form-label">Monto
+						de la Transacci&oacute;n:</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="text" value="" id="montoTran"
+							name="montoTran" ng-model="comprobante.complemento.monto">
+					</div>
+				</div>
+			</div>
+			<!-- TABLA DINAMICA DE ANGULAR -->
+			<hr>
+			<div>
+				<div class="row">
+					<label>Conceptos</label>
+					<table class="table table-stripped">
+						<thead>
+							<tr>
+								<th>Cantidad
+								<th>Unidad</th>
+								<th>N&uacute;mero de Identificaci&oacute;n</th>
+								<th>Descripci&oacute;n</th>
+								<th>Valor Unitario</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><input class="form-control facInp" type="text" value=""
+									id="cantidad" name="cantidad" ng-model="concepto.Cantidad"></td>
+								<td><input class="form-control facInp" type="text" value="" ng-model="concepto.unidad"
+									id="unidad" name="unidad"></td>
+								<td><input class="form-control facInp" type="text" value="" ng-model="concepto.noIdentificacion"
+									id="numIden" name="numIden"></td>
+								<td><input class="form-control facInp" type="text" value="" ng-model="concepto.descripcion"
+									id="descripcion" name="descripcion"></td>
+								<td><input class="form-control facInp" type="text" value="" ng-model="concepto.valorUnitario"
+									id="valUni" name="valUni"></td>
+								<td><input type="submit" class="btn btn-primary"
+									value="Agregar Concepto"></td>
+							</tr>
+						</tbody>
+					</table>
+
+				</div>
+				<div class="form-group">
+					<div class="row">
+						<div class="radio">
+							<label><input type="checkbox" ng-model="infAduanera"
+								id="infAduanera">Informaci&oacute;n Aduanera</label>
+						</div>
+						<div class="radio">
+							<label><input type="checkbox" ng-model="cuentaPredial"
+								id="cuentaPredial">Cuenta Predial</label>
+						</div>
+
+					</div>
+				</div>
+				<!-- AQUÍ VA LA TABLA DONDE SE VAN AGREGANDO LOS CONCEPTOS -->
+
+
+			</div>
+			<!-- AQUÏ FINALIZA EL DIV QUE CONTIENE TABLA DINAMICA DE ANGULAR -->
+
+<!-- 			<div class="form-group"> -->
+<!-- 				<div class="checkbox"> -->
+<!-- 					<label><input type="checkbox" ng-model="donatarias">Donatarias</label> -->
+<!-- 				</div> -->
+<!-- 				<div ng-show="donatarias"> -->
+<!-- 					<div class="row"> -->
+<!-- 						<div class="col-md-4"> -->
+<!-- 							<div class="form-group "> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*No -->
+<!-- 									Autorizaci&oacute;n:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="numAutorizacion" name="numAutorizacion"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="col-md-4"> -->
+<!-- 							<div class="form-group "> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*Fecha -->
+<!-- 									Autorizaci&oacute;n:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="fechaAutorizacion" name="fechaAutorizacion"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="col-md-4"> -->
+<!-- 							<div class="form-group "> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*Leyenda:</label> -->
+<!-- 								<input class="form-control facInp" type="text" value="" id="leyenda" -->
+<!-- 									name="leyenda"> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+
+
+<!-- 			<div class="form-group"> -->
+<!-- 				<div class="checkbox"> -->
+<!-- 					<label><input type="checkbox" ng-model="enEspecie">Pago -->
+<!-- 						en Especie</label> -->
+<!-- 				</div> -->
+<!-- 				<div ng-show="enEspecie"> -->
+<!-- 					<div class="row"> -->
+<!-- 						<div class="col-md-4"> -->
+<!-- 							<div class="form-group "> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*Clave -->
+<!-- 									de inscripci&oacute;n al Padr&oacute;n:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" id="cveInsPad" -->
+<!-- 										name="cveInsPad"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="col-md-4"> -->
+<!-- 							<div class="form-group "> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*Folio -->
+<!-- 									de la solicitud de la donaci&oacute;n:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="folioDonacion" name="folioDonacion"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="col-md-4"> -->
+<!-- 							<div class="form-group "> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*Nombre -->
+<!-- 									de la pieza de arte:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="nomPiezaArte" name="nomPiezaArte"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="col-md-4"> -->
+<!-- 							<div class="form-group "> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*T&eacute;cnica -->
+<!-- 									de Producci&oacute;n:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" id="tecProd" -->
+<!-- 										name="tecProd"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="col-md-4"> -->
+<!-- 							<div class="form-group "> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*A&ntilde;o -->
+<!-- 									de Producci&oacute;n:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" id="prodYear" -->
+<!-- 										name="prodYear"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="col-md-4"> -->
+<!-- 							<div class="form-group "> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*Dimensiones: -->
+<!-- 								</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="prodDimens" name="prodDimens"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+
+<!-- 			<div class="form-group"> -->
+<!-- 				<div class="checkbox"> -->
+<!-- 					<label><input type="checkbox" ng-model="nomina">N&oacute;mina</label> -->
+<!-- 				</div> -->
+<!-- 				<div ng-show="nomina"> -->
+<!-- 					<label>Datos Empleado</label> -->
+<!-- 					<div class="form-group "> -->
+<!-- 						<div class="row"> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*N&uacute;mero -->
+<!-- 									de Empleado:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="numEmpleado" name="numEmpleado"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*CURP:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="curpEmpleado" name="curpEmpleado"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">Departamento:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="depEmpleado" name="depEmpleado"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">*Puesto:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="puestoEmpleado" name="puestoEmpleado"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="form-group "> -->
+<!-- 							<div class="row"> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 										de Seguridad Social:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="nssEmpleado" name="nssEmpleado"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Antiguedad:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="puestoEmpleado" name="puestoEmpleado"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">CLABE:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="clabeEmpleado" name="clabeEmpleado"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="Select">Banco: </label> <select id="bancoEmpleado" -->
+<!-- 										class="form-control" name="bancoEmpleado"> -->
+<!-- 										<option>Seleccione un banco</option> -->
+<!-- 										<option>Santander</option> -->
+<!-- 										<option>Banorte</option> -->
+<!-- 										<option>Banamex</option> -->
+<!-- 									</select> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Fecha -->
+<!-- 										Inicio Relaci&oacute;n Laboral:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="fechaIniRelLab" name="fechaIniRelLab"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Fecha -->
+<!-- 										de Pago:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="fechaPago" name="fechaPago"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Periocidad -->
+<!-- 										de Pago:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="periocidadPago" name="periocidadPago"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="row"> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Fecha -->
+<!-- 										Inicial de Pago:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="fechaIniPago" name="fechaIniPago"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Fecha -->
+<!-- 										final de Pago:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="fechaFinPago" name="fechaFinPago"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 										de d&iacute;as pagados:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="numDiasPagados" name="numDiasPagados"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="row"> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Tipo -->
+<!-- 										de Contrato:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="tipoContrato" name="tipoContrato"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Tipo -->
+<!-- 										de jornada:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="tipoJornada" name="tipoJornada"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">R&eacute;gimen -->
+<!-- 										de Coontrataci&oacute;n:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="regimenContra" name="regimenContra"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Salario -->
+<!-- 										base de cotizaci&oacute;n:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="salarioBase" name="salarioBase"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Salario -->
+<!-- 										diario integrado:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="salarioIntegrado" name="salarioIntegrado"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Registro -->
+<!-- 										Patronal:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="regPatronal" name="regPatronal"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Riesgo -->
+<!-- 										de Puesto:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="riesgoPuesto" name="riesgoPuesto"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="form-group"> -->
+<!-- 							<div class="checkbox"> -->
+<!-- 								<label><input type="checkbox" ng-model="leyendaFiscal">Leyenda -->
+<!-- 									fiscal</label> -->
+<!-- 							</div> -->
+<!-- 							<div ng-show="leyendaFiscal" class="row"> -->
+<!-- 								<div class="form-group col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Disposici&oacute;n -->
+<!-- 										Fiscal:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="dispFiscal" name="dispFiscal"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="form-group col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">Norma:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" id="norma" -->
+<!-- 											name="norma"> -->
+<!-- 									</div> -->
+<!-- 									<input type="submit" class="btn btn-primary" -->
+<!-- 										value="Agregar Leyenda"> -->
+<!-- 								</div> -->
+<!-- 								<div class="form-group col-md-3"> -->
+<!-- 									<label for="example-text-input" class="col-2 col-form-label">*Texto -->
+<!-- 										Leyenda:</label> -->
+<!-- 									<div class="col-10"> -->
+<!-- 										<input class="form-control facInp" type="text" value="" -->
+<!-- 											id="textoLeyenda" name="textoLeyenda"> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="form-group"> -->
+<!-- 							<div class="checkbox"> -->
+<!-- 								<label><input type="checkbox" ng-model="spei">SPEI</label> -->
+<!-- 							</div> -->
+<!-- 							<div class="form-group row" ng-show="spei"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">Comprobante -->
+<!-- 									electr&oacute;nico de pago:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="compElecPago" name="compElecPago"> -->
+<!-- 								</div> -->
+<!-- 								<input type="submit" class="btn btn-primary" -->
+<!-- 									value="Buscar Archivo"> <input type="submit" -->
+<!-- 									class="btn btn-primary" value="Agregar CEP"> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="form-group"> -->
+<!-- 					<div class="checkbox"> -->
+<!-- 						<label><input type="checkbox" -->
+<!-- 							ng-model="certificadoDestruccion">Certificado de -->
+<!-- 							Destrucci&oacute;n</label> -->
+<!-- 					</div> -->
+<!-- 					<div ng-show="certificadoDestruccion"> -->
+<!-- 						<div class="form-group row"> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">Serie:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="serieDestruccion" name="serieDestruccion"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 									de Folio para la destrucci&oacute;n:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="folioDestruccion" name="folioDestruccion"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<label>Datos del Vehiculo Destruido</label> -->
+<!-- 						<div class="form-group row"> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">Marca:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="marcaVehiculo" name="marcaVehiculo"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">Tipo -->
+<!-- 									o clase:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="tipoVehiculo" name="tipoVehiculo"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">A&ntilde;o:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="yearVehiculo" name="yearVehiculo"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">Modelo:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="modVehiculo" name="modVehiculo"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">NIV:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="nivVehiculo" name="nivVehiculo"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 									de Serie:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="numSerieVehiculo" name="numSerieVehiculo"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 									de Placas:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="placasVehiculo" name="placasVehiculo"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 									de Motor:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="numMotorVehiculo" name="numMotorVehiculo"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-3"> -->
+<!-- 								<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 									de Folio Tarjeta de Circulaci&oacute;n:</label> -->
+<!-- 								<div class="col-10"> -->
+<!-- 									<input class="form-control facInp" type="text" value="" -->
+<!-- 										id="tarjCircVehiculo" name="tarjCircVehiculo"> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 												<div class="form-group "> -->
+
+<!-- 												</div> -->
+<!-- 												<div class="form-group "> -->
+
+<!-- 												</div> -->
+<!-- 												<div class="form-group "> -->
+
+<!-- 												</div> -->
+<!-- 												<div class="form-group "> -->
+
+<!-- 												</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+				<div class="form-group" ng-show="infAduanera">
+					<div class="form-group ">
+						<div class="row">
+							<div class="col-md-4">
+								<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero
+									de Pedimento:</label>
+								<div class="col-10">
+									<input class="form-control facInp" type="text" value=""
+										id="numPedimento" name="numPedimento"  ng-model="concepto.informacionAduanera.numeroPedimento">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<label for="example-text-input" class="col-2 col-form-label">Aduana:</label>
+								<div class="col-10">
+									<input class="form-control facInp" type="text" value="" id="aduana"
+										name="aduana"  ng-model="concepto.informacionAduanera.aduana">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<label for="example-text-input" class="col-2 col-form-label">Fecha
+									de Pedimento:</label>
+								<div class="col-10">
+									<input class="form-control facInp" type="text" value=""
+										id="fechaPedimento" name="fechaPedimento"
+										placeholder="dd/mm/aaaa"  ng-model="concepto.informacionAduanera.fecha">
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane fade" id="emisorCont" role="tabpanel"
+			aria-labelledby="emisor-tab" aria-expanded="false">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group ">
+						<label for="example-text-input" class="col-2 col-form-label">RFC:</label>
+						<div class="col-10">
+							<input class="form-control facInp" type="text" value="" id="rfc"  ng-model="comprobante.emisor.rfc"
+								name="rfc">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group ">
+						<label for="example-text-input" class="col-2 col-form-label">Nombre
+							o Raz&oacute;n Social</label>
+						<div class="col-10">
+							<input class="form-control facInp" type="text" value="" id="nombre"
+								name="nombre"  ng-model="comprobante.emisor.nombre">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label for="Select">R&eacute;gimen Fiscal</label> <select
+							id="regimen" class="form-control" name="regimen" ng-model="comprobante.emisor.regimenFiscal">
+							<option>Seleccione regimen</option>
+							<option>PERSONAS MORALES</option>
+							<option>PERSONAS F&Iacute;SICAS</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+<!-- 			<div class="form-group"> -->
+<!-- 				<div class="checkbox"> -->
+<!-- 					<label><input type="checkbox" ng-model="showDomFis">Domicilio -->
+<!-- 						Fiscal</label> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			<div ng-show="showDomFis"> -->
+<!-- 				<div class="form-group row"> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Calle:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="calle" -->
+<!-- 								name="calle"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 							Interior:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="numInt" -->
+<!-- 								name="numInt"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 							Exterior</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="numExt" -->
+<!-- 								name="numExt"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Colonia:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="colonia" -->
+<!-- 								name="colonia"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Localidad:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="localidad" -->
+<!-- 								name="localidad"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Referencia:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="referencia" -->
+<!-- 								name="referencia"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Delegaci&oacute;n/Municipio:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="numInt" -->
+<!-- 								name="numInt"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="Select" class="col-2 col-form-label">Estado</label> <select -->
+<!-- 							id="regimen" class="form-control" name="regimen"> -->
+<!-- 							<option>Seleccione estado</option> -->
+<!-- 							<option>CIUDAD DE MÉXICO</option> -->
+<!-- 							<option>ESTADO DE MÉXICO</option> -->
+<!-- 						</select> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Pa&iacute;s:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="pais" -->
+<!-- 								name="pais"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">C&oacute;digo -->
+<!-- 							Postal</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="cp" -->
+<!-- 								name="cp"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			<div class="form-group"> -->
+<!-- 				<div class="checkbox"> -->
+<!-- 					<label><input type="checkbox" ng-model="expedidoEn">Expedido -->
+<!-- 						En(Para incorporar domicilio del establecimiento o sucursal, -->
+<!-- 						cuando sea domicilio fiscal)</label> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			<div ng-show="expedidoEn"> -->
+<!-- 				<div class="form-group row"> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Calle:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="calle" -->
+<!-- 								name="calle"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 							Interior:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="numInt" -->
+<!-- 								name="numInt"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 							Exterior</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="numExt" -->
+<!-- 								name="numExt"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Colonia:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="colonia" -->
+<!-- 								name="colonia"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Localidad:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="localidad" -->
+<!-- 								name="localidad"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Referencia:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="referencia" -->
+<!-- 								name="referencia"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Delegaci&oacute;n/Municipio:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="numInt" -->
+<!-- 								name="numInt"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="Select" class="col-2 col-form-label">Estado</label> <select -->
+<!-- 							id="regimen" class="form-control" name="regimen"> -->
+<!-- 							<option>Seleccione estado</option> -->
+<!-- 							<option>CIUDAD DE MÉXICO</option> -->
+<!-- 							<option>ESTADO DE MÉXICO</option> -->
+<!-- 						</select> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">Pa&iacute;s:</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="pais" -->
+<!-- 								name="pais"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="col-md-3"> -->
+<!-- 						<label for="example-text-input" class="col-2 col-form-label">C&oacute;digo -->
+<!-- 							Postal</label> -->
+<!-- 						<div class="col-10"> -->
+<!-- 							<input class="form-control facInp" type="text" value="" id="cp" -->
+<!-- 								name="cp"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+			</div>
+
+		</div>
+		<!-- Apartado de Receptor -->
+		<div class="tab-pane fade" id="receptorCont" role="tabpanel"
+			aria-labelledby="receptor-tab" aria-expanded="false">
+			<div class="form-group row">
+				<div class="col-md-3">
+					<label for="example-text-input" class="col-2 col-form-label">*RFC:</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="text" value="" id="rfc" ng-model="comprobante.receptor.rfc"
+							name="rfc">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<label for="example-text-input" class="col-2 col-form-label">Nombre
+						o Raz&oacute;n Social</label>
+					<div class="col-10">
+						<input class="form-control facInp" type="text" value="" id="nombre" ng-model="comprobante.receptor.nombre"
+							name="nombre">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<label for="Select">N&uacute;mero de Registro de Identificaci&oacute;n Fiscal</label> <input type="text"
+						id="regimen" class="form-control" name="regimen" ng-model="comprobante.numRegIdTrib" />
+				</div>
+			</div>
+<!-- 			<div class="form-group"> -->
+<!-- 				<div class="checkbox"> -->
+<!-- 					<label><input type="checkbox" ng-model="domicilioReceptor">Domicilio</label> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			<div class="form-group row" ng-show="domicilioReceptor"> -->
+<!-- 				<div class="col-md-3"> -->
+<!-- 					<label for="example-text-input" class="col-2 col-form-label">Calle:</label> -->
+<!-- 					<div class="col-10"> -->
+<!-- 						<input class="form-control facInp" type="text" value="" id="calle" -->
+<!-- 							name="calle"> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="col-md-3"> -->
+<!-- 					<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 						Interior:</label> -->
+<!-- 					<div class="col-10"> -->
+<!-- 						<input class="form-control facInp" type="text" value="" id="numInt" -->
+<!-- 							name="numInt"> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="col-md-3"> -->
+<!-- 					<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero -->
+<!-- 						Exterior</label> -->
+<!-- 					<div class="col-10"> -->
+<!-- 						<input class="form-control facInp" type="text" value="" id="numExt" -->
+<!-- 							name="numExt"> -->
+<!-- 					</div> -->
+<!-- 				</div><div class="col-md-3"> -->
+<!-- 				<label for="example-text-input" class="col-2 col-form-label">Colonia:</label> -->
+<!-- 				<div class="col-10"> -->
+<!-- 					<input class="form-control facInp" type="text" value="" id="colonia" -->
+<!-- 						name="colonia"> -->
+<!-- 				</div></div><div class="col-md-3"> -->
+<!-- 				<label for="example-text-input" class="col-2 col-form-label">Localidad:</label> -->
+<!-- 				<div class="col-10"> -->
+<!-- 					<input class="form-control facInp" type="text" value="" id="localidad" -->
+<!-- 						name="localidad"> -->
+<!-- 				</div></div><div class="col-md-3"> -->
+<!-- 				<label for="example-text-input" class="col-2 col-form-label">Referencia:</label> -->
+<!-- 				<div class="col-10"> -->
+<!-- 					<input class="form-control facInp" type="text" value="" id="referencia" -->
+<!-- 						name="referencia"> -->
+<!-- 				</div></div><div class="col-md-3"> -->
+<!-- 				<label for="example-text-input" class="col-2 col-form-label">Delegaci&oacute;n/Municipio:</label> -->
+<!-- 				<div class="col-10"> -->
+<!-- 					<input class="form-control facInp" type="text" value="" id="numInt" -->
+<!-- 						name="numInt"> -->
+<!-- 				</div></div><div class="col-md-3"> -->
+<!-- 				<label for="Select" class="col-2 col-form-label">Estado</label> <select -->
+<!-- 					id="regimen" class="form-control" name="regimen"> -->
+<!-- 					<option>Seleccione estado</option> -->
+<!-- 					<option>CIUDAD DE MÉXICO</option> -->
+<!-- 					<option>ESTADO DE MÉXICO</option> -->
+<!-- 				</select></div><div class="col-md-3"> -->
+<!-- 				<label for="example-text-input" class="col-2 col-form-label">Pa&iactue;s:</label> -->
+<!-- 				<div class="col-10"> -->
+<!-- 					<input class="form-control facInp" type="text" value="" id="pais" -->
+<!-- 						name="pais"> -->
+<!-- 				</div></div><div class="col-md-3"> -->
+<!-- 				<label for="example-text-input" class="col-2 col-form-label">C&oacute;digo -->
+<!-- 					Postal</label> -->
+<!-- 				<div class="col-10"> -->
+<!-- 					<input class="form-control facInp" type="text" value="" id="cp" name="cp"> -->
+<!-- 				</div></div> -->
+<!-- 			</div> -->
+			<div class="row">
+				<input type="submit" class="btn btn-primary" value="Enviar" ng-click="enviarComprobante()">
+				<input type="submit" class="btn btn-primary" value="Siguiente">
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+</div>

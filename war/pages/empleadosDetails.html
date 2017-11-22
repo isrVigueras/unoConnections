@@ -1,0 +1,44 @@
+<!--Aqui va-->
+<section class="jumbotron">
+	<div class="container">
+	<h2>Detalles del empleado</h2>
+	<p>{{nombreEmpresa}}</p>
+	<submenu/>
+	</div>
+</section>
+
+<div class="container">
+	<div class="row">
+		<div class="miga-de-pan">
+			<ol class="breadcrumb">
+				<li><button class="btn btn-small btn-link" ng-click="regresaListaEmpRfc()" ng-hide="Mostrar">Regresa a Lista Empleados</button></li>
+				<li><button class="btn btn-small btn-link" ng-click="regresaListaEmpId()" ng-show="Mostrar">Regresa a Lista Empleados</button></li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+		<h4>Datos Generales</h4>
+		<div class="col-md-6">Numero de Empleado:{{empleados.numEmpleado}}</div>
+		<div class="col-md-6">Nombre: {{empleados.nombre.nombresDePila}} {{empleados.nombre.apellidoPaterno}} {{empleados.nombre.apellidoMaterno}}</div>
+		<div class="col-md-6">Numero de Seguro: {{empleados.numSeguroSocial}}</div>
+		<div class="col-md-6">RFC: {{empleados.RFC}}</div>
+		<div class="col-md-6">CURP: {{empleados.curp}}</div>
+		<div class="col-md-6">Email: {{empleados.email}}</div>
+		<div class="col-md-6">Telefono: {{empleados.telefono}}</div>
+		<div class="col-md-6">Puesto: {{empleados.puesto}}</div>
+		<div class="col-md-6">Departamento: {{empleados.departamento}}</div>
+		<div class="col-md-6">Banco: {{empleados.nombreBanco}}</div>
+		<div class="col-md-6">Estado Civil: {{empleados.estadoCivil}}</div>
+		<div class="col-md-6">Nacionalidad: {{empleados.nacionalidad}}</div>
+	</div>
+	<div class="row">
+		<h4>Direcci&oacute;n</h4>
+		<div class="col-md-12">Estado:{{empleados.direccion.estado}}</div>
+		<div class="col-md-12">Localidad:{{empleados.direccion.localidad}}</div>
+			<div class="col-md-6">CP:{{empleados.direccion.codigoPostal}}</div>
+			<div class="col-md-6">Colonia:{{empleados.direccion.colonia}}</div>
+			<div class="col-md-6">Calle:{{empleados.direccion.calle}}</div>
+			<div class="col-md-4">Numero:{{empleados.direccion.numExterior}}</div>
+			<div class="col-md-4">Numero Interior:{{empleados.direccion.numInterior}}</div>		
+		</div>		
+	</div>

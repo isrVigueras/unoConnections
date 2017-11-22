@@ -1,0 +1,153 @@
+
+<!--Aqui va-->
+<section class="jumbotron">
+	<div class="container">
+	<h2>Registra Empleados</h2>
+	<p>{{nombreEmpresa}}</p>
+	<submenu/>
+	</div>
+</section>
+<div class="container">
+	<form id="forma">
+			<div>
+				<ol class="breadcrumb">
+					<li><button class="btn btn-small btn-link"
+							ng-click="regresaEmpleados()" ng-hide="IsShow">Regresar a
+							Empleados</button></li>					
+				</ol>
+			</div>
+			<h4>Datos Generales</h4>
+			<div class="col-md-12">
+					Esquema: <select class="form-control" ng-model="idEmpresa" ng-required="true">
+						<option ng-repeat="esq in regimenes" value="{{esq.regimen.id}}">{{esq.regimen.nombre}}</option>
+					</select><br>
+			</div>
+		<div class="col-md-6">
+			Numero de Seguridad Social: <input class="form-control"
+				ng-model="newEmp.numSeguroSocial" type="text" ng-required="true"><br>
+		</div>
+		<div class="col-md-6">
+			Apellido Paterno: <input class="form-control"
+				ng-model="newEmp.nombre.apellidoPaterno" type="text"><br>
+		</div>
+		<div class="col-md-6">
+			Apellido Materno: <input class="form-control"
+				ng-model="newEmp.nombre.apellidoMaterno" type="text"><br>
+		</div>
+		<div class="col-md-6">
+			Nombres: <input class="form-control"
+				ng-model="newEmp.nombre.nombresDePila" type="text"><br>
+		</div>
+		<div class="col-md-6">
+			CURP: <input class="form-control" ng-model="newEmp.curp" type="text"><br> <!-- (/^([a-z]{4})([0-9]{6})([a-z]{6})([0-9]{2})$/i)) -->
+		</div>
+		<div class="col-md-6">
+			RFC: <input class="form-control" ng-model="newEmp.RFC" type="text"><br> <!-- ^([A-Z—\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$ -->
+		</div>
+		<div class="col-md-6">
+			Email: <input class="form-control" ng-model="newEmp.email" type="text"><br> <!-- ^([A-Z—\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$ -->
+		</div>
+		<div class="col-md-6">
+			Telefono: <input class="form-control" ng-model="newEmp.telefono" type="text"><br> <!-- ^([A-Z—\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$ -->
+		</div>
+		<div class="col-md-6">
+			Puesto: <input class="form-control" ng-model="newEmp.puesto" type="text"><br> <!-- ^([A-Z—\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$ -->
+		</div>
+		<div class="col-md-6">
+			Departamento: <input class="form-control" ng-model="newEmp.departamento" type="text"><br> <!-- ^([A-Z—\x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$ -->
+		</div>
+<!-- 		<div class="col-md-12"> -->
+<!-- 			Fecha de Nacimiento: <input class="form-control" type="datetime-local"><br> -->
+<!-- 		</div> -->
+		<div class="col-md-6">
+			Clave del Banco: <select class="form-control" ng-model="newEmp.claveBanco" id="claveBanco">
+						<option ng-repeat="cveBan in catalogoBancos" value="{{cveBan.clave}}">{{cveBan.clave}}</option>
+					</select><br>
+		</div>
+		<div class="col-md-6">
+			Nombre del Banco: <select class="form-control" ng-model="newEmp.claveBanco" id="nombreBanco">
+						<option ng-repeat="cveBan in catalogoBancos" value="{{cveBan.clave}}">{{cveBan.nombreCorto}}</option>
+					</select><br>
+		</div>
+		<div class="col-md-6">
+			Estado Civil: <select class="form-control" ng-model="newEmp.estadoCivil">
+						<option ng-repeat="estadoCiv in estadoCivil">{{estadoCiv.estado}}</option>
+					</select><br>
+		</div>
+		<div class="col-md-6">
+			Nacionalidad:  <input class="form-control" ng-model="newEmp.nacionalidad" type="text"><br>
+		</div>
+		<div class="col-md-4">
+			<h4>Direccion</h4>
+		</div>
+		<div class="col-md-12">
+			Estado: <select class="form-control"
+				ng-model="newEmp.direccion.estado">
+				<option>AguasCalientes</option>
+				<option>Baja California</option>
+				<option>Baja California Sur</option>
+				<option>Campeche</option>
+				<option>Coahuila</option>
+				<option>Colima</option>
+				<option>Chiapas</option>
+				<option>Chihuahua</option>
+				<option>Ciudad de M√©xico</option>
+				<option>Duarango</option>
+				<option>Guanajuato</option>
+				<option>Guerrero</option>
+				<option>Hidalgo</option>
+				<option>Jalisco</option>
+				<option>Estado de  M√©xico</option>
+				<option>Michoac√°n</option>
+				<option>Morelos</option>
+				<option>Nayarit</option>
+				<option>Nuevo Le√≥n</option>
+				<option>Oaxaca</option>
+				<option>Puebla</option>
+				<option>Quer√©taro</option>
+				<option>Quintana Roo</option>
+				<option>San Luis Potos√≠</option>
+				<option>Sinaloa</option>
+				<option>Sonora</option>
+				<option>Tabasco</option>
+				<option>Tamaulipas</option>
+				<option>Tlaxcala</option>
+				<option>Veracruz</option>
+				<option>Yucatan</option>
+				<option>Zacatecas</option>
+			</select><br>
+		</div>
+		<div class="col-md-6">
+			Localidad: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.localidad"><br>
+		</div>
+		<div class="col-md-6">
+			CP: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.codigoPostal"><br>
+		</div>
+		<div class="col-md-6">
+			Colonia: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.colonia"><br>
+		</div>
+		<div class="col-md-6">
+			Calle: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.calle"><br>
+		</div>
+		<div class="col-md-6">
+			N&uacute;mero: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.numExterior"><br>
+		</div>
+		<div class="col-md-6">
+			N&uacute;mero Interior: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.numInterior"><br>
+		</div>
+		<div class="col-md-6">
+			Fecha Contrataci√≥n: <input class="form-control" id="datePicker" type="date"
+				ng-model="newEmp.fechaDeContratacion"><br>
+		</div>
+	</form>
+</div ng-view>
+<div class="container col-md-offset-1">
+	<button value="Guardar" class="btn btn-primary" ng-click="addEmp()">Guardar</button>
+	<button ng-click="clean()" class="btn btn-primary">Limpiar</button>
+</div>

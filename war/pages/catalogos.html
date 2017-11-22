@@ -1,0 +1,302 @@
+
+<!--Aqui va-->
+<section class="jumbotron">
+	<div class="container">
+		<h2>Catalogos</h2>
+		<p>{{nombreEmpresa}}</p>
+		<submenu/>
+	</div>
+</section>
+
+<div class="container">
+	<div>
+		<ol class="breadcrumb">
+			<li><button class="btn btn-small btn-link"
+					ng-click="regresaEmpresa()">Regresar a Detalles de
+					Empresas</button></li>
+		</ol>
+	</div>
+	<form class="form-inline" id="forma">
+		<div class="row">
+<!-- 		{{deduccionesContabilidad}} -->
+		
+			<h2 class="col-md-6">Catalogo Contabilidad</h2>
+			<h3 class="col-md-6">Percepciones</h3>
+			<table class="table">
+				<thead>
+					<tr>
+ 						<th>Clave</th>
+						<th>Descripcion</th>
+						<th>Clave Asociada al SAT</th>
+						<th>Descripcion Asociada al SAT</th>
+						<th>Editar</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="percep in tablacompleta">
+
+						<td>{{percep.percepcionCont.clave}}</td>
+						<td>{{percep.percepcionCont.descripcion}}</td>		
+ 						<td>{{percep.percepcionSat.clave}}</td>
+ 						<td>{{percep.percepcionSat.descripcion}}</td>
+ 						<td><button class="btn btn-small btn-primary"
+							data-toggle="modal"
+							data-target="#ModalModPerCon" ng-click="btnMod(percep.percepcionCont)">
+							<i class="glyphicon glyphicon-edit"></i>
+						</button></td>	
+						
+<!--  						<td><button class="btn btn-small btn-primary" -->
+<!--  							data-toggle="modal" -->
+<!--  							data-target="#ModalModPerSat" ng-click="btnMod(percep.percepcionSat)"> -->
+<!--  							<i class="glyphicon glyphicon-edit"></i> -->
+<!--  						</button></td> -->
+					</tr>					
+				</tbody>
+			</table>
+<!-- 			<button class="btn btn-small btn-primary" data-toggle="modal" -->
+<!-- 				data-target="#ModalCrearPerSat" ng-click="">Crear Sat</button> -->
+				<button class="btn btn-small btn-primary" data-toggle="modal"
+				data-target="#ModalCrearPerCont" ng-click="">Crear Percepcion de Contabilidad</button>
+			<h3>Deducciones</h3>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Clave</th>
+						<th>Descripcion</th>
+						<th>Clave Asociada al Sat</th>
+						<th>Descripcion Asociada al Sat</th>
+						<th>Editar</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="dedu in tablacompletaDed">
+						<td>{{dedu.deduccionCont.clave}}</td>
+						<td>{{dedu.deduccionCont.descripcion}}</td>
+						<td>{{dedu.deduccionSat.clave}}</td>
+ 						<td>{{dedu.deduccionSat.descripcion}}</td>
+<!-- 						<td><button class="btn btn-small btn-primary" -->
+<!-- 							data-toggle="modal" -->
+<!-- 							data-target="#ModalModDedSat" ng-click="btnModDed(dedu)"> -->
+<!-- 							<i class="glyphicon glyphicon-edit"></i> -->
+<!-- 						</button></td>		 -->
+						<td><button class="btn btn-small btn-primary"
+							data-toggle="modal"
+							data-target="#ModalModDedCon" ng-click="btnModDed(dedu.deduccionCont)">
+							<i class="glyphicon glyphicon-edit"></i>
+						</button></td>
+						</tr>
+				</tbody>
+			</table>
+<!-- 			<button class="btn btn-small btn-primary" data-toggle="modal" -->
+<!-- 				data-target="#ModalCrearDedSat" ng-click="">Crear</button>	 -->
+				<button class="btn btn-small btn-primary" data-toggle="modal"
+				data-target="#ModalCrearDedCont" ng-click="">Crear Deduccion de Contabilidad</button>				
+		</div>
+		
+		<div class="modal fade" id="ModalCrearPerCont" role="dialog" tabindex='-1'>
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">CREAR PERCEPCIONES PROPIAS DE LA
+							CONTABILIDAD</h4>
+					</div>
+					<div class="modal-body">
+						<h3>Percepcion</h3>
+						Clave Asociada al SAT
+						<div class="col-md-12">				
+ 							<select ng-model="variable.clave" class="form-control">
+ 								<option ng-repeat="percep in percepciones"
+ 									value="{{percep.clave}}">{{percep.clave}}</option>
+ 							</select>
+ 						</div>
+ 						<br>Descripcion Asociada al SAT
+ 						<div class="col-md-12">	
+ 							<select ng-model="variable.clave" class="form-control">
+ 								<option ng-repeat="percep in percepciones"
+ 									value="{{percep.clave}}">{{percep.descripcion}}</option>
+ 							</select>
+ 						</div> 						
+						<br>Clave
+						<div class="col-md-12">
+							<input type="text" ng-model="percepcion.clave"
+								class="form-control">
+						</div>
+						<br>Descripcion
+						<div class="col-md-12">
+							<input type="text" ng-model="percepcion.descripcion"
+								class="form-control">
+						</div>
+						<br>
+						<div>
+							<button ng-click="addPerCont(percepcion)" class="btn btn-primary"
+								value="Guardar">Crear</button>
+						</div>						
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		
+				<div class="modal fade" id="ModalCrearDedCont" role="dialog" tabindex='-1'>
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">CREAR DEDUCCIONES PROPIAS DE LA
+							CONTABILIDAD</h4>
+					</div>
+					<div class="modal-body">
+						<h3>Deduccion</h3>
+						Clave Asociada
+						<div class="col-md-12">				
+ 							<select ng-model="variable.clave" class="form-control">
+ 								<option ng-repeat="dedu in deducciones"
+ 									value="{{dedu.clave}}">{{dedu.clave}}</option>
+ 							</select>
+ 						</div>
+ 						<br>Descripcion Asociada
+ 						<div class="col-md-12">	
+ 							<select ng-model="variable.clave" class="form-control">
+ 								<option ng-repeat="dedu in deducciones"
+ 									value="{{dedu.clave}}">{{dedu.descripcion}}</option>
+ 							</select>
+ 						</div> 						
+						<br>Clave
+						<div class="col-md-12">
+							<input type="text" ng-model="deduccion.clave"
+								class="form-control">
+						</div>
+						<br>Descripcion
+						<div class="col-md-12">
+							<input type="text" ng-model="deduccion.descripcion"
+								class="form-control">
+						</div>
+						<br>
+						<div>
+							<button ng-click="addDedCont(deduccion)" class="btn btn-primary"
+								value="Guardar">Crear</button>
+						</div>						
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		
+		<div class="modal fade" id="ModalModPerCon" role="dialog" tabindex='-1'>
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">MODIFICAR PERCEPCION DE LA
+							CONTABILIDAD</h4>
+					</div>
+					<div class="modal-body">
+						<h3>Percepcion</h3>
+						Clave Asociada
+						<div class="col-md-12">				
+ 							<select ng-model="variable.idAsociado" class="form-control">
+ 								<option ng-repeat="percep in percepciones"
+ 									value="{{percep.id}}">{{percep.clave}}</option>
+ 							</select>
+ 						</div>
+ 						<br>Descripcion Asociada
+ 						<div class="col-md-12">	
+ 							<select ng-model="variable.idAsociado" class="form-control">
+ 								<option ng-repeat="percep in percepciones"
+ 									value="{{percep.id}}">{{percep.descripcion}}</option>
+ 							</select>
+ 						</div> 						
+						<br>Clave
+						<div class="col-md-12">
+							<input type="text" ng-model="variable.clave"
+								class="form-control">
+						</div>
+						<br>Descripcion
+						<div class="col-md-12">
+							<input type="text" ng-model="variable.descripcion"
+								class="form-control">
+						</div>
+						<br>
+						<div>
+							<button ng-click="modPerCont(variable)" class="btn btn-primary"
+								value="Guardar">Modificar</button>
+						</div>						
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		
+		<div class="modal fade" id="ModalModDedCon" role="dialog" tabindex='-1'>
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">MODIFICAR DEDUCCION DE LA
+							CONTABILIDAD</h4>
+					</div>
+					<div class="modal-body">
+						<h3>Deduccion</h3>
+						Clave Asociada
+						<div class="col-md-12">				
+ 							<select ng-model="variable.idAsociado" class="form-control">
+ 								<option ng-repeat="dedu in deducciones"
+ 									value="{{dedu.id}}">{{dedu.clave}}</option>
+ 							</select>
+ 						</div>
+ 						<br>Descripcion Asociada
+ 						<div class="col-md-12">	
+ 							<select ng-model="variable.idAsociado" class="form-control">
+ 								<option ng-repeat="dedu in deducciones"
+ 									value="{{dedu.id}}">{{dedu.descripcion}}</option>
+ 							</select>
+ 						</div> 						
+						<br>Clave
+						<div class="col-md-12">
+							<input type="text" ng-model="variable.clave"
+								class="form-control">
+						</div>
+						<br>Descripcion
+						<div class="col-md-12">
+							<input type="text" ng-model="variable.descripcion"
+								class="form-control">
+						</div>
+						<br>
+						<div>
+							<button ng-click="modDedCont(variable)" class="btn btn-primary"
+								value="Guardar">Modificar</button>
+						</div>						
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					</div>
+				</div>
+
+			</div>
+		</div>		
+		
+</div>
+

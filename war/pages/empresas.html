@@ -1,0 +1,120 @@
+<!--Aqui va-->
+<section class="jumbotron">
+	<div class="container">
+	<div class="col-md-12">
+	<h2>Registrar Informaci贸n de la Empresa</h2>
+	<p>Cacao</p>
+	</div>
+	</div>
+</section>
+ 
+<div class="container">
+	<div>
+		<ol class="breadcrumb">
+			<li><a href="#/empresas/list">Regresar a Empresas</a></li>
+		</ol>
+	</div>
+	<form id="forma" name="myForm">
+		<div class="col-md-5">
+		<h4>Datos Generales</h4>
+		
+		<div class="col-md-12">
+			Nombre de la Empresa: <input class="form-control" type="text"
+				ng-model="newEmp.nombre"ng-required="true"><br> <!--   -->
+		</div>
+		<div class="col-md-12">
+			Raz&oacute;n Social: <input class="form-control" type="text"
+				ng-model="newEmp.razonSocial"ng-required="true"><br> <!--   -->
+		</div>
+		<div class="col-md-12">
+			RFC: <input class="form-control" type="text" ng-model="newEmp.RFC" ng-required="true" pattern="^([A-Z裓x26]{3,4}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1]))([A-Z\d]{3})?$"><br><!--   -->
+		</div>
+			<div class="col-md-6">
+			Email 1: <input class="form-control" type="email" ng-model="newEmp.emails[0]"><br><!--   -->
+		</div>
+		<div class="col-md-6">
+			Email 2: <input class="form-control" type="email" ng-model="newEmp.emails[1]"><br><!--   -->
+		</div>
+		<div class="col-md-6">
+			Email 3: <input class="form-control" type="email" ng-model="newEmp.emails[2]"><br><!--   -->
+		</div>
+		</div>
+		<!--<div class="col-md-6">
+			Regimen Fiscal: <select class="form-control"
+				ng-model="newEmp.regimen">
+				<option ng-model="newEmp.regimen">Asimilados a Salarios</option>
+				<option ng-model="newEmp.regimen">Sueldos y Salarios</option>
+			</select><br>
+		</div> -->
+		<div class="col-md-7">
+		<h4>Direcci贸n</h4>
+		<div class="col-md-6">
+			Estado: <select class="form-control"
+				ng-model="newEmp.direccion.estado" required>
+				<option ng-model="newEmp.direccion.estado">Aguascalientes</option>
+				<option ng-model="newEmp.direccion.estado">Baja California</option>
+				<option ng-model="newEmp.direccion.estado">Baja California Sur</option>
+				<option ng-model="newEmp.direccion.estado">Campeche</option>
+				<option ng-model="newEmp.direcicon.estado">Coahuila</option>
+				<option ng-model="newEmp.direcicon.estado">Colima</option>
+				<option ng-model="newEmp.direcicon.estado">Chiapas</option>
+				<option ng-model="newEmp.direcicon.estado">Chihuahua</option>
+				<option ng-model="newEmp.direcicon.estado">Ciudad de M茅xico</option>
+				<option ng-model="newEmp.direcicon.estado">Durango</option>
+				<option ng-model="newEmp.direcicon.estado">Guanajuato</option>
+				<option ng-model="newEmp.direcicon.estado">Guerrero</option>
+				<option ng-model="newEmp.direcicon.estado">Hidalgo</option>
+				<option ng-model="newEmp.direcicon.estado">Jalisco</option>
+				<option ng-model="newEmp.direcicon.estado">M茅xico</option>
+				<option ng-model="newEmp.direcicon.estado">Michoac谩n</option>
+				<option ng-model="newEmp.direcicon.estado">Morelos</option>
+				<option ng-model="newEmp.direcicon.estado">Nayarit</option>
+				<option ng-model="newEmp.direcicon.estado">Nuevo Le贸n</option>
+				<option ng-model="newEmp.direcicon.estado">Oaxaca</option>
+				<option ng-model="newEmp.direcicon.estado">Puebla</option>
+				<option ng-model="newEmp.direcicon.estado">Quer茅taro</option>
+				<option ng-model="newEmp.direcicon.estado">Quintana Roo</option>
+				<option ng-model="newEmp.direcicon.estado">San Luis Potos铆</option>
+				<option ng-model="newEmp.direcicon.estado">Sinaloa</option>
+				<option ng-model="newEmp.direcicon.estado">Sonora</option>
+				<option ng-model="newEmp.direcicon.estado">Tabasco</option>
+				<option ng-model="newEmp.direcicon.estado">Tamaulipas</option>
+				<option ng-model="newEmp.direcicon.estado">Tlaxcala</option>
+				<option ng-model="newEmp.direcicon.estado">Veracruz</option>
+				<option ng-model="newEmp.direcicon.estado">Yucatan</option>
+				<option ng-model="newEmp.direcicon.estado">Zacatecas</option>
+			</select><br>
+		</div>
+		<div class="col-md-6">
+			Localidad: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.localidad" ng-required="true" ><br> <!--  -->
+		</div>
+		<div class="col-md-6">
+		C贸digo Postal:<input class="form-control" type="text" 
+				ng-model="newEmp.direccion.codigoPostal" ng-required="true" pattern="[0-9\s]{5}"> <br>
+		</div>
+		<div class="col-md-6">
+			Colonia: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.colonia" ng-required="true"><br>
+		</div>
+		<div class="col-md-6">
+			Calle: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.calle" ng-required="true" ><br>
+		</div>
+		<div class="col-md-6">
+			Municipio / Delegaci&oacute;n: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.municipio" ng-required="true"><br> <!--  -->
+		</div>
+		<div class="col-md-3">
+			Numero Exterior: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.numExterior"ng-required="true" ><br>
+		</div>
+		<div class="col-md-3">
+			Numero Interior: <input class="form-control" type="text"
+				ng-model="newEmp.direccion.numInterior"><br>
+		</div>	
+	</form>
+	<div class="col-md-12">
+				<button ng-click="myForm.$valid && addEmp()" class="btn">Guardar</button>
+	</div>
+</div ng-view>

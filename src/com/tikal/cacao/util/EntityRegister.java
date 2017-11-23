@@ -21,8 +21,10 @@ import com.tikal.cacao.model.Empresa;
 import com.tikal.cacao.model.EntTipoDeduccion;
 import com.tikal.cacao.model.EntTipoPercepcion;
 import com.tikal.cacao.model.Factura;
+import com.tikal.cacao.model.FacturaVTT;
 import com.tikal.cacao.model.Imagen;
 import com.tikal.cacao.model.IndicadorNomina;
+import com.tikal.cacao.model.ListaDeClasesDeProdServ;
 import com.tikal.cacao.model.Pago;
 import com.tikal.cacao.model.PercepcionCuotaSindical;
 import com.tikal.cacao.model.PercepcionHorasExtra;
@@ -92,6 +94,8 @@ public class EntityRegister {
 		registrar(Serial.class);
 		registrar(Imagen.class);
 		registrar(ReporteRenglon.class);
+		registrar(ListaDeClasesDeProdServ.class);
+		registrar(FacturaVTT.class);
 	}
 	
 	private <T> void registrar(Class<T> clase) {

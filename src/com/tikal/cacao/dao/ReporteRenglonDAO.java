@@ -25,6 +25,8 @@ public interface ReporteRenglonDAO {
 	
 	List<ReporteRenglon> consultarids(String[] ids);
 	
+	int pags(String rfcEmisor);
+	
 	int pags(String rfc, String serie);
 	
 	int pagsRec(String rfc, String receptor);

@@ -9,7 +9,9 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Index;
+import com.tikal.cacao.factura.VersionCFDI;
 import com.tikal.cacao.model.Factura;
+import com.tikal.cacao.model.FacturaVTT;
 import com.tikal.cacao.sat.cfd.Comprobante;
 import com.tikal.cacao.util.Util;
 
@@ -39,6 +41,14 @@ public class ReporteRenglon {
 	private String total;
 	private String estatus; //antes status
 	
+	private boolean tieneComplementoPago;
+	
+	@Index
+	private boolean pagado;
+	
+	@Index 
+	private VersionCFDI version;
+	
 	public ReporteRenglon(){}
 	
 	public ReporteRenglon(Factura f){
@@ -61,6 +71,34 @@ public class ReporteRenglon {
 		this.estatus="";
 		if(f.getEstatus()!=null){
 			this.estatus=f.getEstatus().name();
+		}
+	}
+	
+	public ReporteRenglon(FacturaVTT f) {
+		this.fechaCertificacion = f.getFechaCertificacion();
+		com.tikal.cacao.sat.cfd33.Comprobante cfdi = Util.unmarshallCFDI33XML(f.getCfdiXML());
+		this.rfcEmisor = cfdi.getEmisor().getRfc();
+		this.emisor = cfdi.getEmisor().getNombre();
+		this.serie = cfdi.getSerie();
+		this.folio = cfdi.getFolio();
+		this.nombreRec = cfdi.getReceptor().getNombre();
+		this.rfcReceptor = cfdi.getReceptor().getRfc();
+		this.lugar = cfdi.getLugarExpedicion().getValor();
+		this.uuid = f.getUuid();
+		this.subtotal=cfdi.getSubTotal()+"";
+		this.iva=cfdi.getImpuestos().getTotalImpuestosTrasladados()+"";
+		this.total=cfdi.getTotal()+"";
+		this.estatus="";
+		if(f.getEstatus()!=null){
+			this.estatus=f.getEstatus().name();
+		}
+		this.version = VersionCFDI.V3_3;
+		
+		if (cfdi.getMetodoPago().getValor().contentEquals("PPD")) {
+			this.pagado = false;
+		} else if (cfdi.getMetodoPago().getValor().contentEquals("PUE")
+				&& !cfdi.getFormaPago().getValor().contentEquals("99")) {
+			this.pagado = true;
 		}
 	}
 	
@@ -171,4 +209,23 @@ public class ReporteRenglon {
 	public void setFolio(String folio) {
 		this.folio = folio;
 	}
+
+	public boolean isTieneComplementoPago() {
+		return tieneComplementoPago;
+	}
+
+	public void setTieneComplementoPago(boolean tieneComplementoPago) {
+		this.tieneComplementoPago = tieneComplementoPago;
+	}
+
+	public boolean isPagado() {
+		return pagado;
+	}
+
+	public void setPagado(boolean pagado) {
+		this.pagado = pagado;
+	}
+	
+	
+	
 }

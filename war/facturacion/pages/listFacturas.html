@@ -64,6 +64,7 @@
 			<thead>
 				<tr>
 					<th>Receptor</th>
+					<th style="width:35%;">Nombre del Cliente</th>
 					<th>Serie/Folio</th>
 					<th>Fecha</th>
 					<th>Total</th>
@@ -74,17 +75,20 @@
 			<tbody>
 				<tr ng-repeat="fact in facturas | filter:search:strict">
 					<td>{{fact.rfcReceptor}}</td>
+					<td>{{fact.nombreRec}}</td>
 					<td>{{fact.serie}}{{fact.folio}}</td>
 					<td>{{fact.fechaCertificacion}}</td>
 					<td>{{fact.total}}</td>
 					<td>{{fact.estatus}}</td>
 
-					<td><a class="btn2 btn-small btn-danger"
-						href="/facturacion/obtenerPDF/{{fact.uuid}}" download="{{fact.serie+''+fact.folio+'.pdf'}}">PDF</a><a
+					<td>
+					<div ng-show="fact.version === undefined"class="v3_2">
+					<a class="btn2 btn-small btn-danger"
+						href="/facturacion/obtenerPDF/{{fact.uuid}}"
+						download="{{fact.serie+''+fact.folio+'.pdf'}}">PDF</a><a
 						class="btn2 btn-small btn-info"
-						href="/facturacion/obtenerXML/{{fact.uuid}}" download="{{fact.serie+''+fact.folio+'.xml'}}">XML</a> <!-- <a ng-show="fact.estatus === 'GENERADO'" class="btn2 btn-small btn-success" href="/facturacion/timbrar/{{fact.uuid}}">Timbrar</a> -->
-						<!-- 						<button class="btn2 btn-small btn-success" --> <!-- 							ng-show="fact.estatus === 'GENERADO'" type="button" -->
-						<!-- 							ng-click="timbrar(fact.uuid)">Timbrar</button> -->
+						href="/facturacion/obtenerXML/{{fact.uuid}}"
+						download="{{fact.serie+''+fact.folio+'.xml'}}">XML</a> 
 						<button class="btn2 btn-small btn-success" data-toggle="modal"
 							ng-show="fact.estatus === 'GENERADO'" type="button"
 							data-target="#myModal" ng-click="paraTimbrar(fact.uuid)">Timbrar</button>
@@ -96,9 +100,51 @@
 						<button class="btn2 btn-small btn-info" data-toggle="modal"
 							ng-show="fact.estatus=='TIMBRADO'" data-target="#myModal2"
 							ng-click="paraCancelar(fact.uuid)">Cancelar</button>
-							<button class="btn2 btn-small btn-info" data-toggle="modal"
-							ng-show="fact.estatus=='TIMBRADO' || fact.estatus=='CANCELADO'" data-target="#mailModal"
-							ng-click="paraCorreo(fact.uuid)"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></button></td>
+						<button class="btn2 btn-small btn-info" data-toggle="modal"
+							ng-show="fact.estatus=='TIMBRADO' || fact.estatus=='CANCELADO'"
+							data-target="#mailModal" ng-click="paraCorreo(fact.uuid)">
+							<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+						</button>
+						</div>
+<!-- 						BOTONES A MOSTRAR VERSION 3.3 -->
+						<div ng-show="fact.version === 'V3_3'"class="v3_3">
+						<a class="btn2 btn-small btn-danger"
+						href="/factura33/obtenerPDF/{{fact.uuid}}"
+						download="{{fact.serie+''+fact.folio+'.pdf'}}">PDF</a><a
+						class="btn2 btn-small btn-info"
+						href="/factura33/obtenerXML/{{fact.uuid}}"
+						download="{{fact.serie+''+fact.folio+'.xml'}}">XML</a> 
+						<button class="btn2 btn-small btn-success" data-toggle="modal"
+							ng-show="fact.estatus === 'GENERADO'" type="button"
+							data-target="#myModal" ng-click="paraTimbrar(fact.uuid)">Timbrar</button>
+
+						<button class="btn2 btn-small btn-info"
+							ng-show="fact.estatus=='GENERADO'"
+							ng-click="editarFactura33(fact.uuid)">Editar</button>
+
+						
+						<button class="btn2 btn-small btn-info" data-toggle="modal"
+							ng-show="fact.estatus=='TIMBRADO'" data-target="#myModalF33"
+							ng-click="paraCancelar33(fact.uuid)" title="Cancelar">
+							
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+						
+						<button class="btn2 btn-small btn-info" data-toggle="modal"
+							ng-show="fact.estatus=='TIMBRADO' || fact.estatus=='CANCELADO'"
+							data-target="#mailModal33" ng-click="paraCorreo33(fact.uuid)">
+							<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+						</button>
+						
+<!-- 						<button class="btn2 btn-small btn-success" data-toggle="modal" title="Agregar complemento de pago" -->
+<!-- 							ng-show="fact.estatus=='TIMBRADO' && fact.pagado==false" -->
+<!-- 							ng-click="agregarPago(fact.uuid, $index)" data-target="#pagoModal"> -->
+							
+<!-- 								<span class="glyphicon glyphicon-usd"></span> -->
+<!-- 						</button> -->
+						
+						</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -171,6 +217,38 @@
 	</div>
 </div>
 
+<div class="modal fade" id="mailModal33" role="dialog" tabindex='-1'>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Selecciona un Email Factura 33</h4>
+			</div>
+			<div class="modal-body">
+				<label class="col-2 col-form-label" ng-hide="Correo">Email:</label>
+				<div class="col-10">
+					<select ng-model="comprobante.email" class="form-control"
+						ng-hide="Correo">
+						<option ng-repeat="e in emails">{{e}}</option>
+					</select> <label class="col-2 col-form-label">Otro:</label> <input
+						type="checkbox" name="otro" value="Otro" ng-click="otro()">
+					<input class="form-control" type="text" value=""
+						ng-model="comprobante.email" ng-hide="OtroCorreo">
+				</div>
+				<div class="modal-footer">
+				
+					<button ng-hide="terminado" type="submit" class="btn btn-default"
+						data-toggle="modal" data-dismiss="modal" data-target="#myModal3"
+						ng-click="enviarMail33()">Enviar</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+				
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
 
 <div class="modal fade" id="myModal2" role="dialog" tabindex='-1'>
 	<div class="modal-dialog">
@@ -193,6 +271,30 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="myModalF33" role="dialog" tabindex='-1'>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Cancelar Factura 3.3</h4>
+			</div>
+			<div class="modal-body">
+				<label class="col-2 col-form-label" ng-hide="Correo">Seguro
+					que desea cancelar la Factura</label>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-default"
+						ng-click="cancelarFactura33()" data-dismiss="modal">Si,
+						Cancelar</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+				</div>
+				
+			</div>
+
+		</div>
+	</div>
+</div>
+
 <div class="modal fade" id="myModal3" role="dialog" tabindex='-1'>
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -205,6 +307,128 @@
 				</div>
 			</div>
 
+		</div>
+	</div>
+</div>
+
+<!-- Modal para complemento de Pago -->
+<div class="modal fade" id="pagoModal" role="dialog" tabindex='-1'>
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			 
+			 <div class="modal-header">
+			 	<h3>CFDI con Complemento de Pagos</h3>
+			 </div>
+			 
+			 <div class="modal-body">
+			 	<ul class="nav nav-tabs" id="myTabPagos" role="tablist">
+					<li class="nav-item"><a class="nav-link active" id="home-tab"
+						data-toggle="tab" href="" ng-click="showTab('comprobante')"
+						role="tab" aria-controls="comprobante" aria-expanded="true">Comprobante</a>
+					</li>
+					
+					<li class="nav-item"><a class="nav-link" id="receptor-tab"
+						data-toggle="tab" href="" ng-click="showTab('complementoDePago')"
+						role="tab" aria-controls="pago" aria-expanded="false">Pago</a></li>
+					
+				</ul>
+				<div class="tab-content" id="myTabContent">
+					<div role="tabpanel" class="tab-pane fade active show"
+					id="comprobante" aria-labelledby="comprobante-tab"
+					aria-expanded="true">
+						<div class="row">
+							<div class="col-md-4">
+								<label for="example-text-input" class="col-2 col-form-label">*Fecha
+									y Hora de Expedici&oacute;n:</label>
+								<div class="col-10">
+									<input class="form-control facInp" type="date" value="" id="fecha"
+										ng-model="cfdiParaPago.fecha">
+								</div>
+							</div>
+							<div class="col-md-2">
+								<label for="example-text-input" class="col-2 col-form-label">*Lugar
+									de Expedici&oacute;n:</label>
+								<div class="col-10">
+									<input class="form-control facInp" type="text" value="" id="lugar"
+										name="lugar" ng-model="cfdiParaPago.lugarExpedicion.valor">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<label for="example-text-input" class="col-2 col-form-label">*R&eacute;gimen
+									Fiscal</label>
+								<div class="col-10">
+									<select class="form-control facInp"
+										ng-model="cfdiParaPago.emisor.regimenFiscal.valor">
+										<option value="601" selected>601-General de Ley Personas Morales</option>
+										<option value="603">603-Personas Morales con Fines no Lucrativos</option>
+										<option value="605">605-Sueldos y Salarios e Ingresos Asimilados a Salarios</option>
+										<option value="606">606-Arrendamiento</option>
+										<option value="608">608-Dem&aacute;s ingresos</option>
+										<option value="609">609-Consolidaci&oacute;n</option>
+										<option value="610">610-Residentes en el Extranjero sin Establecimiento Permanente en M&eacute;xico</option>
+										<option value="611">611-Ingresos por Dividendos (socios y accionistas)</option>
+										<option value="612">612-Personas F&iacute;sicas con Actividades Empresariales y Profesionales</option>
+										<option value="614">614-Ingresos por intereses</option>
+										<option value="616">616-Sin obligaciones fiscales</option>
+										<option value="620">620-Sociedades Cooperativas de Producci&oacute;n que optan por diferir sus ingresos</option>
+										<option value="622">622-Actividades Agr&iacute;colas, Ganaderas,Silv&iacute;colas y Pesqueras</option>
+										<option value="623">623-Opcional para Grupos de Sociedades</option>
+										<option value="624">624-Coordinados</option>
+										<option value="607">607-R&eacute;gimen de Enajenaci&oacute;n o Adquisici&oacute;n de Bienes</option>
+										<option value="615">615-R&eacute;gimen de los ingresos por obtenci&oacute;n de premios</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-2"></div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="form-group ">
+								<div class="col-md-2">
+									<label for="example-text-input" class="col-2 col-form-label">Serie:
+									</label>
+									<div class="col-10">
+										<select class="facInp" ng-model="serialElegido"
+											ng-options="r.serie for r in seriales" ></select>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<label for="example-text-input" class="col-2 col-form-label">Folio:</label>
+									<div class="col-10">
+										<input class="form-control facInp" type="number" value=""
+											id="folio" name="folio" ng-model="serialElegido.folio" min="1" ng-disabled="serialElegido">
+									</div>
+								</div>
+								<div class="col-md-2">
+									<label for="example-text-input" class="col-2 col-form-label">*Tipo
+										de Comprobante:</label>
+									<div class="col-10">
+										<input class="form-control facInp" type="text" value=""
+											id="tipoComprobante" name="tipoComprobante" disabled
+											ng-model="cfdiParaPago.tipoDeComprobante.valor">
+									</div>
+								</div>
+								<div class="col-md-2">
+									<label for="example-text-input" class="col-2 col-form-label">Moneda:</label>
+									<div class="col-10">
+										<input class="form-control facInp" type="text" value="" disabled
+											id="moneda" name="moneda" ng-model="cfdiParaPago.moneda.valor">
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					
+					<div role="tabpanel" class="tab-pane fade"
+					id="complementoDePago" aria-labelledby="pago-tab"
+					aria-expanded="false">
+						<div class="form-group row">
+							
+						</div>
+					</div>
+			 	</div>
+			 </div>
 		</div>
 	</div>
 </div>

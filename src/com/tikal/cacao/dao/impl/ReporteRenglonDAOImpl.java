@@ -84,6 +84,11 @@ public class ReporteRenglonDAOImpl implements ReporteRenglonDAO {
 			return renglones;
 		}
 	}
+	
+	@Override
+	public int pags(String rfcEmisor) {
+		return ((ofy().load().type(ReporteRenglon.class).filter("rfcEmisor",rfcEmisor).count()-1)/25)+1;
+	}
 
 	@Override
 	public int pags(String rfc, String serie) {

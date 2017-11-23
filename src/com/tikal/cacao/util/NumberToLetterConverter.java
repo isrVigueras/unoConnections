@@ -10,8 +10,8 @@ import java.text.DecimalFormat;
 public class NumberToLetterConverter {
 	private static final String[] UNIDADES = { "", "UN ", "DOS ", "TRES ",
             "CUATRO ", "CINCO ", "SEIS ", "SIETE ", "OCHO ", "NUEVE ", "DIEZ ",
-            "ONCE ", "DOCE ", "TRECE ", "CATORCE ", "QUINCE ", "DIECISEIS",
-            "DIECISIETE", "DIECIOCHO", "DIECINUEVE", "VEINTE" };
+            "ONCE ", "DOCE ", "TRECE ", "CATORCE ", "QUINCE ", "DIECISEIS ",
+            "DIECISIETE ", "DIECIOCHO ", "DIECINUEVE ", "VEINTE " };
 
     private static final String[] DECENAS = { "VEINTI", "TREINTA ", "CUARENTA ",
             "CINCUENTA ", "SESENTA ", "SETENTA ", "OCHENTA ", "NOVENTA ",
@@ -35,9 +35,9 @@ public class NumberToLetterConverter {
      * Si valor del numero no es valido (fuera de rango o )
      * @return Numero en letras
      */
-    public static String convertNumberToLetter(String number)
+    public static String convertNumberToLetter(String number, String moneda)
             throws NumberFormatException {
-        return convertNumberToLetter(Double.parseDouble(number));
+        return convertNumberToLetter(Double.parseDouble(number), moneda);
     }
 
     /**
@@ -48,7 +48,7 @@ public class NumberToLetterConverter {
      * @throws NumberFormatException
      * Si el numero esta fuera del rango
      */
-    public static String convertNumberToLetter(double doubleNumber)
+    public static String convertNumberToLetter(double doubleNumber, String moneda)
             throws NumberFormatException {
 
         StringBuilder converted = new StringBuilder();
@@ -108,10 +108,10 @@ public class NumberToLetterConverter {
                         .append(convertNumber(String.valueOf(miles)))
                         .append("MIL ");
         }
-        
+
         //booleano para caso de $1.00
         boolean unPeso = false;
-
+        
         // Descompone el ultimo trio de unidades
         int cientos = Integer.parseInt(String.valueOf(getDigitAt(
                 splitNumber[0], 2))
@@ -121,10 +121,17 @@ public class NumberToLetterConverter {
             if (cientos >= 1)
             converted.append(convertNumber(String.valueOf(cientos)));
         }else{
-            if (cientos == 1){
-                converted.append("=UN PESO ");
-            	unPeso = true;
+            if (cientos == 1) {
+            	if (moneda.contentEquals("MXN")) {
+            		converted.append("=UN PESO ");
+                	unPeso = true;
+            	} else if (moneda.contentEquals("USD")) {
+            		converted.append("=UN DOLAR ");
+            		unPeso = true;
+            	}
+            	
             }
+               
             if (cientos > 1)
                 converted.append("=").append(convertNumber(String.valueOf(cientos)));
         }
@@ -132,9 +139,12 @@ public class NumberToLetterConverter {
         if (millon + miles + cientos == 0)
             converted.append("=CERO ");
 
-        if (!unPeso) {
+        if (!unPeso && moneda.contentEquals("MXN")) {
         	converted.append("PESOS ");
+        } else if (!unPeso && moneda.contentEquals("USD")) {
+        	converted.append("DOLARES ");
         }
+        	
         
        // Descompone los centavos
        String valor = splitNumber[1];
@@ -143,7 +153,12 @@ public class NumberToLetterConverter {
        }else{
           converted.append(splitNumber[1]).append("/100 "); 
        }
-        converted.append("M.N.=");
+       	if (moneda.contentEquals("MXN")) {
+       		converted.append("M.N.=");
+       	} else {
+       		converted.append("=");
+       	}
+        
         return converted.toString();
     }
 

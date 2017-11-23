@@ -15,28 +15,57 @@
 	</div>
 	<hr>
 	<form id="forma" name="myForm" ng-show="tipoCarga==1">
-		<div class="col-md-6">
-			*Clave: <input class="form-control"
+	<div class="row">
+		<div class="col-md-4">
+			Clave: <input class="form-control"
 				ng-model="newConcepto.noIdentificacion" type="text"
 				ng-required="true"><br>
 		</div>
-
-		<div class="col-md-6">
-			*Unidad: <input class="form-control" ng-model="newConcepto.unidad"
+		<div class="col-md-4">
+			Clave Producto-Servicio:  <select class="form-control" ng-model="newConcepto.productos_servicios" ng-options="producto_servicio[0] for producto_servicio in productos_servicios">				
+				</select><br>
+		</div>
+		<div class="col-md-4">
+			Unidad: <input class="form-control" ng-model="newConcepto.unidad"
 				type="text" value="NO APLICA" ng-required="true"><br>
 		</div>
-		<div class="col-md-6">
-			*Descripci&oacute;n: <input class="form-control"
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			Descripci&oacute;n: <input class="form-control"
 				ng-model="newConcepto.descripcion" type="text" ng-required="true"><br>
 		</div>
-		<div class="col-md-6">
-			*Valor Unitario: <input class="form-control"
-				ng-model="newConcepto.valorUnitario" type="text" ng-required="true"><br>
+		<div class="col-md-4">
+			Descripci&oacute;n Producto-Servicio:  <select class="form-control" ng-model="newConcepto.productos_servicios" ng-options="producto_servicio[1] for producto_servicio in productos_servicios">				
+				</select><br>
 		</div>
+		<div class="col-md-4">
+			Valor Unitario: <input class="form-control"
+				ng-model="newConcepto.valorUnitario" type="text" ng-required="true"><br>
+		</div>	
+	</div>
+	<div class="row">
+		<div class="col-md-4">	
+				Buscar Clave Unidad:  <input class="form-control"
+					ng-model="newConcepto.nombreUnidad" type="text"><br>
+		</div>
+		<div class="col-md-2">
+			<button class="btn" ng-click="buscarClaveUnidad()" style="margin-top: 18px;"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar</button>
+		</div>
+	</div>
+	<div class="row" ng-hide="ClaveUnidad">
+		<div class="col-md-4">
+			Seleccionar Clave Unidad:  <select class="form-control" ng-model="newConcepto.claveNombreUnidad" ng-options="clave_unidad for clave_unidad in claves_unidades">				
+				</select><br>
+		</div>
+	</div>	
+	<div class="row">	
 		<div class="col-md-12">
 			<button value="Guardar" class="btn"
 				ng-click="myForm.$valid && guardarConcepto()">Guardar</button>
+			<button ng-click="clean()" class="btn">Limpiar</button>
 		</div>
+	</div>
 	</form>
 
 	<div class="row" ng-hide="tipoCarga==1">

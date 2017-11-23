@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
-  <application>teak-advice-149917</application>
+  <application>rafypack</application>
   <version>1</version>
 
   <!--
     Allows App Engine to send multiple requests to one instance in parallel:
   -->
   <threadsafe>true</threadsafe>
+  
+  <use-google-connector-j>true</use-google-connector-j>
 
   <!-- Configure serving/caching of GWT files -->
   <static-files>
@@ -24,12 +26,11 @@
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
     <property name="file.encoding" value="UTF-8" />
     <property name="DEFAULT_ENCODING" value="UTF-8" />
+    
+    <property name="ae-cloudsql.cloudsql-database-url" value="jdbc:google:mysql://stdsistema2:us-central1:std2sql/catalogos?user=ismael&amp;password=nMVKLZ7yuj" />
   </system-properties>
   
-  <env-variables>
-    <env-var name="DEFAULT_ENCODING" value="UTF-8" />
-  </env-variables>
-<sessions-enabled>true</sessions-enabled>
+  <sessions-enabled>true</sessions-enabled>
   <!--
     HTTP Sessions are disabled by default. To enable HTTP sessions specify:
 
@@ -37,7 +38,6 @@
 
     It's possible to reduce request latency by configuring your application to
     asynchronously write HTTP session data to the datastore:
-
 
       <async-session-persistence enabled="true" />
 

@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.tikal.cacao.dao.ConceptosDAO;
 import com.tikal.cacao.model.Concepto;
 import com.tikal.cacao.model.Conceptos;
+import com.tikal.cacao.model.orm.ProductoOServicio;
 import com.tikal.cacao.security.PerfilDAO;
 import com.tikal.cacao.security.UsuarioDAO;
+import com.tikal.cacao.service.ConceptoSATService;
 import com.tikal.cacao.util.AsignadorDeCharset;
 import com.tikal.cacao.util.JsonConvertidor;
 
@@ -34,6 +36,9 @@ public class ConceptoController {
 
 	@Autowired
 	PerfilDAO perfildao;
+	
+	@Autowired
+	ConceptoSATService conceptosSATService;
 
 	@RequestMapping(value = {
 			"/add" }, method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -123,5 +128,12 @@ public class ConceptoController {
 	public void alv(HttpServletRequest re, HttpServletResponse rs, @PathVariable String rfc) throws IOException {
 			AsignadorDeCharset.asignar(re, rs);
 			conceptosdao.alv(rfc);
+	}
+	
+	@RequestMapping(value = { "/getProdServ/{rfc}" }, method = RequestMethod.GET, produces = "application/json")
+	public void getProductosServiciosSAT(HttpServletRequest re, HttpServletResponse rs, @PathVariable String rfc) throws IOException {
+		AsignadorDeCharset.asignar(re, rs);
+		List<ProductoOServicio> listaPD = conceptosSATService.cargarProdServ(rfc);
+		rs.getWriter().println(JsonConvertidor.toJson(listaPD));
 	}
 }

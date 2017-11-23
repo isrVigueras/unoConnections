@@ -38,6 +38,8 @@ import com.tikal.cacao.model.RegistroBitacora;
 import com.tikal.cacao.model.Usuario;
 import com.tikal.cacao.security.PerfilDAO;
 import com.tikal.cacao.security.UsuarioDAO;
+import com.tikal.cacao.service.ConceptoSATService;
+import com.tikal.cacao.springController.requestObject.EmpresaConProductoOServicioRO;
 import com.tikal.cacao.springController.viewObjects.AlertaPagosEmpresasVO;
 import com.tikal.cacao.springController.viewObjects.AlertaPagosRegimenVO;
 import com.tikal.cacao.springController.viewObjects.EmpresaVO;
@@ -78,6 +80,9 @@ public class EmpresasController {
 	
 	@Resource(name= "pagosdao")
 	PagosDAO pagosdao;
+	
+	@Autowired
+	ConceptoSATService conceptosSATService;
 
 	@RequestMapping(value = {
 			"/add" }, method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -85,10 +90,15 @@ public class EmpresasController {
 			throws IOException {
 		if (ServicioSesion.verificarPermiso(request, usuariodao, perfildao, 0)) {
 			AsignadorDeCharset.asignar(request, response);
-			Empresa e = (Empresa) JsonConvertidor.fromJson(json, Empresa.class);
+			//Empresa e = (Empresa) JsonConvertidor.fromJson(json, Empresa.class);
+			EmpresaConProductoOServicioRO requestObject = (EmpresaConProductoOServicioRO) JsonConvertidor.fromJson(json, EmpresaConProductoOServicioRO.class);
+			Empresa e = requestObject.getEmpresa();
 			// e.getDireccion().setEstado(JsonConvertidor.estadoFromJson(json));
 			empresasdao.crear(e);
 			response.getWriter().println(JsonConvertidor.toJson(empresasdao.consultar(e.getRFC())));
+
+			Object[][] arregloProdServ = requestObject.getProductoOServicio();
+			conceptosSATService.generarConceptos(e.getRFC(), arregloProdServ);
 			
 
 			String evento = "Se dio de alta a la empresa " + e.getNombre() + " con Raz&oacute;n Social: "
@@ -138,8 +148,13 @@ public class EmpresasController {
 			throws IOException {
 		if (ServicioSesion.verificarPermiso(request, usuariodao, perfildao, 1)) {
 			AsignadorDeCharset.asignar(request, response);
-			Empresa e = (Empresa) JsonConvertidor.fromJson(json, Empresa.class);
+			EmpresaConProductoOServicioRO requestObject = (EmpresaConProductoOServicioRO) JsonConvertidor.fromJson(json, EmpresaConProductoOServicioRO.class);
+			//Empresa e = (Empresa) JsonConvertidor.fromJson(json, Empresa.class);
+			Empresa e = requestObject.getEmpresa();
 			empresasdao.actualizar(e);
+			
+			Object[][] arregloProdServ = requestObject.getProductoOServicio();
+			conceptosSATService.generarConceptos(e.getRFC(), arregloProdServ);
 			response.getWriter().println(JsonConvertidor.toJson(empresasdao.consultar(e.getRFC())));
 		} else {
 			response.sendError(403);

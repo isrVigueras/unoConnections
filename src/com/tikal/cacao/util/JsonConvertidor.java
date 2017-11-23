@@ -13,6 +13,7 @@ import com.tikal.cacao.springController.viewObjects.ComprobanteConComentarioVO;
 import com.tikal.cacao.springController.viewObjects.ComprobanteVO;
 import com.tikal.cacao.springController.viewObjects.ListaPagosVO;
 import com.tikal.cacao.springController.viewObjects.RegimenVO;
+import com.tikal.cacao.springController.viewObjects.v33.ComprobanteConComplementoPagosVO;
 
 public class JsonConvertidor {
 	public static Object fromJson(String json, Class<?> clase){
@@ -23,7 +24,10 @@ public class JsonConvertidor {
 			g = getGsonWithSpecificTypeAdapter(clase, new ListaPagosVOAdapter());
 		} else if (clase.equals(Comprobante.class) || clase.equals(com.tikal.cacao.sat.cfd.Comprobante.class)
 				|| clase.equals(FacturaRO.class) || clase.equals(ComprobanteVO.class)
-				|| clase.equals(ComprobanteConComentarioVO.class)) {
+				|| clase.equals(ComprobanteConComentarioVO.class)
+				|| clase.equals(com.tikal.cacao.springController.viewObjects.v33.ComprobanteVO.class)
+				|| clase.equals(com.tikal.cacao.springController.viewObjects.v33.ComprobanteConComentarioVO.class)
+				|| clase.equals(ComprobanteConComplementoPagosVO.class)) {
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.registerTypeAdapter(XMLGregorianCalendar.class, new XMLGregorianCalendarConverter.Deserializer());
 			g = gsonBuilder.create();

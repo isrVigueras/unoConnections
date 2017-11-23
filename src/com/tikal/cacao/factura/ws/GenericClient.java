@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ws.soap.client.core.SoapActionCallback;
 import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
+import com.tikal.cacao.util.Util;
+
 import localhost.CancelaCFDI;
 import localhost.CancelaCFDIAck;
 import localhost.CancelaCFDIAckResponse;
@@ -34,8 +36,19 @@ public class GenericClient extends WSClient {
 
 	private ObjectFactory of = new ObjectFactory();
 	private EncodeBase64 base64 = new EncodeBase64();
-	//private final String uri = "http://www.timbracfdipruebas.mx/serviciointegracionpruebas/Timbrado.asmx";
-	private final String uri = "https://www.timbracfdi.mx/serviciointegracion/Timbrado.asmx";
+	private String uri;
+	private String usuarioIntegrador;
+	
+	public GenericClient() {
+		if (Util.detectarAmbienteProductivo()) {
+			uri = "https://www.timbracfdi.mx/serviciointegracion/Timbrado.asmx";
+			usuarioIntegrador = "SSaC3HanfgtTGP+gChvWNg==";
+		} else {
+			uri = "https://www.timbracfdipruebas.mx/serviciointegracionpruebas/Timbrado.asmx";
+			usuarioIntegrador = "mvpNUXmQfK8=";
+		}
+	}
+
 	
 	/* (non-Javadoc)
 	 * @see com.tikal.cacao.factura.ws.WSClient#getRegistraEmisorResponse()
@@ -185,9 +198,7 @@ public class GenericClient extends WSClient {
 	}
 
 	private String getUsuarioIntegrador(){
-		//Esto es Fijo para el ambito de pruebas "mvpNUXmQfK8="
-		
-		return "SSaC3HanfgtTGP+gChvWNg==";
+		return this.usuarioIntegrador;
 	}
 	
 

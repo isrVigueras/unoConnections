@@ -2,6 +2,7 @@ package com.tikal.cacao.util;
 
 import java.lang.reflect.Type;
 
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -52,7 +53,9 @@ public class XMLGregorianCalendarConverter {
             		if (obj.isString()) {
             			String strFecha = obj.getAsString();
             			XMLGregorianCalendar xmlGregCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(strFecha);
-            			//xmlGregCalendar.setTimezone(-4);
+            			xmlGregCalendar.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+            			xmlGregCalendar.setFractionalSecond(null);
+            			xmlGregCalendar.setHour(xmlGregCalendar.getHour()-6);
             			return xmlGregCalendar;
             		} else 
             			return null;

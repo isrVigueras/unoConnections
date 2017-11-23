@@ -29,7 +29,9 @@ import javax.xml.transform.stream.StreamSource;
 
 import java.util.GregorianCalendar;
 
+import com.google.appengine.api.utils.SystemProperty;
 import com.tikal.cacao.factura.FormatoFecha;
+import com.tikal.cacao.factura.RespuestaWebServicePersonalizada;
 import com.tikal.cacao.model.Pago;
 import com.tikal.cacao.model.PeriodosDePago;
 import com.tikal.cacao.model.Regimen;
@@ -49,6 +51,7 @@ import com.tikal.cacao.tarifas.subsidioEmpleo.TarifaTrabajoRealizado;
 
 import mx.gob.sat.cancelacfd.Acuse;
 import mx.gob.sat.implocal.ImpuestosLocales;
+import mx.gob.sat.pagos.Pagos;
 
 /**
  * @author Tikal
@@ -399,6 +402,13 @@ public class Util {
     	 
     	return date2;
     }
+	
+	public static Date xmlGregorianAFecha(XMLGregorianCalendar calendar) {
+		if (calendar == null) {
+			return null;
+		}
+		return calendar.toGregorianCalendar().getTime();
+	}
 
 	public static C_PeriodicidadPago convertir(PeriodosDePago periodosDePago) {
 		C_PeriodicidadPago periodicidadPago = null;
@@ -429,6 +439,20 @@ public class Util {
 		switch (estado) {
 		case "":
 			break;
+		}
+		return null;
+	}
+	
+	public static com.tikal.cacao.sat.cfd33.Comprobante unmarshallCFDI33XML(String cadenaXML) {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class, mx.gob.sat.timbrefiscaldigital.TimbreFiscalDigital.class, NominaElement.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			StringBuffer xmlStr = new StringBuffer(cadenaXML);
+			com.tikal.cacao.sat.cfd33.Comprobante comprobante = 
+					(com.tikal.cacao.sat.cfd33.Comprobante) unmarshaller.unmarshal(new StreamSource( new StringReader(xmlStr.toString() ) ) );
+			return comprobante;
+		} catch (JAXBException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -464,6 +488,71 @@ public class Util {
 			e.printStackTrace();
 		}
 		
+		return null;
+	}
+	
+	public static String marshallComprobante33(com.tikal.cacao.sat.cfd33.Comprobante c) {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		
+			jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,	
+				"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd");
+		
+			StringWriter sw = new StringWriter();
+			jaxbMarshaller.marshal(c, sw);
+			return sw.toString();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static String marshallComprobante33(com.tikal.cacao.sat.cfd33.Comprobante c, boolean esNomina) {
+		try {
+			JAXBContext jaxbContext;
+			Marshaller jaxbMarshaller;
+			if (esNomina) {
+				jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class, NominaElement.class);
+				jaxbMarshaller = jaxbContext.createMarshaller();
+				jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,	
+						"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd " +
+								"http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd");
+			} else {
+				jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class);
+				jaxbMarshaller = jaxbContext.createMarshaller();
+				jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,	
+						"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd");
+			}
+		
+			jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+			StringWriter sw = new StringWriter();
+			jaxbMarshaller.marshal(c, sw);
+			return sw.toString();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static String marshallComprobanteConPagos(com.tikal.cacao.sat.cfd33.Comprobante c) {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class, Pagos.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		
+			jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,	
+				"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd" +
+					"http://www.sat.gob.mx/Pagos http://www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos10.xsd");
+		
+			StringWriter sw = new StringWriter();
+			jaxbMarshaller.marshal(c, sw);
+			return sw.toString();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
@@ -614,6 +703,31 @@ public class Util {
 		}
 		
 		return seRealizoElPago;
+	}
+	
+	public static boolean detectarAmbienteProductivo() {
+		if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+			// Production   
+			return true;
+		} else {
+		  // Local development server
+		  // which is: SystemProperty.Environment.Value.Development
+			 return false;
+		}
+	}
+	
+	public static RespuestaWebServicePersonalizada construirMensajeError(List<Object> respuestaWB) {
+		StringBuilder respuestaError = new StringBuilder("Excepción en caso de error: ");
+		respuestaError.append(respuestaWB.get(0)+ "\r\n");
+		respuestaError.append("Código de error: " + respuestaWB.get(1) + "\r\n");
+		respuestaError.append("Mensaje de respuesta: " + respuestaWB.get(2) + "\r\n");
+		respuestaError.append( respuestaWB.get(6) + "\r\n");
+		respuestaError.append( respuestaWB.get(7) + "\r\n");
+		respuestaError.append( respuestaWB.get(8) + "\r\n");
+		
+		RespuestaWebServicePersonalizada respPersonalizada = new RespuestaWebServicePersonalizada();
+		respPersonalizada.setMensajeRespuesta(respuestaError.toString());
+		return respPersonalizada;
 	}
 	
 }

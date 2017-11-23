@@ -49,7 +49,27 @@ app.service('conceptosService', [
 			});
 			return d.promise;
 		};
-	
+		this.findConceptos = function(rfc) {
+			var d = $q.defer();
+//			console.log($rootScope)
+			$http.get("/conceptos/getProdServ/"+rfc).then(
+				function(response) {
+//					console.log(response); 
+					d.resolve(response.data);
+				});
+			return d.promise;
+		}
+		this.findClave = function(pal) {
+			var d = $q.defer();
+//			console.log($rootScope)
+			$http.get("/unidad_de_medida/getLista/"+pal).then(
+				function(response) {
+//					console.log(response); 
+					d.resolve(response.data);
+				});
+			return d.promise;
+		}
+		
 }])
 app.controller("conceptosController",[
 	'$scope',
@@ -60,11 +80,18 @@ app.controller("conceptosController",[
 	'$rootScope','archivoService',
 	'$cookieStore',
 	function($scope, conceptosService, $routeParams,$location,$window,$rootScope,archivoService,$cookieStore){
+		conceptosService.findConceptos($routeParams.rfc).then(function(data){
+			$scope.productos_servicios=data;
+			console.log($scope.productos_servicios);
+		})
 		$scope.tipoCarga=1;
 		$scope.newConcepto={
 				unidad:"No Aplica"
 		}
 		$scope.guardarConcepto=function(){
+			$scope.newConcepto.claveProdServ= $scope.newConcepto.productos_servicios[0];
+			$scope.newConcepto.descripcionSAT= $scope.newConcepto.productos_servicios[1];
+			$scope.newConcepto.claveUnidad= $scope.newConcepto.claveNombreUnidad[0];
 			conceptosService.registraConcepto($scope.newConcepto).then(function(data){
 				alert("Concepto Guardado");
 				$location.path("/conceptosList/"+$routeParams.rfc);
@@ -96,6 +123,12 @@ app.controller("conceptosController",[
 				$window.location.reload();
 			});
 		}
+		$scope.buscarClaveUnidad= function(){
+			conceptosService.findClave($scope.newConcepto.nombreUnidad).then(function(data){
+				$scope.claves_unidades=data;
+				console.log($scope.productos_servicios);
+			})
+		}
 }]);
 
 
@@ -114,8 +147,8 @@ app.controller("conceptosListController",[
 				$scope.conceptos=data.conceptos;
 				console.log($scope.conceptos);
 				for (var i = 0; i < $scope.conceptos.length; i++) {
-					$scope.conceptos[i].indice=i;
-					$scope.conceptos[i].busquedaAttr = $scope.conceptos[i].noIdentificacion+" "+$scope.conceptos[i].descripcion;
+					$scope.conceptos[i].busquedaAttr = $scope.conceptos[i].noIdentificacion
+					+ " "
 //					+ $scope.empleados[i].empleado.nombre.apellidoPaterno
 //					+ " "
 //					+ $scope.empleados[i].empleado.nombre.apellidoMaterno
@@ -157,11 +190,17 @@ app.controller("conceptosEditController",[
 	'$window',
 	'$cookieStore',
 	function($scope, conceptosService, $routeParams,$location, $window, $cookieStore){
+		conceptosService.findConceptos($routeParams.rfc).then(function(data){
+			$scope.productos_servicios=data;
+			console.log($scope.productos_servicios);
+		})
 		conceptosService.cargaConceptos($routeParams.rfc).then(function(data){
 			$scope.newConcepto=data.conceptos[$routeParams.ind];
 		})
 		
-		$scope.editaConcepto = function(newConcepto) {
+		$scope.editaConcepto = function(newConcepto) {			
+			$scope.newConcepto.claveUnidad=$scope.newConcepto.claveNombreUnidad[0];
+			$scope.newConcepto.descripcionUnidadSAT=$scope.newConcepto.claveNombreUnidad[1];
 			var send={
 						conceptos: [newConcepto],
 						id: $cookieStore.get('indice'),
@@ -173,7 +212,13 @@ app.controller("conceptosEditController",[
 					$window.location.reload();
 					$location.path("/conceptosList/"+$routeParams.rfc);
 				})
-	}	
+	}
+		$scope.buscarClaveUnidad= function(){
+			conceptosService.findClave($scope.newConcepto.nombreUnidad).then(function(data){
+				$scope.claves_unidades=data;
+				console.log($scope.productos_servicios);
+			})
+		}
 		
 }]);
 		

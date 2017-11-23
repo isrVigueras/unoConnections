@@ -12,6 +12,14 @@ public class Concepto {
 	private String descripcion;
 	
 	private float valorUnitario;
+	
+	private String descripcionSAT;
+	
+	private String claveProdServ;
+	
+	private String claveUnidad;
+	
+	private String descripcionUnidadSAT;
 
 	public String getNoIdentificacion() {
 		return noIdentificacion;
@@ -43,6 +51,38 @@ public class Concepto {
 
 	public void setUnidad(String unidad) {
 		this.unidad = unidad;
+	}
+
+	public String getDescripcionSAT() {
+		return descripcionSAT;
+	}
+
+	public void setDescripcionSAT(String descripcionSAT) {
+		this.descripcionSAT = descripcionSAT;
+	}
+
+	public String getClaveProdServ() {
+		return claveProdServ;
+	}
+
+	public void setClaveProdServ(String claveProdServ) {
+		this.claveProdServ = claveProdServ;
+	}
+
+	public String getClaveUnidad() {
+		return claveUnidad;
+	}
+
+	public void setClaveUnidad(String claveUnidad) {
+		this.claveUnidad = claveUnidad;
+	}
+
+	public String getDescripcionUnidadSAT() {
+		return descripcionUnidadSAT;
+	}
+
+	public void setDescripcionUnidadSAT(String descripcionUnidadSAT) {
+		this.descripcionUnidadSAT = descripcionUnidadSAT;
 	}
 	
 	

@@ -3,15 +3,108 @@
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
         http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
 	<context:component-scan
-		base-package="com.tikal.cacao.springController, com.tikal.cacao.sat.calculos, com.tikal.cacao.factura, com.tikal.cacao.factura.ws" />
+		base-package="com.tikal.cacao.springController, com.tikal.cacao.springController.orm,
+		 com.tikal.cacao.sat.calculos, com.tikal.cacao.factura, com.tikal.cacao.factura.ws,
+		 com.tikal.cacao.service.impl" />
 		
+	<!-- Data source Cloud SQL Bean -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<!-- Production GoogleDriver -->
+		<!-- <property name="driverClassName" value="com.mysql.jdbc.GoogleDriver" />
+		<property name="url" value="jdbc:google:mysql://stdsistema2:us-central1:std2sql/catalogos" />
+		<property name="username" value="ismael" />
+		<property name="password" value="nMVKLZ7yuj" /> -->
+		
+		<!-- Development Driver -->
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/catalogos" />
+		<property name="username" value="devismael" /> 
+		<property name="password" value="1123581321dev/"/>
+		
+		<property name="validationQuery" value="SELECT 1"/>
+	</bean>
+	
+	<!-- Hibernate 4 SessionFactory Bean definition -->
+	<bean id="hibernate4AnnotatedSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.tikal.cacao.model.orm.Tipo</value>
+				<value>com.tikal.cacao.model.orm.Division</value>
+				<value>com.tikal.cacao.model.orm.Grupo</value>
+				<value>com.tikal.cacao.model.orm.Clase</value>
+				<value>com.tikal.cacao.model.orm.ProductoOServicio</value>
+				
+				<value>com.tikal.cacao.model.orm.UnidadDeMedida</value>
+				<value>com.tikal.cacao.model.orm.UsoDeCFDI</value>
+				<value>com.tikal.cacao.model.orm.RegimenFiscal</value>
+				<value>com.tikal.cacao.model.orm.FormaDePago</value>
+				<value>com.tikal.cacao.model.orm.Impuesto</value>
+				
+				<value>com.tikal.cacao.model.orm.Moneda</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.show_sql">true</prop> <!-- false in production -->
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="tipoDAOH" class="com.tikal.cacao.dao.sqlimpl.TipoDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="divisionDAOH" class="com.tikal.cacao.dao.sqlimpl.DivisionDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="grupoDAOH" class="com.tikal.cacao.dao.sqlimpl.GrupoDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="claseDAOH" class="com.tikal.cacao.dao.sqlimpl.ClaseDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="productoServicioDAOH" class="com.tikal.cacao.dao.sqlimpl.ProductoOServicioDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="unidadDeMedidaDAOH" class="com.tikal.cacao.dao.sqlimpl.UnidadDeMedidaDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="usoDeCfdiDAOH" class="com.tikal.cacao.dao.sqlimpl.UsoDeCFDIDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="regimenFiscalDAOH" class="com.tikal.cacao.dao.sqlimpl.RegimenFiscalDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="formaDePagoDAOH" class="com.tikal.cacao.dao.sqlimpl.FormaDePagoHibernateDAOImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="impuestoDAOH" class="com.tikal.cacao.dao.sqlimpl.ImpuestoHibernateDAOImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="monedaDAOH" class="com.tikal.cacao.dao.sqlimpl.MonedaHibernateDAOImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>	
+	
 	<!-- Beans DAOs GAE storage implementation -->
 	<bean id="empresasdao" class="com.tikal.cacao.dao.impl.EmpresasDAOImpl"></bean>
 	<bean id="regimenesdao" class="com.tikal.cacao.dao.impl.RegimenesDAOImpl"></bean>
@@ -33,6 +126,8 @@
 	<bean class="com.tikal.cacao.dao.impl.SerialDAOImp"></bean>
 	<bean class="com.tikal.cacao.dao.impl.ImagenDAOImp"/>
 	<bean class="com.tikal.cacao.dao.impl.ReporteRenglonDAOImpl"/>
+	<bean class="com.tikal.cacao.dao.impl.ListaDeClavesDeClasesDAOImpl" />
+	<bean class="com.tikal.cacao.dao.impl.FacturaVttDAOImpl" />
 
 	<!-- Spring Controllers -->
 	<!-- <bean class="com.tikal.cacao.springController.EmpresasController"></bean> -->

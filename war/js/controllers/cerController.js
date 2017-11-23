@@ -1,7 +1,7 @@
 app.service('cerService',function($q, $http, $location,$window,$rootScope){
 	this.enviarCosas = function(cad) {
 		var d = $q.defer();
-		$http.post("/facturacion/registrarEmisor/", cad).then(function(response) {
+		$http.post("/factura33/registrarEmisor/", cad).then(function(response) {
 			d.resolve(response.data);
 		}, function(response) {
 			if(response.status==403){

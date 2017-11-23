@@ -19,7 +19,51 @@ app.service('empresasService', [ '$http', '$q', function($http, $q) {
 		});
 		return d.promise;
 	};
-	
+	this.findTipo = function() {
+		var d = $q.defer();
+		$http.get("/tipo/getList").then(function(response) {
+			console.log(response);
+			d.resolve(response.data);
+		}, function(response) {
+		});
+		return d.promise;
+	};
+	this.findDivision = function(tipoId) {
+		var d = $q.defer();
+		$http.get("/division/getLista/"+tipoId).then(function(response) {
+			console.log(response);
+			d.resolve(response.data);
+		}, function(response) {
+		});
+		return d.promise;
+	};
+	this.findGrupo = function(grupoClave) {
+		var d = $q.defer();
+		$http.get("/grupo/getLista/"+grupoClave).then(function(response) {
+			console.log(response);
+			d.resolve(response.data);
+		}, function(response) {
+		});
+		return d.promise;
+	};
+	this.findClase = function(claseClave) {
+		var d = $q.defer();
+		$http.get("/clase/getLista/"+claseClave).then(function(response) {
+			console.log(response);
+			d.resolve(response.data);
+		}, function(response) {
+		});
+		return d.promise;
+	}
+	this.findProductos_Servicios = function(claseClave) {
+		var d = $q.defer();
+		$http.get("/producto_servicio/getLista/"+claseClave).then(function(response) {
+			console.log(response);
+			d.resolve(response.data);
+		}, function(response) {
+		});
+		return d.promise;
+	}
 	this.clean = function() {/* Limpia o Elimina todos los elementos */
 	};
 	this.getAll = function() {/* Muestra todos los Elementos */
@@ -34,12 +78,21 @@ app.controller("empresasController", [
 		'$location',
 		'empresasService',
 		'$rootScope',
-		function($scope, $http, $location, empresasSevice, $rootScope) {
+		function($scope, $http, $location, empresasService, $rootScope) {
+			empresasService.findTipo().then(function(data){
+				$scope.tipos=data;
+			})
+			$scope.Txt=true;
 			if(!$rootScope.variable){
 				$location.path("/login");
 			}else{
+			
 			$scope.addEmp = function() {
-				$http.post("/empresas/add", $scope.newEmp).then(
+				var send={
+						empresa: $scope.newEmp,
+						productoServicio: $scope.productos_servicios,
+				}
+				$http.post("/empresas/add", send).then(
 						function(response) {
 							alert("Empresa Guardada");
 							$location.path("/empresas/list");
@@ -58,6 +111,47 @@ app.controller("empresasController", [
 				//$scope.newEmp.regimen="";
 				$scope.newEmp.direccion.estado="";
 			}
+			$scope.valor = function(tipo){
+				console.log(tipo);	
+				$scope.busqueda.division=[];
+				$scope.busqueda.grupo=[];
+				$scope.busqueda.clase=[];
+				
+				empresasService.findDivision(tipo.id).then(function(data){
+					$scope.divisiones=data;
+				})
+			}
+			$scope.valordos = function(division){
+				console.log(division);	
+				$scope.busqueda.grupo=[];
+				$scope.busqueda.clase=[];
+				
+				empresasService.findGrupo(division[0]).then(function(data){
+					$scope.grupos=data;
+				})
+			}
+			$scope.valortres = function(grupo){
+				console.log(grupo);		
+				$scope.busqueda.clase=[];
+				
+				
+				empresasService.findClase(grupo[0]).then(function(data){
+					$scope.clases=data;
+				})
+			}
+			$scope.buscar = function(){
+				console.log($scope.busqueda.clase);
+				if($scope.busqueda.tipo==undefined || $scope.busqueda.division==undefined || $scope.busqueda.grupo==undefined){					
+					alert("Para evitar grandes cantidades de resultados favor de seleccionar información de al menos 3 listas");
+				}else{	
+					empresasService.findProductos_Servicios($scope.busqueda.clase[0]).then(function(data){
+						$scope.productos_servicios=data;
+					})
+					$scope.Txt=false;
+				}
+				
+			}
+			$scope.busqueda={};
 			$scope.newEmp={emails:[]}
 		} }]);
 
@@ -68,7 +162,11 @@ app.controller("empresasEditController", [
 		'$routeParams',
 		'empresasService',
 		'$rootScope',
-		function($scope, $http, $location, $routeParams, empresasService,$rootScope) {
+		function($scope, $http, $location, $routeParams, empresasService,$rootScope) {	
+			empresasService.findTipo().then(function(data){
+				$scope.tipos=data;
+			})
+			$scope.Txt=true;
 			if(!$rootScope.variable){
 				$location.path("/login");
 			}else{
@@ -93,9 +191,12 @@ app.controller("empresasEditController", [
 							console.log(response);
 						});
 			}*/
-			$scope.update = function() {		
-				console.log($scope.newEmp);
-				empresasService.update($scope.newEmp).then(function(data) {
+			$scope.update = function() {
+				var send={
+						empresa: $scope.newEmp,
+						productoServicio: $scope.productos_servicios,
+				}
+				empresasService.update(send).then(function(data) {
 					$scope.newEmp = data;
 					
 					alert("Empresas Modificada correctamente");
@@ -117,7 +218,47 @@ app.controller("empresasEditController", [
 				$scope.newEmp.regimen="";
 				$scope.newEmp.direccion.estado="";
 			}
-			
+			$scope.valor = function(tipo){
+				console.log(tipo);	
+				$scope.busqueda.division=[];
+				$scope.busqueda.grupo=[];
+				$scope.busqueda.clase=[];
+				
+				empresasService.findDivision(tipo.id).then(function(data){
+					$scope.divisiones=data;
+				})
+			}
+			$scope.valordos = function(division){
+				console.log(division);	
+				$scope.busqueda.grupo=[];
+				$scope.busqueda.clase=[];
+				
+				empresasService.findGrupo(division[0]).then(function(data){
+					$scope.grupos=data;
+				})
+			}
+			$scope.valortres = function(grupo){
+				console.log(grupo);		
+				$scope.busqueda.clase=[];
+				
+				
+				empresasService.findClase(grupo[0]).then(function(data){
+					$scope.clases=data;
+				})
+			}
+			$scope.buscar = function(){
+				console.log($scope.busqueda.clase);
+				if($scope.busqueda.tipo==undefined || $scope.busqueda.division==undefined || $scope.busqueda.grupo==undefined){					
+					alert("Para evitar grandes cantidades de resultados favor de seleccionar información de al menos 3 listas");
+				}else{					
+					$scope.Txt=false;
+					empresasService.findProductos_Servicios($scope.busqueda.clase[0]).then(function(data){
+						$scope.productos_servicios=data;
+					})
+				}
+				
+			}
+			$scope.busqueda={};
 		}} ]);
 
 app.controller("empresasDetailsController", [ '$scope', '$http', '$location',
@@ -139,7 +280,7 @@ app.controller("empresasDetailsController", [ '$scope', '$http', '$location',
 				$cookies.rfcEmpresa=$rootScope.rfc;
 				$cookieStore.put('rfcEmpresa',$scope.empresa.RFC);
 				$scope.regimenes=data[1];
-				console.log($scope.regimenes);
+//				console.log($scope.regimenes);
 			});
 			
 			$scope.addEsquema=function(){

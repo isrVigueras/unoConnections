@@ -112,9 +112,52 @@
 		<div class="col-md-3">
 			Numero Interior: <input class="form-control" type="text"
 				ng-model="newEmp.direccion.numInterior"><br>
-		</div>	
-	</form>
-	<div class="col-md-12">
-				<button ng-click="myForm.$valid && addEmp()" class="btn">Guardar</button>
+		</div>			
+
 	</div>
+	<div class="col-md-12">	
+	 		<h4>Configuraci&oacute;n de la Empresa</h4>	
+	 		<div class="col-md-3">
+				Tipo: <select class="form-control" ng-model="busqueda.tipo" ng-change="valor(busqueda.tipo)"ng-options="tipo.nombre for tipo in tipos">				
+				</select>
+			</div>
+			<div class="col-md-3">
+				Division: <select class="form-control" ng-model="busqueda.division" ng-change="valordos(busqueda.division)"ng-options="division for division in divisiones">				
+				</select>
+			</div>
+			<div class="col-md-3">
+				Grupo: <select class="form-control" ng-model="busqueda.grupo" ng-change="valortres(busqueda.grupo)"ng-options="grupo for grupo in grupos">				
+				</select>
+			</div>
+			<div class="col-md-3">
+				Clase: <select class="form-control" ng-model="busqueda.clase" ng-options="clase for clase in clases">				
+				</select><br>	
+			</div>
+			<div class="col-md-12">
+				<button ng-click="buscar()" class="btn">Buscar</button><br>			
+			</div>
+			<div class="col-md-12">
+<!-- 				<textarea type="text" class="form-control facInp" rows="10" ng-model="txt"></textarea><br> -->
+				<table class="table table-stripped">
+					<thead>
+						<tr>
+							<th style="width: 15%;">Clave
+							<th style="width: 30%;">Descripcion</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="producto_servicio in productos_servicios">
+							<td>{{producto_servicio[0]}}</td>
+							<td>{{producto_servicio[1]}}</td>
+						</tr>
+					</tbody>
+				</table><br>	
+			</div>
+	 </div>
+	 <div class="col-md-12">		
+			<div class="col-md-12">
+				<button ng-click="myForm.$valid && addEmp()" class="btn">Guardar</button>			
+			</div>
+	</div>
+	</form>
 </div ng-view>

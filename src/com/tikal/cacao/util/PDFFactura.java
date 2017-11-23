@@ -517,7 +517,7 @@ public class PDFFactura {
 		agregarCeldaConFondo("Importe con letra ", fontHead, tablaImporteConLetra, true);
 
 		double importeTotal = Math.round(comprobante.getTotal().doubleValue() * 100.0) / 100.0;
-		String importeConLetra = NumberToLetterConverter.convertNumberToLetter(importeTotal);
+		String importeConLetra = NumberToLetterConverter.convertNumberToLetter(importeTotal, comprobante.getMoneda());
 		Chunk chunkImporteConLetra = new Chunk(importeConLetra, font3);
 		Phrase fraseImporteConLetra = new Phrase(chunkImporteConLetra);
 		PdfPCell celdaImporteConLetra = new PdfPCell();
@@ -854,8 +854,8 @@ public class PDFFactura {
 			/*Phrase footer = new Phrase("Hoja número ".concat(Integer.toString(document.getPageNumber())).concat(" de ")
 					.concat(Integer.toString(writer.getPageNumber())).concat(" del CFDi con UUID:").concat(uuid),
 					ffont);*/
-			Chunk chunkHojaNum = new Chunk("Hoja número ".concat(Integer.toString(document.getPageNumber())).concat(" de ")
-					.concat(Integer.toString(writer.getPageNumber())).concat(" del CFDi con UUID:").concat(uuid), ffont);
+			Chunk chunkHojaNum = new Chunk("Hoja número ".concat(Integer.toString(document.getPageNumber()))
+					.concat(" del CFDi con UUID:").concat(uuid), ffont);
 			footer.add(chunkHojaNum);
 			
 			if (fechaCancel != null) {

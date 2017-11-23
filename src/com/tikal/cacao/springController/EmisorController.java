@@ -53,6 +53,25 @@ public class EmisorController {
 		datosFacturaVO.construirDomicilio(direccion, "MÉXICO");
 		rs.getWriter().println(JsonConvertidor.toJson(datosFacturaVO));
 	}
+	
+	@RequestMapping(value = {
+	"/consultar33/{rfc}" }, method = RequestMethod.GET, produces = "application/json")
+	public void get33(HttpServletRequest re, HttpServletResponse rs, @PathVariable String rfc) throws IOException {
+	
+		AsignadorDeCharset.asignar(re, rs);
+		Emisor emisor = emisordao.consultar(rfc);
+		Empresa empresa = empresasdao.consultar(rfc);
+		
+		Direccion direccion = empresa.getDireccion();
+		String lugarDeExpedicion = null;
+		if(direccion.getCodigoPostal() != null) {
+			lugarDeExpedicion = direccion.getCodigoPostal();
+		}
+				
+		DatosFacturaVO datosFacturaVO = new DatosFacturaVO(lugarDeExpedicion, empresa.getRazonSocial(), emisor, empresa.getEmails());
+		//datosFacturaVO.construirDomicilio(direccion, "MÉXICO");
+		rs.getWriter().println(JsonConvertidor.toJson(datosFacturaVO));
+	}
 
 	@RequestMapping(value = { "/consultar2/{rfc}" }, method = RequestMethod.GET, produces = "application/json")
 	public void getReceptores(HttpServletRequest re, HttpServletResponse rs, @PathVariable String rfc) throws IOException {

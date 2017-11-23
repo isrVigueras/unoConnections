@@ -12,24 +12,30 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
+					<td>Clave Producto-Servicio</td>
+					<td>Descripci&oacute;n Producto-Servicio</td>
 					<td>Clave</td>
 					<td>Descripci&oacute;n</td>
+					<td>Clave Unidad</td>
 					<td>Valor Unitario</td>
 					<td style="width: 10%;">Acciones</td>
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="concepto in conceptos | filter:search:strict">
+					<td>{{concepto.claveProdServ}}</td>
+					<td style="line-height: normal;">{{concepto.descripcionSAT}}</td>
 					<td>{{concepto.noIdentificacion}}</td>
 					<td style="line-height: normal;">{{concepto.descripcion}}</td>
+					<td style="line-height: normal;">{{concepto.claveUnidad}}</td>
 					<td>{{concepto.valorUnitario}}</td>
 					<td>
 						<button class="btn btn-small"
-							ng-click="editarConcepto(concepto.indice)">
+							ng-click="editarConcepto($index)">
 							<i class="glyphicon glyphicon-edit"></i>
 						</button>
 						<button class="btn btn-small"
-							ng-click="eliminarConcepto(concepto.indice)">
+							ng-click="eliminarConcepto($index)">
 							<i class="glyphicon glyphicon-remove"></i>
 						</button>
 					</td>

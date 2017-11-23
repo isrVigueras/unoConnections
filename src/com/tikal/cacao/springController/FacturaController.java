@@ -140,12 +140,6 @@ public class FacturaController {
 		}
 	}
 	
-	@RequestMapping(value = "/multiple/{rfc}", method = RequestMethod.POST)
-	public void multiple(HttpServletRequest req, HttpServletResponse res, @RequestBody String json, @PathVariable String rfc) throws IOException {
-		//El código de Karen va aquí
-		
-	}
-	
 	@RequestMapping(value = "/emailTo", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public void enviarEmail(HttpServletRequest req, HttpServletResponse res, @RequestBody String json) throws IOException {
 		String[] args= json.split(",");
@@ -524,7 +518,7 @@ public class FacturaController {
 		}
 	}
 	
-	@RequestMapping(value = "/registrarEmisor33", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/registrarEmisor33", method = RequestMethod.GET)
 	public void registrarEmisor33(HttpServletRequest req, HttpServletResponse res) {
 		org.tempuri.RegistraEmisorResponse regEmResponse = client33.getRegistraEmisorResponse();
 		try {
@@ -534,7 +528,7 @@ public class FacturaController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	@RequestMapping(value = "/pruebaTimbrar", method = RequestMethod.GET)
 	public void timbrar(HttpServletRequest req, HttpServletResponse res) {
@@ -791,7 +785,7 @@ public class FacturaController {
 		}
 	}*/
 	
-	@RequestMapping(value = "/obtener33", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/obtener33", method = RequestMethod.GET)
 	public void obtener33(HttpServletRequest req, HttpServletResponse res) {
 		// el UUID esta hardcoded
 		org.tempuri.ObtieneCFDIResponse obtieneCFDIResponse = client33.getObtieneCFDIResponse("f0ff847b-e68c-43d4-8e95-29a8393d1b67");
@@ -803,7 +797,7 @@ public class FacturaController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	@RequestMapping(value = "/editar/{uuid}", method = RequestMethod.GET)
 	public void cargaComprobante(HttpServletRequest req, HttpServletResponse res, @PathVariable String uuid) throws IOException {
@@ -832,6 +826,7 @@ public class FacturaController {
 	
 	@RequestMapping(value = "/consultar/{rfc}/{page}", method = RequestMethod.GET)
 	public void byrfc(HttpServletRequest req, HttpServletResponse res, @PathVariable String rfc,@PathVariable int page) throws IOException {
+		AsignadorDeCharset.asignar(req, res);
 		List<ReporteRenglon> listaR = repRenglonDAO.consultarPag(rfc, page);
 		res.getWriter().println(JsonConvertidor.toJson(listaR));
 		

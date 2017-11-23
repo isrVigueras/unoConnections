@@ -4,6 +4,24 @@
 	<groupId>Cacao</groupId>
 	<artifactId>Cacao</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
+	<properties>
+	<!-- INSTANCE_CONNECTION_NAME from Cloud Console > SQL > Instance Details > Properties
+	     or gcloud sql instances describe <instance>
+	     project:region:instance for Cloud SQL 2nd Generation or
+	     project:instance        for Cloud SQL 1st Generation
+	-->
+	    <INSTANCE_CONNECTION_NAME>stdsistema2:us-central1:std2sql</INSTANCE_CONNECTION_NAME>
+	    <user>ismael</user>
+	    <password>nMVKLZ7yuj</password>
+	    <database>catalogos</database>
+	    
+	    <spring-framework.version>4.1.5.RELEASE</spring-framework.version>
+	    
+	    <hibernate.version>4.3.8.Final</hibernate.version>
+
+    </properties>
+	
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
@@ -72,6 +90,12 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>4.1.5.RELEASE</version>
 		</dependency>
+		<!-- Spring ORM support -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring-framework.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -111,11 +135,6 @@
 			<version>2.0-20050809.1515</version>
 		</dependency>
 		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.2.2</version>
-		</dependency>
-		<dependency>
 		    <groupId>org.springframework.ws</groupId>
 		    <artifactId>spring-ws-core</artifactId>
 		    <version>2.4.0.RELEASE</version>
@@ -139,6 +158,40 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.7</version>
+		</dependency>
+		
+		<!-- This has the connection pool DataSource class for Cloud SQL -->
+		<dependency>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>1.4</version>
+		</dependency>
+
+		<!-- Cloud MySQL dependency -->
+		<dependency>
+		  <groupId>com.google.cloud.sql</groupId>
+		  <artifactId>mysql-socket-factory</artifactId>
+		  <version>1.0.3</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+		<dependency>
+		    <groupId>javax.validation</groupId>
+		    <artifactId>validation-api</artifactId>
+		    <version>1.0.0.GA</version>
+		    <scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

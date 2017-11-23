@@ -201,14 +201,25 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : "comprobante"
 	});
 	
+	$routeProvider.when('/facturacion33/:rfc', {
+		templateUrl : "facturacion/pages/comprobanteF33.html",
+		controller : "comprobante33"
+	});
+	
 	$routeProvider.when('/listFacturas', {
 		templateUrl : "facturacion/pages/listFacturas.html",
 		controller : "facturaListController"
 	});
 	
+	
 	$routeProvider.when('/editaFactura/:rfc/:uuid', {
 		templateUrl : "facturacion/pages/comprobanteF32.html",
 		controller : "facturaEditController"
+	});
+	
+	$routeProvider.when('/editaFactura33/:rfc/:uuid', {
+		templateUrl : "facturacion/pages/comprobanteF33.html",
+		controller : "facturaEditController33"
 	});
 	
 	$routeProvider.when('/reporte/', {
@@ -237,11 +248,6 @@ app.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/altaImagen', {
 		templateUrl : "pages/altaImagen.html",
 		controller : "imagenController"
-	});
-	
-	$routeProvider.when('/facturacionMultiple', {
-		templateUrl : "facturacion/pages/multiple.html",
-		controller : "archivoController"
 	});
 	
 	$routeProvider.otherwise({

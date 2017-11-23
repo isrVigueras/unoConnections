@@ -212,7 +212,7 @@ app.controller('archivoController',['$scope','archivoService','fileService',func
 	// array = new Uint8Array(arrayBuffer),
 	// binaryString = String.fromCharCode.apply(null, array);
 			    var cadena=$('#cadena').text();
-			    cadena= cadena+"CADENADEESCAPE"+arrayBuffer;
+			    cadena= cadena+arrayBuffer+"CADENADEESCAPE";
 			   
 			    $('#cadena').text(cadena);
 			  }

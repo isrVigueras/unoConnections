@@ -24,9 +24,9 @@
 		
 		<!-- Development Driver -->
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://127.0.0.1:3306/catalogos" />
-		<property name="username" value="devismael" /> 
-		<property name="password" value="1123581321dev/"/>
+		<property name="url" value="jdbc:mysql://192.168.100.3:3306/catalogos" />
+		<property name="username" value="felipe" /> 
+		<property name="password" value="123456"/>
 		
 		<property name="validationQuery" value="SELECT 1"/>
 	</bean>

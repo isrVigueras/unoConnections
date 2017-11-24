@@ -36,9 +36,9 @@ app.directive('multipleFileModel', function (fileService) {
 
 
 app.service('archivoService',['$http','$q',function($http,$q){
-	this.sendfile=function(cadena){
+	this.sendfile=function(cadena, rfcEmpresa){
 		var d = $q.defer();
-		$http.post("/file/upload/",cadena).then(
+		$http.post("/facturacion/multiple/"+ rfcEmpresa,cadena).then(
 				function(response) {
 					console.log(response);
 					d.resolve(response.data);
@@ -197,7 +197,7 @@ app.service('archivoService',['$http','$q',function($http,$q){
 	 
 }]);
 
-app.controller('archivoController',['$scope','archivoService','fileService',function($scope,archivoService,fileService){
+app.controller('archivoController',['$scope','archivoService','fileService', '$cookieStore', function($scope,archivoService,fileService,$cookieStore){
 	$scope.mensaje="";
 	$scope.ver=false;
 	
@@ -222,7 +222,7 @@ app.controller('archivoController',['$scope','archivoService','fileService',func
 		}, false);
 	$scope.ok=function(){
 		var c= $('#cadena').text();
-		archivoService.sendfile(c).then(function(data){
+		archivoService.sendfile(c, $cookieStore.get("rfcEmpresa")).then(function(data){
 			console.log(data);
 			$scope.mensaje= data;
 		});

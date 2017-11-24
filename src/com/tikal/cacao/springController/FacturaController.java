@@ -140,6 +140,14 @@ public class FacturaController {
 		}
 	}
 	
+	@RequestMapping(value = "/multiple/{rfc}", method = RequestMethod.POST)
+ 	public void multiple(HttpServletRequest req, HttpServletResponse res, @RequestBody String json, @PathVariable String rfc) throws IOException {
+ 		
+		
+		
+ 		
+ 	}
+	
 	@RequestMapping(value = "/emailTo", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public void enviarEmail(HttpServletRequest req, HttpServletResponse res, @RequestBody String json) throws IOException {
 		String[] args= json.split(",");

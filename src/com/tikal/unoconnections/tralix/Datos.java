@@ -29,12 +29,12 @@ public class Datos {
 	private String formaPago;
 	
 	//#03 //#04
-	//private String idUnicoRec;
+	//private String idUnicoRec; //IdentificadorÚnicoReceptor
 	private String RFC;
 	Direccion direccion;
 
 	//#05
-	private String idUnicoInterno;
+	//private String idUnicoInterno;
 	private int cantidad;
 	private String descripcion;
 	private float valorUnit;
@@ -49,7 +49,7 @@ public class Datos {
 	private float imp; //importe
 	
 	//#09
-	private String idIntReceptor;
+	//private String idIntReceptor; //IdentificadorInternoReceptor
 	private String email;
 	private String asunto = "null";
 	private String mensaje = "null";
@@ -59,9 +59,9 @@ public class Datos {
 	private float version = 0;
 	private int tipoOpe;
 	private String clavePedimento;
-	private String certOrigen = "null";
+	private String certOrigen = "null"; //certificadoOrigen
 	private String numCertOrigen = "";
-	private String numExportConfiable = "null";
+	private String numExportConfiable = "null"; //NumeroDeExportadorConfiable
 	private String incoterm = "null";
 	private String subdiv = "null"; 
 	private String observaciones = "null";
@@ -81,12 +81,12 @@ public class Datos {
 	public Datos (String idCFD, String serie, String folio, float subtotal, float total, float impTrasladados,
 			float impRetenidos, String totalLetra, String moneda, float tipoCambio, String referencia, String repVentas,
 			String viaEmbarque, String nPedido, String sPedido, String noCtaPago, String condPago, String metodoPago,
-			String formaPago, String RFC, Direccion direccion, String idUnicoInterno, int cantidad,
-			String descripcion, float valorUnit, float importe, String unidadMed, int categoria, String fraccionArancelaria, 
-			String impuesto, float tasa, float imp, String idIntReceptor, String email, String asunto, String mensaje,
-			String adjunto, float version, int tipoOpe, String clavePedimento, String certOrigen, String numCertOrigen, 
-			String numExportConfiable, String incoterm, String subdiv, String observaciones, String tipoCambioUSD, 
-			String totalUSD, String CURP, String numRegIdTrib, String pais, String numLineas){
+			String formaPago, String RFC, Direccion direccion, int cantidad, String descripcion, float valorUnit, 
+			float importe, String unidadMed, int categoria, String fraccionArancelaria, String impuesto, float tasa, 
+			float imp, String email, String asunto, String mensaje, String adjunto, float version, int tipoOpe, 
+			String clavePedimento, String certOrigen, String numCertOrigen, String numExportConfiable, String incoterm, 
+			String subdiv, String observaciones, String tipoCambioUSD, String totalUSD, String CURP, 
+			String numRegIdTrib, String pais, String numLineas){
 		this.idCFD = idCFD;
 		this.serie = serie;
 		this.folio = folio;
@@ -108,7 +108,6 @@ public class Datos {
 		this.formaPago = formaPago;
 		this.RFC = RFC;
 		this.direccion = direccion;
-		this.idUnicoInterno = idUnicoInterno;
 		this.cantidad = cantidad;
 		this.descripcion = descripcion;
 		this.valorUnit = valorUnit;
@@ -119,7 +118,6 @@ public class Datos {
 		this.impuesto = impuesto;
 		this.tasa = tasa;
 		this.imp = imp;
-		this.idIntReceptor = idIntReceptor;
 		this.email = email;
 		this.asunto = asunto;
 		this.mensaje = mensaje;
@@ -309,14 +307,6 @@ public class Datos {
 		this.direccion = direccion;
 	}
 
-	public String getIdUnicoInterno() {
-		return idUnicoInterno;
-	}
-
-	public void setIdUnicoInterno(String idUnicoInterno) {
-		this.idUnicoInterno = idUnicoInterno;
-	}
-
 	public int getCantidad() {
 		return cantidad;
 	}
@@ -395,14 +385,6 @@ public class Datos {
 
 	public void setImp(float imp) {
 		this.imp = imp;
-	}
-
-	public String getIdIntReceptor() {
-		return idIntReceptor;
-	}
-
-	public void setIdIntReceptor(String idIntReceptor) {
-		this.idIntReceptor = idIntReceptor;
 	}
 
 	public String getEmail() {
@@ -555,12 +537,5 @@ public class Datos {
 
 	public void setNumLineas(String numLineas) {
 		this.numLineas = numLineas;
-	}
-	
+	}	
 }
-	
-	
-	
-	
-
-

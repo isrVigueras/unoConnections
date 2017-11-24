@@ -77,7 +77,6 @@ public class FacturacionMultipleServlet extends HttpServlet {
 //		response.getWriter().print("OK");
 		
 		
-		
 	}
 
 //	private String timbrar(Datis f, HttpSession sesion) {

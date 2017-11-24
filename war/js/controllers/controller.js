@@ -222,6 +222,11 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : "facturaEditController33"
 	});
 	
+	$routeProvider.when('/facturacionMultiple', {
+		templateUrl : "facturacion/pages/multiple.html",
+		controller : "archivoController"
+	});
+	
 	$routeProvider.when('/reporte/', {
 		templateUrl : "pages/reporte.html",
 		controller : "reporteController"

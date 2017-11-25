@@ -1,5 +1,4 @@
 package com.tikal.cacao.springController;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,6 +47,7 @@ import com.tikal.cacao.factura.Estatus;
 import com.tikal.cacao.factura.FormatoFecha;
 import com.tikal.cacao.factura.ws.WSClient;
 import com.tikal.cacao.factura.ws.WSClientCfdi33;
+import com.tikal.cacao.model.Direccion;
 import com.tikal.cacao.model.Emisor;
 import com.tikal.cacao.model.Factura;
 import com.tikal.cacao.model.Imagen;
@@ -68,6 +68,7 @@ import com.tikal.cacao.util.EmailSender;
 import com.tikal.cacao.util.JsonConvertidor;
 import com.tikal.cacao.util.PDFFactura;
 import com.tikal.cacao.util.Util;
+import com.tikal.unoconnections.tralix.Datos;
 
 import localhost.CancelaCFDIAckResponse;
 import localhost.CancelaCFDIResponse;
@@ -142,11 +143,15 @@ public class FacturaController {
 	
 	@RequestMapping(value = "/multiple/{rfc}", method = RequestMethod.POST)
  	public void multiple(HttpServletRequest req, HttpServletResponse res, @RequestBody String json, @PathVariable String rfc) throws IOException {
- 		
-		
-		
- 		
- 	}
+ 		String[] args = json.split("CADENADEESCAPE");
+ 		List<Datos> lista= new ArrayList<Datos>();
+ 		for(String arg:args){
+ 			Datos datos = new Datos(arg);
+ 			lista.add(datos);
+ 		}
+ 		//guardar los datitos
+
+	}
 	
 	@RequestMapping(value = "/emailTo", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public void enviarEmail(HttpServletRequest req, HttpServletResponse res, @RequestBody String json) throws IOException {

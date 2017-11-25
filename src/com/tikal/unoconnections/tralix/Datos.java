@@ -6,7 +6,7 @@ public class Datos {
 	private String idCFD;
 	private String serie;
 	private String folio;
-	//fecha_hora
+	private String fecha_hora;
 	private float subtotal;
 	private float total;
 	private float impTrasladados; //total
@@ -32,16 +32,6 @@ public class Datos {
 	//private String idUnicoRec; //IdentificadorÚnicoReceptor
 	private String RFC;
 	Direccion direccion;
-
-	//#05
-	//private String idUnicoInterno;
-	private int cantidad;
-	private String descripcion;
-	private float valorUnit;
-	private float importe;
-	private String unidadMed;
-	private int categoria; //categoria
-	private String fraccionArancelaria; 
 	
 	//#06
 	private String impuesto;
@@ -78,37 +68,32 @@ public class Datos {
 	//#99
 	private String numLineas;
 	
-	public Datos (String idCFD, String serie, String folio, float subtotal, float total, float impTrasladados,
-			float impRetenidos, String totalLetra, String moneda, float tipoCambio, String referencia, String repVentas,
-			String viaEmbarque, String nPedido, String sPedido, String noCtaPago, String condPago, String metodoPago,
-			String formaPago, String RFC, Direccion direccion, int cantidad, String descripcion, float valorUnit, 
-			float importe, String unidadMed, int categoria, String fraccionArancelaria, String impuesto, float tasa, 
-			float imp, String email, String asunto, String mensaje, String adjunto, float version, int tipoOpe, 
-			String clavePedimento, String certOrigen, String numCertOrigen, String numExportConfiable, String incoterm, 
-			String subdiv, String observaciones, String tipoCambioUSD, String totalUSD, String CURP, 
-			String numRegIdTrib, String pais, String numLineas){
-		this.idCFD = idCFD;
-		this.serie = serie;
-		this.folio = folio;
-		this.subtotal = subtotal;
-		this.total = total;
-		this.impTrasladados = impTrasladados;
-		this.impRetenidos = impRetenidos;
-		this.totalLetra = totalLetra;
-		this.moneda = moneda;
-		this.tipoCambio = tipoCambio;
-		this.referencia = referencia;
-		this.repVentas = repVentas;
-		this.viaEmbarque = viaEmbarque;
-		this.nPedido = nPedido;
-		this.sPedido = sPedido;
-		this.noCtaPago = noCtaPago;
-		this.condPago = condPago;
-		this.metodoPago = metodoPago;
-		this.formaPago = formaPago;
-		this.RFC = RFC;
-		this.direccion = direccion;
-		this.cantidad = cantidad;
+	public Datos (String info){
+		String[] values= info.split("\\|");
+		
+		this.idCFD = values[0];
+		this.serie = values[1];
+		this.folio = values[2];
+		this.fecha_hora = values[3];
+		this.subtotal = values[4];
+		this.total = values[5];
+		this.impTrasladados = values[6];
+		this.impRetenidos = values[7];
+		this.totalLetra = values[8];
+		this.moneda = values[9];
+		this.tipoCambio = values[10];
+		this.referencia = values[11];
+		this.repVentas = values[12];
+		this.viaEmbarque = values[13];
+		this.nPedido = values[14];
+		this.sPedido =values[15];
+		this.noCtaPago = values[16];
+		this.condPago = values[17];
+		this.metodoPago = values[18];
+		this.formaPago = values[19];
+		this.RFC = values[20];
+		//this.direccion = values[21];
+		this.cantidad = values[22];
 		this.descripcion = descripcion;
 		this.valorUnit = valorUnit;
 		this.importe = importe;
@@ -161,6 +146,14 @@ public class Datos {
 
 	public void setFolio(String folio) {
 		this.folio = folio;
+	}
+	
+	public String getFecha_Hora() {
+		return fecha_hora;
+	}
+
+	public void setFecha_Hora(String fecha_hora) {
+		this.fecha_hora = fecha_hora;
 	}
 
 	public float getSubtotal() {
@@ -305,62 +298,6 @@ public class Datos {
 
 	public void setDireccion(Direccion direccion) {
 		this.direccion = direccion;
-	}
-
-	public int getCantidad() {
-		return cantidad;
-	}
-
-	public void setCantidad(int cantidad) {
-		this.cantidad = cantidad;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-	public float getValorUnit() {
-		return valorUnit;
-	}
-
-	public void setValorUnit(float valorUnit) {
-		this.valorUnit = valorUnit;
-	}
-
-	public float getImporte() {
-		return importe;
-	}
-
-	public void setImporte(float importe) {
-		this.importe = importe;
-	}
-
-	public String getUnidadMed() {
-		return unidadMed;
-	}
-
-	public void setUnidadMed(String unidadMed) {
-		this.unidadMed = unidadMed;
-	}
-
-	public int getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(int categoria) {
-		this.categoria = categoria;
-	}
-
-	public String getFraccionArancelaria() {
-		return fraccionArancelaria;
-	}
-
-	public void setFraccionArancelaria(String fraccionArancelaria) {
-		this.fraccionArancelaria = fraccionArancelaria;
 	}
 
 	public String getImpuesto() {

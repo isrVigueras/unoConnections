@@ -12,8 +12,4 @@ public class Lista {
 		private int categoria; //categoria
 		private String fraccionArancelaria; 
 
-
-List<String> ejemploLista = new ArrayList<String>();
-1
-List<String> ejemploLista = new ArrayList<String>();
 }

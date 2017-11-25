@@ -1,7 +1,17 @@
 package com.tikal.unoconnections.tralix;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.tikal.cacao.model.Direccion;
 
+@Entity
 public class Datos {
+	
+	@Id
+	private Long id;
+	
+	@Index
+	private String rfcEmisor;
 	//#01
 	private String idCFD;
 	private String serie;
@@ -474,5 +484,23 @@ public class Datos {
 
 	public void setNumLineas(String numLineas) {
 		this.numLineas = numLineas;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getRfcEmisor() {
+		return rfcEmisor;
+	}
+
+	public void setRfcEmisor(String rfcEmisor) {
+		this.rfcEmisor = rfcEmisor;
 	}	
+	
+	
 }

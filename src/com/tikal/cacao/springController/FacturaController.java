@@ -110,6 +110,8 @@ public class FacturaController {
 	@Autowired
 	private BitacoraDAO bitacoradao;
 	
+	
+	
 	@PostConstruct
 	public void init() {
 		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
@@ -141,7 +143,7 @@ public class FacturaController {
 		}
 	}
 	
-	@RequestMapping(value = "/multiple/{rfc}", method = RequestMethod.POST)
+	@RequestMapping(value = "/multiple/{rfc}", method = RequestMethod.POST, produces="application/json")
  	public void multiple(HttpServletRequest req, HttpServletResponse res, @RequestBody String json, @PathVariable String rfc) throws IOException {
  		String[] args = json.split("CADENADEESCAPE");
  		List<Datos> lista= new ArrayList<Datos>();
@@ -150,7 +152,8 @@ public class FacturaController {
  			lista.add(datos);
  		}
  		//guardar los datitos
-
+ 		
+ 		res.getWriter().print(JsonConvertidor.toJson(lista));
 	}
 	
 	@RequestMapping(value = "/emailTo", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")

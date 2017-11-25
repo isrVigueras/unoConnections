@@ -1,4 +1,8 @@
 package com.tikal.unoconnections.tralix;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -6,132 +10,240 @@ import com.tikal.cacao.model.Direccion;
 
 @Entity
 public class Datos {
-	
+
 	@Id
 	private Long id;
-	
+
 	@Index
 	private String rfcEmisor;
-	//#01
+	// #01
 	private String idCFD;
 	private String serie;
 	private String folio;
 	private String fecha_hora;
 	private float subtotal;
 	private float total;
-	private float impTrasladados; //total
-	private float impRetenidos; //totalImpuestos
+	private float impTrasladados; // total
+	private float impRetenidos; // totalImpuestos
 	private String totalLetra;
 	private String moneda;
 	private float tipoCambio;
 	private String referencia;
-	private String repVentas; //representante_ventas
+	private String repVentas; // representante_ventas
 	private String viaEmbarque;
-	private String nPedido; //nuestro_pedido
-	private String sPedido; //su_pedido
-	
-	//#01A
+	private String nPedido; // nuestro_pedido
+	private String sPedido; // su_pedido
+
+	// #01A
 	private String noCtaPago;
-	
-	//#02
+
+	// #02
 	private String condPago;
 	private String metodoPago;
 	private String formaPago;
-	
-	//#03 //#04
-	//private String idUnicoRec; //IdentificadorÚnicoReceptor
+
+	// #03 //#04
+	// private String idUnicoRec; //IdentificadorÚnicoReceptor
 	private String RFC;
 	Direccion direccion;
-	
-	//#06
+	private String nombreReceptor;
+
+	// #06
 	private String impuesto;
 	private float tasa;
-	private float imp; //importe
-	
-	//#09
-	//private String idIntReceptor; //IdentificadorInternoReceptor
+	private float imp; // importe
+
+	// #09
+	// private String idIntReceptor; //IdentificadorInternoReceptor
 	private String email;
 	private String asunto = "null";
 	private String mensaje = "null";
 	private String adjunto;
-	
-	//#10
+
+	// #10
 	private float version = 0;
 	private int tipoOpe;
 	private String clavePedimento;
-	private String certOrigen = "null"; //certificadoOrigen
+	private String certOrigen = "null"; // certificadoOrigen
 	private String numCertOrigen = "";
-	private String numExportConfiable = "null"; //NumeroDeExportadorConfiable
+	private String numExportConfiable = "null"; // NumeroDeExportadorConfiable
 	private String incoterm = "null";
-	private String subdiv = "null"; 
+	private String subdiv = "null";
 	private String observaciones = "null";
 	private String tipoCambioUSD = "null";
 	private String totalUSD;
-	
-	//#12
+
+	// #12
 	private String CURP = "null";
 	private String numRegIdTrib;
-	
-	//#14
+
+	// #14
 	private String pais;
+
+	// #99
+	private int numLineas;
+
+	// Conceptos
+	private List<DatosConcepto> conceptos;
+
+	public Datos(String info) {
+		this.setConceptos(new ArrayList<DatosConcepto>());
+
+		String[] rengs = info.split("\n");
+
+		for (String reng : rengs) {
+			String head = reng.substring(0, reng.indexOf("|"));
+			switch (head) {
+			case "01": {
+				this.parsea01(reng);
+				break;
+			}
+			case "01A": {
+				this.parsea01A(reng);
+				break;
+			}
+			case "02": {
+				this.parsea02(reng);
+				break;
+			}
+			case "03": {
+				this.parsea03(reng);
+				break;
+			}
+			case "05": {
+				this.parsea05(reng);
+				break;
+			}
+			case "06": {
+				this.parsea06(reng);
+				break;
+			}
+			case "09": {
+				this.parsea09(reng);
+				break;
+			}
+			case "12": {
+				this.parsea12(reng);
+				break;
+			}
+			case "14": {
+				this.parsea14(reng);
+				break;
+			}
+			case "99": {
+				String[] values = reng.split("\\|");
+				this.trimear(values);
+				this.numLineas = Integer.parseInt(values[1]);
+			}
+			}
+
+		}
+	}
+
+	private void parsea01(String reng) {
+		String[] values = reng.split("\\|");
+		this.trimear(values);
+		this.idCFD = values[1];
+		this.serie = values[2];
+		this.folio = values[3];
+		this.fecha_hora = values[4];
+		this.subtotal = Float.parseFloat(values[5]);
+		this.total = Float.parseFloat(values[6]);
+		this.impTrasladados = Float.parseFloat(values[7]);
+		this.impRetenidos = Float.parseFloat(values[8]);
+		this.totalLetra = values[9];
+		this.moneda = values[10];
+		if (!values[11].isEmpty()) {
+			this.tipoCambio = Float.parseFloat(values[11]);
+		}
+	}
+
+	private void parsea01A(String reng) {
+		String[] values = reng.split("\\|");
+		this.trimear(values);
+		this.noCtaPago = values[1];
+	}
+
+	private void parsea02(String reng) {
+		String[] values = reng.split("\\|");
+		this.trimear(values);
+		this.condPago = values[1];
+		this.metodoPago = values[2];
+		this.formaPago = values[3];
+	}
+
+	private void parsea03(String reng) {
+		String[] values = reng.split("\\|");
+		this.trimear(values);
+		this.RFC = values[2];
+		this.setNombreReceptor(values[3]);
+	}
+
+	private void parsea05(String reng) {
+		String[] values = reng.split("\\|");
+		this.trimear(values);
+		String id = values[1];
+		if (id.compareTo("0") != 0) {
+			DatosConcepto d = new DatosConcepto();
+			d.setCantidad(Integer.parseInt(values[2]));
+			d.setDescripcion(values[3]);
+			d.setFraccionArancelaria(values[8]);
+			d.setImporte(Float.parseFloat(values[5]));
+			d.setUnidadMed(values[6]);
+			d.setValorUnit(Float.parseFloat(values[4]));
+			this.conceptos.add(d);
+		} else {
+			DatosConcepto d = this.conceptos.get(this.conceptos.size() - 1);
+			String desc = d.getDescripcion();
+			desc += " " + values[3];
+			d.setDescripcion(desc);
+		}
+
+	}
+
+	private void parsea06(String reng) {
+		String[] values = reng.split("\\|");
+		this.trimear(values);
+		this.impuesto = values[1];
+		this.tasa = Float.parseFloat(values[2]);
+		this.imp = Float.parseFloat(values[3]);
+	}
+
+	private void parsea09(String reng) {
+		String[] values = reng.split("\\|");
+		this.trimear(values);
+		this.email = values[2];
+		this.asunto = values[3];
+		this.mensaje = values[4];
+		this.adjunto = values[5];
+	}
+
+	private void parsea12(String reng) {
+		String[] values = reng.split("\\|");
+		this.trimear(values);
+		this.CURP = values[1];
+		this.numRegIdTrib = values[2];
+	}
+
+	private void parsea14(String reng) {
+		String[] values = reng.split("\\|");
+		this.trimear(values);
+		this.direccion = new Direccion();
+		this.direccion.setCalle(values[1]);
+		this.direccion.setNumExterior(values[2]);
+		this.direccion.setNumInterior(values[3]);
+		this.direccion.setColonia(values[4]);
+		this.direccion.setLocalidad(values[5]);
+		this.direccion.setMunicipio(values[6]);
+		this.direccion.setEstado(values[7]);
+		this.setPais(values[8]);
+		this.direccion.setCodigoPostal(values[9]);
+	}
 	
-	//#99
-	private String numLineas;
-	
-	public Datos (String info){
-		String[] values= info.split("\\|");
-		
-		this.idCFD = values[0];
-		this.serie = values[1];
-		this.folio = values[2];
-		this.fecha_hora = values[3];
-		this.subtotal = values[4];
-		this.total = values[5];
-		this.impTrasladados = values[6];
-		this.impRetenidos = values[7];
-		this.totalLetra = values[8];
-		this.moneda = values[9];
-		this.tipoCambio = values[10];
-		this.referencia = values[11];
-		this.repVentas = values[12];
-		this.viaEmbarque = values[13];
-		this.nPedido = values[14];
-		this.sPedido =values[15];
-		this.noCtaPago = values[16];
-		this.condPago = values[17];
-		this.metodoPago = values[18];
-		this.formaPago = values[19];
-		this.RFC = values[20];
-		//this.direccion = values[21];
-		this.cantidad = values[22];
-		this.descripcion = descripcion;
-		this.valorUnit = valorUnit;
-		this.importe = importe;
-		this.unidadMed = unidadMed;
-		this.categoria = categoria;
-		this.fraccionArancelaria = fraccionArancelaria;
-		this.impuesto = impuesto;
-		this.tasa = tasa;
-		this.imp = imp;
-		this.email = email;
-		this.asunto = asunto;
-		this.mensaje = mensaje;
-		this.adjunto = adjunto;
-		this.version = version;
-		this.tipoOpe = tipoOpe;
-		this.clavePedimento = clavePedimento;
-		this.certOrigen = certOrigen;
-		this.numCertOrigen = numCertOrigen;
-		this.numExportConfiable = numExportConfiable;
-		this.incoterm = incoterm;
-		this.subdiv = subdiv;
-		this.observaciones = observaciones;
-		this.tipoCambioUSD = tipoCambioUSD;
-		this.totalUSD = totalUSD;
-		this.CURP = CURP;
-		this.numRegIdTrib = numRegIdTrib;
-		this.pais = pais;
-		this.numLineas = numLineas;
+	private void trimear(String[] values){
+		for(int i= 0; i<values.length; i++){
+			values[i]= values[i].trim();
+		}
 	}
 
 	public String getIdCFD() {
@@ -157,7 +269,7 @@ public class Datos {
 	public void setFolio(String folio) {
 		this.folio = folio;
 	}
-	
+
 	public String getFecha_Hora() {
 		return fecha_hora;
 	}
@@ -478,11 +590,11 @@ public class Datos {
 		this.pais = pais;
 	}
 
-	public String getNumLineas() {
+	public int getNumLineas() {
 		return numLineas;
 	}
 
-	public void setNumLineas(String numLineas) {
+	public void setNumLineas(int numLineas) {
 		this.numLineas = numLineas;
 	}
 
@@ -500,7 +612,22 @@ public class Datos {
 
 	public void setRfcEmisor(String rfcEmisor) {
 		this.rfcEmisor = rfcEmisor;
-	}	
-	
-	
+	}
+
+	public List<DatosConcepto> getConceptos() {
+		return conceptos;
+	}
+
+	public void setConceptos(List<DatosConcepto> conceptos) {
+		this.conceptos = conceptos;
+	}
+
+	public String getNombreReceptor() {
+		return nombreReceptor;
+	}
+
+	public void setNombreReceptor(String nombreReceptor) {
+		this.nombreReceptor = nombreReceptor;
+	}
+
 }

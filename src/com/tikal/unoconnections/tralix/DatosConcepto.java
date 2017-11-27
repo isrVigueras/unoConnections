@@ -4,6 +4,7 @@ public class DatosConcepto {
 	
 	//#05
 		//private String idUnicoInterno;
+		private String clave;
 		private int cantidad;
 		private String descripcion;
 		private float valorUnit;
@@ -52,6 +53,12 @@ public class DatosConcepto {
 		}
 		public void setFraccionArancelaria(String fraccionArancelaria) {
 			this.fraccionArancelaria = fraccionArancelaria;
+		}
+		public String getClave() {
+			return clave;
+		}
+		public void setClave(String clave) {
+			this.clave = clave;
 		} 
 
 		

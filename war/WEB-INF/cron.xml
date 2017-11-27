@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+	<cron>
+		<url>/_ah/facturacionMultiple/backProcess2</url>
+		<description>FM</description>
+		<schedule>every 1 minutes</schedule>
+	</cron>
+	<cron>
+		<url>/_ah/sessioncleanup?clear</url>
+		<description>Clean up sessions</description>
+		<schedule>every 30 minutes</schedule>
+	</cron>
+</cronentries>

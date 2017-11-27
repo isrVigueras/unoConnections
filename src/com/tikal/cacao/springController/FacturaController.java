@@ -38,6 +38,7 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfGState;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.tikal.cacao.dao.BitacoraDAO;
+import com.tikal.cacao.dao.DatosDAO;
 import com.tikal.cacao.dao.EmisorDAO;
 import com.tikal.cacao.dao.FacturaDAO;
 import com.tikal.cacao.dao.ImagenDAO;
@@ -47,7 +48,6 @@ import com.tikal.cacao.factura.Estatus;
 import com.tikal.cacao.factura.FormatoFecha;
 import com.tikal.cacao.factura.ws.WSClient;
 import com.tikal.cacao.factura.ws.WSClientCfdi33;
-import com.tikal.cacao.model.Direccion;
 import com.tikal.cacao.model.Emisor;
 import com.tikal.cacao.model.Factura;
 import com.tikal.cacao.model.Imagen;
@@ -56,10 +56,10 @@ import com.tikal.cacao.model.RegistroBitacora;
 import com.tikal.cacao.model.Serial;
 import com.tikal.cacao.reporte.ReporteRenglon;
 import com.tikal.cacao.sat.cfd.Comprobante;
+import com.tikal.cacao.sat.cfd.Comprobante.Conceptos.Concepto;
 import com.tikal.cacao.sat.cfd.ObjectFactoryComprobante;
 import com.tikal.cacao.sat.cfd.TUbicacion;
 import com.tikal.cacao.sat.cfd.TUbicacionFiscal;
-import com.tikal.cacao.sat.cfd.Comprobante.Conceptos.Concepto;
 import com.tikal.cacao.sat.timbrefiscaldigital.TimbreFiscalDigital;
 import com.tikal.cacao.springController.viewObjects.ComprobanteConComentarioVO;
 import com.tikal.cacao.springController.viewObjects.ComprobanteVO;
@@ -110,7 +110,8 @@ public class FacturaController {
 	@Autowired
 	private BitacoraDAO bitacoradao;
 	
-	
+	@Autowired
+	private DatosDAO datosdao;
 	
 	@PostConstruct
 	public void init() {
@@ -149,9 +150,11 @@ public class FacturaController {
  		List<Datos> lista= new ArrayList<Datos>();
  		for(String arg:args){
  			Datos datos = new Datos(arg);
+ 			datos.setRfcEmisor(rfc);
  			lista.add(datos);
  		}
- 		//guardar los datitos
+
+ 		datosdao.guardar(lista);
  		
  		res.getWriter().print(JsonConvertidor.toJson(lista));
 	}

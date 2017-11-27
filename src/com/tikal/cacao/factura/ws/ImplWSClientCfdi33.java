@@ -37,13 +37,13 @@ public class ImplWSClientCfdi33 extends WSClientCfdi33 {
 	private String usuarioIntegrador;
 	
 	public ImplWSClientCfdi33() {
-		if(Util.detectarAmbienteProductivo()) {
-			uri = "https://timbracfdi33.mx:1443/Timbrado.asmx";
-			usuarioIntegrador = "SSaC3HanfgtTGP+gChvWNg==";
-		} else {
+//		if(Util.detectarAmbienteProductivo()) {
+//			uri = "https://timbracfdi33.mx:1443/Timbrado.asmx";
+//			usuarioIntegrador = "SSaC3HanfgtTGP+gChvWNg==";
+//		} else {
 			uri = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx";
 			usuarioIntegrador = "mvpNUXmQfK8=";
-		}
+//		}
 	}
 
 	@Override

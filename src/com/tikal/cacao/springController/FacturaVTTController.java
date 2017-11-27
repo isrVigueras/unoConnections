@@ -157,7 +157,7 @@ public class FacturaVTTController {
 			AsignadorDeCharset.asignar(req, res);
 			if (ServicioSesion.verificarPermiso(req, usuarioDAO, perfilDAO, 11)) {
 				ComprobanteVO cVO = (ComprobanteVO) JsonConvertidor.fromJson(json, ComprobanteVO.class);
-				String textoRespuesta = facturaVTTService.timbrar(cVO, req.getSession());
+				String textoRespuesta = facturaVTTService.timbrar(cVO, req.getSession(), false);
 				res.setContentType("text/html");
 				res.getWriter().println(textoRespuesta);
 			} else {

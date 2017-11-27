@@ -85,6 +85,10 @@ public class Datos {
 
 	// Conceptos
 	private List<DatosConcepto> conceptos;
+	
+	public Datos(){
+		
+	}
 
 	public Datos(String info) {
 		this.setConceptos(new ArrayList<DatosConcepto>());
@@ -185,6 +189,7 @@ public class Datos {
 		String id = values[1];
 		if (id.compareTo("0") != 0) {
 			DatosConcepto d = new DatosConcepto();
+			d.setClave(values[1]);
 			d.setCantidad(Integer.parseInt(values[2]));
 			d.setDescripcion(values[3]);
 			d.setFraccionArancelaria(values[8]);

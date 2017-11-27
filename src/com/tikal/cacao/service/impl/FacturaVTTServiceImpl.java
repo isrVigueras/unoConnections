@@ -190,7 +190,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 	public String timbrarCFDIGenerado(String uuid, String email, HttpSession sesion) {
 		FacturaVTT factura = facturaVTTDAO.consultar(uuid);
 		Comprobante comprobante = Util.unmarshallCFDI33XML(factura.getCfdiXML());
-		RespuestaWebServicePersonalizada respWBPersonalizada = this.timbrar(comprobante, factura.getComentarios(), email);
+		RespuestaWebServicePersonalizada respWBPersonalizada = this.timbrar(comprobante, factura.getComentarios(), email, false);
 		
 		if (respWBPersonalizada.getUuidFactura() != null) {
 			//SE TIMBRÓ LA FACTURA CON ÉXITO
@@ -208,7 +208,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 	@Override
 	public String timbrar(String json, String uuid, HttpSession sesion) {
 		ComprobanteVO cVO = (ComprobanteVO) JsonConvertidor.fromJson(json, ComprobanteVO.class);
-		RespuestaWebServicePersonalizada respWBPersonalizada = this.timbrar(cVO.getComprobante(), cVO.getComentarios(), cVO.getEmail());
+		RespuestaWebServicePersonalizada respWBPersonalizada = this.timbrar(cVO.getComprobante(), cVO.getComentarios(), cVO.getEmail(),false);
 		
 		if (respWBPersonalizada.getUuidFactura() != null) {
 			String evento = "Se actualizo y se timbró la factura guardada con el id: "+ uuid +
@@ -222,8 +222,8 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 	}
 
 	@Override
-	public String timbrar(ComprobanteVO comprobanteVO, HttpSession sesion) {
-		RespuestaWebServicePersonalizada respWBPersonalizada = this.timbrar(comprobanteVO.getComprobante(), comprobanteVO.getComentarios(), comprobanteVO.getEmail());
+	public String timbrar(ComprobanteVO comprobanteVO, HttpSession sesion, boolean auto) {
+		RespuestaWebServicePersonalizada respWBPersonalizada = this.timbrar(comprobanteVO.getComprobante(), comprobanteVO.getComentarios(), comprobanteVO.getEmail(),auto);
 		
 		if (respWBPersonalizada.getUuidFactura() != null) {
 			if (sesion.getAttribute("userName") != null) {
@@ -427,11 +427,13 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 		}
 	}
 	
-	private RespuestaWebServicePersonalizada timbrar(Comprobante comprobante, String comentarios, String email) {
+	private RespuestaWebServicePersonalizada timbrar(Comprobante comprobante, String comentarios, String email, boolean auto) {
 		this.redondearCantidades(comprobante);
 		this.agregarCerosATasaOCuota(comprobante.getImpuestos());
-		Serial s = serialDAO.consultar(comprobante.getEmisor().getRfc(), comprobante.getSerie());
-		comprobante.setFolio(s.getFolio()+"");
+		if(!auto){
+			Serial s = serialDAO.consultar(comprobante.getEmisor().getRfc(), comprobante.getSerie());
+			comprobante.setFolio(s.getFolio()+"");
+		}
 		String xmlCFDI = Util.marshallComprobante33(comprobante, false);
 		
 		TimbraCFDIResponse timbraCFDIResponse = webServiceClient33.getTimbraCFDIResponse(xmlCFDI);

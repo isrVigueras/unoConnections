@@ -45,6 +45,7 @@ import com.tikal.cacao.tarifas.subsidioEmpleo.TarifaQuincenal;
 import com.tikal.cacao.tarifas.subsidioEmpleo.TarifaSemanal;
 import com.tikal.cacao.tarifas.subsidioEmpleo.TarifaSubsidio;
 import com.tikal.cacao.tarifas.subsidioEmpleo.TarifaTrabajoRealizado;
+import com.tikal.unoconnections.tralix.Datos;
 
 /**
  * @author Tikal
@@ -96,6 +97,7 @@ public class EntityRegister {
 		registrar(ReporteRenglon.class);
 		registrar(ListaDeClasesDeProdServ.class);
 		registrar(FacturaVTT.class);
+		registrar(Datos.class);
 	}
 	
 	private <T> void registrar(Class<T> clase) {

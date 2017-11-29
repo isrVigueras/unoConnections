@@ -2122,7 +2122,7 @@ public class ComercioExterior {
              *     {@link String }
              *     
              */
-            public String getUnidadAduana() {
+            public CUnidadAduana getUnidadAduana() {
                 return unidadAduana;
             }
 
@@ -2134,7 +2134,7 @@ public class ComercioExterior {
              *     {@link String }
              *     
              */
-            public void setUnidadAduana(String value) {
+            public void setUnidadAduana(CUnidadAduana value) {
                 this.unidadAduana = value;
             }
 

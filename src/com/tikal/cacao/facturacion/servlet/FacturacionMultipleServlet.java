@@ -35,6 +35,8 @@ import com.tikal.cacao.factura.ws.WSClient;
 import com.tikal.cacao.factura.ws.WSClientCfdi33;
 import com.tikal.cacao.model.Direccion;
 import com.tikal.cacao.model.Empresa;
+import com.tikal.cacao.model.FacturaVTT;
+import com.tikal.cacao.model.FacturaVTT.DatosExtra;
 import com.tikal.cacao.model.RegistroBitacora;
 import com.tikal.cacao.model.orm.FormaDePago;
 import com.tikal.cacao.sat.cfd.catalogos.C_Pais;
@@ -64,6 +66,7 @@ import mx.gob.sat.comercioexterior11.ComercioExterior;
 import mx.gob.sat.comercioexterior11.ComercioExterior.Mercancias.Mercancia;
 import mx.gob.sat.sitio_internet.cfd.catalogos.comext.CClavePedimento;
 import mx.gob.sat.sitio_internet.cfd.catalogos.comext.CINCOTERM;
+import mx.gob.sat.sitio_internet.cfd.catalogos.comext.CTipoOperacion;
 import mx.gob.sat.sitio_internet.cfd.catalogos.comext.CUnidadAduana;
 
 public class FacturacionMultipleServlet extends HttpServlet {
@@ -105,7 +108,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 
 	@Autowired
 	ConceptosDAO conceptodao;
-	
+
 	@Autowired
 	DomicilioCEDAO domdao;
 
@@ -122,7 +125,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		List<Datos> lista = datosdao.todos();
 		for (Datos fr : lista) {
 			String respuesta = this.timbrarDatos(fr, request.getSession());
-			if (respuesta.compareTo("OK") == 0) {
+			if (respuesta.compareTo("¡La factura se timbró con éxito!") == 0) {
 				datosdao.elimiar(fr);
 			} else {
 				// something to do
@@ -151,7 +154,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		receptor.setNombre(f.getNombreReceptor());
 		receptor.setRfc(f.getRFC());
 		receptor.setUsoCFDI(new C_UsoCFDI("P01"));
-		// receptor.setResidenciaFiscal(new C_Pais("MEX"));
+		receptor.setResidenciaFiscal(new com.tikal.cacao.sat.cfd.catalogos.dyn.C_Pais(f.getPais()));
 
 		// receptor.setDomicilio(recept.getDomicilio());
 		c.setReceptor(receptor);
@@ -202,7 +205,8 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			con.setClaveProdServ(conce.getClaveProdServ());
 			con.setDescripcion(d.getDescripcion());
 			con.setValorUnitario(new BigDecimal(d.getValorUnit()));
-			con.setImporte(Util.redondearBigD(new BigDecimal(d.getImporte()),6));
+			con.setImporte(Util.redondearBigD(new BigDecimal(d.getImporte()), 6));
+			con.setNoIdentificacion(d.getClave());
 
 			Comprobante.Conceptos.Concepto.Impuestos impuestos = new Comprobante.Conceptos.Concepto.Impuestos();
 			Comprobante.Conceptos.Concepto.Impuestos.Traslados traslados = new Comprobante.Conceptos.Concepto.Impuestos.Traslados();
@@ -219,7 +223,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			traslado.setTipoFactor(new C_TipoFactor("Tasa"));
 			traslados.getTraslado().add(traslado);
 			impuestos.setTraslados(traslados);
-			con.setImpuestos(impuestos);	
+			con.setImpuestos(impuestos);
 
 			total += d.getValorUnit() * d.getCantidad();
 			conceptos.getConcepto().add(con);
@@ -250,15 +254,28 @@ public class FacturacionMultipleServlet extends HttpServlet {
 
 		c.setTotal(Util.redondearBigD(new BigDecimal(f.getTotal()), 2));
 		c.setSubTotal(Util.redondearBigD(new BigDecimal(f.getSubtotal()), 2));
-		
-		
-		if(tipo==2){
+
+		if (tipo == 2) {
 			this.agregarComercioExterno(c, f);
 		}
-		
+
 		ComprobanteVO vo = new ComprobanteVO();
 		vo.setComprobante(c);
-		String respuesta = servicioFact.timbrar(vo, sesion, true);
+		
+		FacturaVTT factura= new FacturaVTT();
+		FacturaVTT.DatosExtra extra= factura.getDatosExtra();
+		extra.setCondicionesPago(f.getCondPago());
+		extra.setImporteichon(f.getTotalLetra());
+		extra.setNuestroPedido(f.getnPedido());
+		extra.setRepresentante(f.getRepVentas());
+		extra.setShipCalle(f.getShipCalle());
+		extra.setShipLocalidad(f.getShipColonia());
+		extra.setShipPais(f.getShipPais());
+		extra.setShipPostCode(f.getShipEstado());
+		extra.setSuPedido(f.getsPedido());
+		extra.setViaEmbarque(f.getViaEmbarque());
+		
+		String respuesta = servicioFact.timbrar(vo, sesion, true,extra);
 		// facturarenglondao.eliminar(f.getId());
 		RegistroBitacora bit = new RegistroBitacora();
 		bit.setEvento(respuesta);
@@ -266,7 +283,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		bit.setUsuario("Proceso Back");
 		bit.setFecha(new Date());
 		bitacoradao.addReg(bit);
-		return "OK";
+		return respuesta;
 
 		// Comprobante c = new Comprobante();
 		// Comprobante.Emisor emisor = new Comprobante.Emisor();
@@ -439,37 +456,47 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		}
 		return "";
 	}
-	
-	private void agregarComercioExterno(Comprobante c, Datos d){
-		mx.gob.sat.comercioexterior11.ObjectFactory of= new mx.gob.sat.comercioexterior11.ObjectFactory();
-		ComercioExterior com= of.createComercioExterior();
-		
+
+	private void agregarComercioExterno(Comprobante c, Datos d) {
+		mx.gob.sat.comercioexterior11.ObjectFactory of = new mx.gob.sat.comercioexterior11.ObjectFactory();
+		ComercioExterior com = of.createComercioExterior();
+
 		com.setIncoterm(CINCOTERM.valueOf(d.getIncoterm()));
-		com.setNumCertificadoOrigen(d.getNumCertOrigen());
+
 		com.setNumeroExportadorConfiable(d.getNumExportConfiable());
 		com.setObservaciones(d.getObservaciones());
-		if(d.getSubdiv()!=null){
+		if (d.getSubdiv() != null) {
 			com.setSubdivision(Integer.parseInt(d.getSubdiv()));
 		}
 		com.setTipoCambioUSD(Util.redondearBigD(new BigDecimal(d.getTipoCambio()), 2));
 		com.setTotalUSD(Util.redondearBigD(new BigDecimal(d.getTotalUSD()), 2));
-		if(d.getCertOrigen()!=null){
-			com.setCertificadoOrigen(Integer.parseInt(d.getCertOrigen()));
+		if (d.getNumCertOrigen() == null) {
+			com.setCertificadoOrigen(0);
+		} else {
+			if (d.getCertOrigen() != null) {
+				com.setNumCertificadoOrigen(d.getNumCertOrigen());
+				com.setCertificadoOrigen(Integer.parseInt(d.getCertOrigen()));
+			} else {
+				com.setCertificadoOrigen(0);
+			}
 		}
 		com.setClaveDePedimento(CClavePedimento.A_1);
-		
-		mx.gob.sat.comercioexterior11.ComercioExterior.Emisor emisor= of.createComercioExteriorEmisor();
-		mx.gob.sat.comercioexterior11.ComercioExterior.Emisor.Domicilio domicilio= of.createComercioExteriorEmisorDomicilio();
-		
+
+		mx.gob.sat.comercioexterior11.ComercioExterior.Emisor emisor = of.createComercioExteriorEmisor();
+		mx.gob.sat.comercioexterior11.ComercioExterior.Emisor.Domicilio domicilio = of
+				.createComercioExteriorEmisorDomicilio();
+
 		emisor.setCurp(d.getCURP());
-		
-		emisor.setDomicilio((mx.gob.sat.comercioexterior11.ComercioExterior.Emisor.Domicilio) domdao.get(d.getRfcEmisor()));
+
+		emisor.setDomicilio(
+				(mx.gob.sat.comercioexterior11.ComercioExterior.Emisor.Domicilio) domdao.get(d.getRfcEmisor()));
 		com.setEmisor(emisor);
-		
-		mx.gob.sat.comercioexterior11.ComercioExterior.Receptor receptor= of.createComercioExteriorReceptor();
-		mx.gob.sat.comercioexterior11.ComercioExterior.Receptor.Domicilio domrec= of.createComercioExteriorReceptorDomicilio();
-		
-		Direccion direccion= d.getDireccion();
+
+		mx.gob.sat.comercioexterior11.ComercioExterior.Receptor receptor = of.createComercioExteriorReceptor();
+		mx.gob.sat.comercioexterior11.ComercioExterior.Receptor.Domicilio domrec = of
+				.createComercioExteriorReceptorDomicilio();
+
+		Direccion direccion = d.getDireccion();
 		domrec.setCalle(direccion.getCalle());
 		domrec.setCodigoPostal(direccion.getCodigoPostal());
 		domrec.setColonia(direccion.getColonia());
@@ -477,40 +504,42 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		domrec.setLocalidad(direccion.getColonia());
 		domrec.setNumeroExterior(direccion.getNumExterior());
 		domrec.setPais(C_Pais.valueOf(d.getPais()));
-		
-		receptor.setNumRegIdTrib(d.getNumRegIdTrib());
+
+//		receptor.setNumRegIdTrib(d.getNumRegIdTrib());
 		receptor.setDomicilio(domrec);
 		com.setReceptor(receptor);
-		
-		mx.gob.sat.comercioexterior11.ComercioExterior.Mercancias mercs= of.createComercioExteriorMercancias();
-		
-		List<mx.gob.sat.comercioexterior11.ComercioExterior.Mercancias.Mercancia> lista=mercs.getMercancia();
-		
-		List<Concepto> listac= c.getConceptos().getConcepto();
-		
-		for(int i=0; i<d.getConceptos().size(); i++){
-			
-			Concepto conc= listac.get(i);
-			DatosConcepto de= d.getConceptos().get(i);
-			
-			Mercancia m= of.createComercioExteriorMercanciasMercancia();
+
+		mx.gob.sat.comercioexterior11.ComercioExterior.Mercancias mercs = of.createComercioExteriorMercancias();
+
+		List<mx.gob.sat.comercioexterior11.ComercioExterior.Mercancias.Mercancia> lista = mercs.getMercancia();
+
+		List<Concepto> listac = c.getConceptos().getConcepto();
+
+		for (int i = 0; i < d.getConceptos().size(); i++) {
+
+			Concepto conc = listac.get(i);
+			DatosConcepto de = d.getConceptos().get(i);
+
+			Mercancia m = of.createComercioExteriorMercanciasMercancia();
 			m.setCantidadAduana(conc.getCantidad());
 			m.setFraccionArancelaria(new C_FraccionArancelaria(de.getFraccionArancelaria()));
 			m.setNoIdentificacion(conc.getNoIdentificacion());
-			String cua= de.getUnidadMed();
-			if(cua.length()==1){
-				cua= "0"+cua;
+			String cua = de.getUnidadMed();
+			if (cua.length() == 1) {
+				cua = "0" + cua;
 			}
-			m.setUnidadAduana(CUnidadAduana.fromValue(cua));
-			m.setValorDolares(conc.getImporte());
-			m.setValorUnitarioAduana(conc.getValorUnitario());
+			m.setUnidadAduana(CUnidadAduana.fromValue("06"));
+			m.setValorDolares(Util.redondearBigD(conc.getImporte(), 2));
+			m.setValorUnitarioAduana(Util.redondearBigD(conc.getValorUnitario(), 2));
 			lista.add(m);
-//			m.setCantidadAduana(con.getCantidad());
-//			m.setFraccionArancelaria();
+			// m.setCantidadAduana(con.getCantidad());
+			// m.setFraccionArancelaria();
 		}
 		com.setMercancias(mercs);
-		
-		Complemento compl= new Comprobante.Complemento();
+		com.setVersion("1.1");
+		com.setTipoOperacion(CTipoOperacion.VALUE_1);
+		com.setSubdivision(0);
+		Complemento compl = new Comprobante.Complemento();
 		compl.getAny().add(com);
 		c.getComplemento().add(compl);
 	}

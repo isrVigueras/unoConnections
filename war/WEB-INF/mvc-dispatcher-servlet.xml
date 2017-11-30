@@ -129,6 +129,7 @@
 	<bean class="com.tikal.cacao.dao.impl.ListaDeClavesDeClasesDAOImpl" />
 	<bean class="com.tikal.cacao.dao.impl.FacturaVttDAOImpl" />
 	<bean class="com.tikal.cacao.dao.impl.DatosDAOImp" />
+	<bean class="com.tikal.cacao.dao.impl.DomicilioCEDAOImp" />
 
 	<!-- Spring Controllers -->
 	<!-- <bean class="com.tikal.cacao.springController.EmpresasController"></bean> -->

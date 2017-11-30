@@ -193,7 +193,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 		FacturaVTT factura = facturaVTTDAO.consultar(uuid);
 		Comprobante comprobante = Util.unmarshallCFDI33XML(factura.getCfdiXML());
 		RespuestaWebServicePersonalizada respWBPersonalizada = this.timbrar(comprobante, factura.getComentarios(),
-				email, false);
+				email, false, null);
 
 		if (respWBPersonalizada.getUuidFactura() != null) {
 			// SE TIMBRÓ LA FACTURA CON ÉXITO
@@ -212,7 +212,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 	public String timbrar(String json, String uuid, HttpSession sesion) {
 		ComprobanteVO cVO = (ComprobanteVO) JsonConvertidor.fromJson(json, ComprobanteVO.class);
 		RespuestaWebServicePersonalizada respWBPersonalizada = this.timbrar(cVO.getComprobante(), cVO.getComentarios(),
-				cVO.getEmail(), false);
+				cVO.getEmail(), false, null);
 
 		if (respWBPersonalizada.getUuidFactura() != null) {
 			String evento = "Se actualizo y se timbró la factura guardada con el id: " + uuid
@@ -226,9 +226,9 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 	}
 
 	@Override
-	public String timbrar(ComprobanteVO comprobanteVO, HttpSession sesion, boolean auto) {
+	public String timbrar(ComprobanteVO comprobanteVO, HttpSession sesion, boolean auto, FacturaVTT.DatosExtra extra) {
 		RespuestaWebServicePersonalizada respWBPersonalizada = this.timbrar(comprobanteVO.getComprobante(),
-				comprobanteVO.getComentarios(), comprobanteVO.getEmail(), auto);
+				comprobanteVO.getComentarios(), comprobanteVO.getEmail(), auto, extra);
 
 		if (respWBPersonalizada.getUuidFactura() != null) {
 			if (sesion.getAttribute("userName") != null) {
@@ -444,7 +444,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 	}
 
 	private RespuestaWebServicePersonalizada timbrar(Comprobante comprobante, String comentarios, String email,
-			boolean auto) {
+			boolean auto, FacturaVTT.DatosExtra extra) {
 		this.redondearCantidades(comprobante);
 		this.agregarCerosATasaOCuota(comprobante.getImpuestos());
 		if (!auto) {
@@ -481,6 +481,11 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 				FacturaVTT facturaTimbrada = new FacturaVTT(timbreFD.getUUID(), xmlCFDITimbrado,
 						cfdiTimbrado.getEmisor().getRfc(), cfdiTimbrado.getReceptor().getNombre(), fechaCertificacion,
 						selloDigital, bytesQRCode);
+				
+				if(auto){
+					facturaTimbrada.setDatosExtra(extra);
+				}
+				
 				facturaTimbrada.setComentarios(comentarios);
 				facturaVTTDAO.guardar(facturaTimbrada);
 				this.crearReporteRenglon(facturaTimbrada);

@@ -52,7 +52,7 @@ public interface FacturaVTTService {
 	 * @return un texto con el resultado de la operaci&oacute;n de Timbrado del
 	 * CFDI 3.3
 	 */
-	String timbrar(ComprobanteVO comprobanteVO, HttpSession sesion, boolean auto);
+	String timbrar(ComprobanteVO comprobanteVO, HttpSession sesion, boolean auto, FacturaVTT.DatosExtra extra);
 	
 	/**
 	 * <p>Timbra un CFDI 3.3 que ya ha sido guardado como un objeto 

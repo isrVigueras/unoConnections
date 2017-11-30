@@ -42,12 +42,18 @@ public class Datos {
 	private String metodoPago;
 	private String formaPago;
 
-	// #03 	
-	//#04
+	// #03
 	// private String idUnicoRec; //IdentificadorÚnicoReceptor
 	private String RFC;
 	Direccion direccion;
 	private String nombreReceptor;
+	
+	// #04
+	private String shipNombre;
+	private String shipPais;
+	private String shipCalle;
+	private String shipColonia;
+	private String shipEstado;
 
 	// #06
 	private String impuesto;
@@ -86,9 +92,9 @@ public class Datos {
 
 	// Conceptos
 	private List<DatosConcepto> conceptos;
-	
-	public Datos(){
-		
+
+	public Datos() {
+
 	}
 
 	public Datos(String info) {
@@ -115,6 +121,10 @@ public class Datos {
 				this.parsea03(reng);
 				break;
 			}
+			case "04":{
+				this.parsea04(reng);
+				break;
+			}
 			case "05": {
 				this.parsea05(reng);
 				break;
@@ -127,7 +137,7 @@ public class Datos {
 				this.parsea09(reng);
 				break;
 			}
-			case "10":{
+			case "10": {
 				this.parsea10(reng);
 				break;
 			}
@@ -186,16 +196,39 @@ public class Datos {
 		this.trimear(values);
 		this.RFC = values[2];
 		this.setNombreReceptor(values[3]);
-		this.direccion= new Direccion();
-		direccion.setCalle(values[5]);
-		direccion.setCodigoPostal(values[10]);
-		direccion.setColonia(values[8]);
-		direccion.setLocalidad(values[9]);
-		direccion.setNumExterior(values[6]);
-		direccion.setEstado(values[9].split(" ")[1]);
-		
+		this.direccion = new Direccion();
+		if (!values[5].isEmpty()) {
+			direccion.setCalle(values[5]);
+		}
+		if (!values[5].isEmpty()) {
+			direccion.setCodigoPostal(values[10]);
+		}
+		if (!values[8].isEmpty()) {
+			direccion.setColonia(values[8]);
+		}
+		if (!values[9].isEmpty()) {
+			direccion.setLocalidad(values[9]);
+		}
+		if (!values[6].isEmpty()) {
+			direccion.setNumExterior(values[6]);
+		}
+		if (!values[9].isEmpty()) {
+			direccion.setEstado(values[9].split(" ")[1]);
+		}
+
 	}
 
+	private void parsea04(String reng) {
+		String[] values = reng.split("\\|");
+		this.trimear(values);
+		this.shipNombre= values[2];
+		this.shipPais= values[3];
+		this.shipCalle= values[4];
+		this.shipColonia= values[5];
+		this.shipEstado= values[8];
+	
+	}
+	
 	private void parsea05(String reng) {
 		String[] values = reng.split("\\|");
 		this.trimear(values);
@@ -235,73 +268,75 @@ public class Datos {
 		this.mensaje = values[4];
 		this.adjunto = values[5];
 	}
-	
-	private void parsea10(String reng){
+
+	private void parsea10(String reng) {
 		String[] values = reng.split("\\|");
 		this.trimear(values);
-		if(!values[2].isEmpty()){
-			this.tipoOpe=Integer.parseInt(values[2]);
+		if (!values[2].isEmpty()) {
+			this.tipoOpe = Integer.parseInt(values[2]);
 		}
-		if(!values[3].isEmpty()){
-			this.clavePedimento=values[3];
+		if (!values[3].isEmpty()) {
+			this.clavePedimento = values[3];
 		}
-		
-		if(!values[3].isEmpty()){
-			this.clavePedimento=values[3];
+
+		if (!values[3].isEmpty()) {
+			this.clavePedimento = values[3];
 		}
-		if(!values[4].isEmpty()){
-			this.certOrigen=values[4];
+		if (!values[4].isEmpty()) {
+			this.certOrigen = values[4];
 		}
-		if(!values[5].isEmpty()){
-			this.numCertOrigen=values[5];
+		if (!values[5].isEmpty()) {
+			this.numCertOrigen = values[5];
 		}
-		if(!values[6].isEmpty()){
-			this.numExportConfiable=values[6];
+		if (!values[6].isEmpty()) {
+			this.numExportConfiable = values[6];
 		}
-		if(!values[7].isEmpty()){
-			this.incoterm=values[7];
+		if (!values[7].isEmpty()) {
+			this.incoterm = values[7];
 		}
-		if(!values[8].isEmpty()){
-			this.subdiv=values[8];
+		if (!values[8].isEmpty()) {
+			this.subdiv = values[8];
 		}
-		if(!values[9].isEmpty()){
-			this.observaciones=values[9];
+		if (!values[9].isEmpty()) {
+			this.observaciones = values[9];
 		}
-		if(!values[10].isEmpty()){
-			this.tipoCambioUSD=values[10];
-		}else{
-			this.tipoCambioUSD=tipoCambio+"";
+		if (!values[10].isEmpty()) {
+			this.tipoCambioUSD = values[10];
+		} else {
+			this.tipoCambioUSD = tipoCambio + "";
 		}
-		if(!values[11].isEmpty()){
-			this.totalUSD=values[11];
+		if (!values[11].isEmpty()) {
+			this.totalUSD = values[11];
 		}
 	}
 
 	private void parsea12(String reng) {
 		String[] values = reng.split("\\|");
 		this.trimear(values);
-		this.CURP = values[1];
+		if (!values[1].isEmpty()) {
+			this.CURP = values[1];
+		}
 		this.numRegIdTrib = values[2];
 	}
 
 	private void parsea14(String reng) {
 		String[] values = reng.split("\\|");
 		this.trimear(values);
-		this.direccion = new Direccion();
-		this.direccion.setCalle(values[1]);
-		this.direccion.setNumExterior(values[2]);
-		this.direccion.setNumInterior(values[3]);
-		this.direccion.setColonia(values[4]);
-		this.direccion.setLocalidad(values[5]);
-		this.direccion.setMunicipio(values[6]);
-		this.direccion.setEstado(values[7]);
+//		this.direccion = new Direccion();
+//		this.direccion.setCalle(values[1]);
+//		this.direccion.setNumExterior(values[2]);
+//		this.direccion.setNumInterior(values[3]);
+//		this.direccion.setColonia(values[4]);
+//		this.direccion.setLocalidad(values[5]);
+//		this.direccion.setMunicipio(values[6]);
+//		this.direccion.setEstado(values[7]);
 		this.setPais(values[9]);
-//		this.direccion.setCodigoPostal(values[10]);
+		// this.direccion.setCodigoPostal(values[10]);
 	}
-	
-	private void trimear(String[] values){
-		for(int i= 0; i<values.length; i++){
-			values[i]= values[i].trim();
+
+	private void trimear(String[] values) {
+		for (int i = 0; i < values.length; i++) {
+			values[i] = values[i].trim();
 		}
 	}
 
@@ -688,5 +723,55 @@ public class Datos {
 	public void setNombreReceptor(String nombreReceptor) {
 		this.nombreReceptor = nombreReceptor;
 	}
+
+	public String getFecha_hora() {
+		return fecha_hora;
+	}
+
+	public void setFecha_hora(String fecha_hora) {
+		this.fecha_hora = fecha_hora;
+	}
+
+	public String getShipNombre() {
+		return shipNombre;
+	}
+
+	public void setShipNombre(String shipNombre) {
+		this.shipNombre = shipNombre;
+	}
+
+	public String getShipPais() {
+		return shipPais;
+	}
+
+	public void setShipPais(String shipPais) {
+		this.shipPais = shipPais;
+	}
+
+	public String getShipCalle() {
+		return shipCalle;
+	}
+
+	public void setShipCalle(String shipCalle) {
+		this.shipCalle = shipCalle;
+	}
+
+	public String getShipColonia() {
+		return shipColonia;
+	}
+
+	public void setShipColonia(String shipColonia) {
+		this.shipColonia = shipColonia;
+	}
+
+	public String getShipEstado() {
+		return shipEstado;
+	}
+
+	public void setShipEstado(String shipEstado) {
+		this.shipEstado = shipEstado;
+	}
+	
+	
 
 }

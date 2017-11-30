@@ -51,6 +51,8 @@ public class FacturaVTT {
 	private String comentarios;
 	
 	private Estatus estatus;
+	
+	private DatosExtra datosExtra;
 
 	public FacturaVTT() { }
 	
@@ -66,6 +68,7 @@ public class FacturaVTT {
 		this.selloDigital = sello;
 		this.codigoQR = codigoQR;
 		this.configurarEstatus();
+		this.datosExtra= new DatosExtra();
 	}
 	
 	
@@ -233,4 +236,121 @@ public class FacturaVTT {
 			this.estatus = Estatus.TIMBRADO;
 		}
 	}
+	
+	public DatosExtra getDatosExtra() {
+		if(datosExtra==null){
+			return new DatosExtra();
+		}
+			
+		return datosExtra;
+	}
+
+	public void setDatosExtra(DatosExtra datosExtra) {
+		this.datosExtra = datosExtra;
+	}
+
+	public class DatosExtra{
+		private String nuestroPedido;
+		
+		private String suPedido;
+		
+		private String condicionesPago;
+		
+		private String viaEmbarque;
+		
+		private String representante;
+		
+		private String importeichon;
+		
+		private String shipLocalidad;
+		
+		private String shipPais;
+		
+		private String shipCalle;
+		
+		private String shipPostCode;
+
+		public String getNuestroPedido() {
+			return nuestroPedido;
+		}
+
+		public void setNuestroPedido(String nuestroPedido) {
+			this.nuestroPedido = nuestroPedido;
+		}
+
+		public String getSuPedido() {
+			return suPedido;
+		}
+
+		public void setSuPedido(String suPedido) {
+			this.suPedido = suPedido;
+		}
+
+		public String getCondicionesPago() {
+			return condicionesPago;
+		}
+
+		public void setCondicionesPago(String condicionesPago) {
+			this.condicionesPago = condicionesPago;
+		}
+
+		public String getViaEmbarque() {
+			return viaEmbarque;
+		}
+
+		public void setViaEmbarque(String viaEmbarque) {
+			this.viaEmbarque = viaEmbarque;
+		}
+
+		public String getRepresentante() {
+			return representante;
+		}
+
+		public void setRepresentante(String representante) {
+			this.representante = representante;
+		}
+
+		public String getImporteichon() {
+			return importeichon;
+		}
+
+		public void setImporteichon(String importeichon) {
+			this.importeichon = importeichon;
+		}
+
+		public String getShipLocalidad() {
+			return shipLocalidad;
+		}
+
+		public void setShipLocalidad(String shipLocalidad) {
+			this.shipLocalidad = shipLocalidad;
+		}
+
+		public String getShipPais() {
+			return shipPais;
+		}
+
+		public void setShipPais(String shipPais) {
+			this.shipPais = shipPais;
+		}
+
+		public String getShipCalle() {
+			return shipCalle;
+		}
+
+		public void setShipCalle(String shipCalle) {
+			this.shipCalle = shipCalle;
+		}
+
+		public String getShipPostCode() {
+			return shipPostCode;
+		}
+
+		public void setShipPostCode(String shipPostCode) {
+			this.shipPostCode = shipPostCode;
+		}
+		
+		
+	}
+	
 }

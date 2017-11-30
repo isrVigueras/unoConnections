@@ -281,6 +281,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		extra.setShipPostCode(f.getShipEstado());
 		extra.setSuPedido(f.getsPedido());
 		extra.setViaEmbarque(f.getViaEmbarque());
+		extra.setSoldTo(f.getDireccion());
 		
 		this.addAddenda(c, f);
 

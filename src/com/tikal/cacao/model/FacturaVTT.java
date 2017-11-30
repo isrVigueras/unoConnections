@@ -275,6 +275,8 @@ public class FacturaVTT {
 		
 		private String shipPostCode;
 		
+		private Direccion soldTo;
+		
 		public DatosExtra() {
 			this.shipCalle = "";
 			this.shipLocalidad = "";
@@ -382,6 +384,14 @@ public class FacturaVTT {
 
 		public void setIdShip(String idShip) {
 			this.idShip = idShip;
+		}
+
+		public Direccion getSoldTo() {
+			return soldTo;
+		}
+
+		public void setSoldTo(Direccion soldTo) {
+			this.soldTo = soldTo;
 		}
 		
 		

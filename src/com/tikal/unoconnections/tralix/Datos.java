@@ -776,14 +776,6 @@ public class Datos {
 		this.shipEstado = shipEstado;
 	}
 
-	public String getIdCfd() {
-		return idCfd;
-	}
-
-	public void setIdCfd(String idCfd) {
-		this.idCfd = idCfd;
-	}
-
 	public String getIdShip() {
 		return idShip;
 	}

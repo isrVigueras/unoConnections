@@ -529,7 +529,7 @@ public class Util {
 							"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd"+
 					" http://www.sat.gob.mx/ComercioExterior11 http://www.sat.gob.mx/sitio_internet/cfd/ComercioExterior11/ComercioExterior11.xsd");
 				}else{
-					jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class);
+					jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class, mx.com.fact.schema.pepsico.RequestCFD.class);
 					jaxbMarshaller = jaxbContext.createMarshaller();
 					jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,	
 							"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd");

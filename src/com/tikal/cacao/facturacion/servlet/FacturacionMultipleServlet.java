@@ -36,7 +36,6 @@ import com.tikal.cacao.factura.ws.WSClientCfdi33;
 import com.tikal.cacao.model.Direccion;
 import com.tikal.cacao.model.Empresa;
 import com.tikal.cacao.model.FacturaVTT;
-import com.tikal.cacao.model.FacturaVTT.DatosExtra;
 import com.tikal.cacao.model.RegistroBitacora;
 import com.tikal.cacao.model.orm.FormaDePago;
 import com.tikal.cacao.sat.cfd.catalogos.C_Pais;
@@ -52,6 +51,7 @@ import com.tikal.cacao.sat.cfd.catalogos.dyn.C_TipoFactor;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.C_UsoCFDI;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.comext.C_FraccionArancelaria;
 import com.tikal.cacao.sat.cfd33.Comprobante;
+import com.tikal.cacao.sat.cfd33.Comprobante.Addenda;
 import com.tikal.cacao.sat.cfd33.Comprobante.Complemento;
 import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos;
 import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos.Concepto;
@@ -59,6 +59,7 @@ import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos.Concepto.Impuestos.Trasla
 import com.tikal.cacao.service.FacturaVTTService;
 import com.tikal.cacao.springController.viewObjects.v33.ComprobanteVO;
 import com.tikal.cacao.util.Util;
+import com.tikal.unoconnections.tralix.AddendaFactory;
 import com.tikal.unoconnections.tralix.Datos;
 import com.tikal.unoconnections.tralix.DatosConcepto;
 
@@ -173,10 +174,10 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			c.setMetodoPago(new C_MetodoDePago("PUE"));
 		}
 
-		//c.setMoneda(new C_Moneda("MXN"));
+		// c.setMoneda(new C_Moneda("MXN"));
 		c.setMoneda(new C_Moneda(f.getMoneda()));
 		if (!c.getMoneda().getValor().contentEquals("MXN")) {
-			c.setTipoCambio( new BigDecimal( Float.toString( f.getTipoCambio() ) ) );
+			c.setTipoCambio(new BigDecimal(Float.toString(f.getTipoCambio())));
 		}
 
 		com.tikal.cacao.sat.cfd33.Comprobante.Impuestos imps = new com.tikal.cacao.sat.cfd33.Comprobante.Impuestos();
@@ -265,10 +266,10 @@ public class FacturacionMultipleServlet extends HttpServlet {
 
 		ComprobanteVO vo = new ComprobanteVO();
 		vo.setComprobante(c);
-		
-		FacturaVTT factura= new FacturaVTT();
-		FacturaVTT.DatosExtra extra= factura.getDatosExtra();
-		extra.setIdCliente(f.getIdCfd());
+
+		FacturaVTT factura = new FacturaVTT();
+		FacturaVTT.DatosExtra extra = factura.getDatosExtra();
+		extra.setIdCliente(f.getIdCFD());
 		extra.setIdShip(f.getIdShip());
 		extra.setCondicionesPago(f.getCondPago());
 		extra.setImporteichon(f.getTotalLetra());
@@ -281,7 +282,9 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		extra.setSuPedido(f.getsPedido());
 		extra.setViaEmbarque(f.getViaEmbarque());
 		
-		String respuesta = servicioFact.timbrar(vo, sesion, true,extra);
+		this.addAddenda(c, f);
+
+		String respuesta = servicioFact.timbrar(vo, sesion, true, extra);
 		// facturarenglondao.eliminar(f.getId());
 		RegistroBitacora bit = new RegistroBitacora();
 		bit.setEvento(respuesta);
@@ -291,158 +294,6 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		bitacoradao.addReg(bit);
 		return respuesta;
 
-		// Comprobante c = new Comprobante();
-		// Comprobante.Emisor emisor = new Comprobante.Emisor();
-		// Empresa empresa = empresasDAO.consultar(f.getRfcEmisor());
-		// emisor.setNombre(empresa.getNombre());
-		// emisor.setRfc(empresa.getRFC());
-		//
-		// emisor.setRegimenFiscal(new
-		// C_RegimenFiscal(f.getRegimen().split("-")[0]));
-		//// emisor.getRegimenFiscal().add(reg);
-		// c.setEmisor(emisor);
-		// Comprobante.Receptor receptor = new Comprobante.Receptor();
-		// List<Receptor> receptores =
-		// emisorDAO.consultar(f.getRfcEmisor()).getReceptores();
-		// Receptor recept = null;
-		// for (Receptor r : receptores) {
-		// if (r.getRfc().compareToIgnoreCase(f.getRfcReceptor()) == 0) {
-		// recept = r;
-		// break;
-		// }
-		// }
-		// if(recept==null){
-		// return "No se encontró al receptor con RFC: "+f.getRfcReceptor();
-		// }
-		// receptor.setNombre(recept.getNombre());
-		// receptor.setRfc(recept.getRfc());
-		// receptor.setUsoCFDI(new C_UsoCFDI(f.getUsoCFDI().split("-")[0]));
-		//// receptor.setResidenciaFiscal(new C_Pais("MEX"));
-		//
-		//// receptor.setDomicilio(recept.getDomicilio());
-		// c.setReceptor(receptor);
-		// c.setVersion("3.3");
-		// c.setFecha(Util.getXMLDate(new Date(), FormatoFecha.COMPROBANTE));
-		//
-		// c.setLugarExpedicion(new
-		// C_CodigoPostal(empresa.getDireccion().getCodigoPostal()));
-		// c.setTipoDeComprobante(new
-		// C_TipoDeComprobante(f.getTipoComprobante().split("-")[0]));
-		// String[] formadepago=f.getFormaPago().split("-");
-		// c.setFormaPago(new C_FormaDePago(formadepago[0]));
-		// String[] metododepago= f.getMetodoPago().split("-");
-		// c.setMetodoPago(new C_MetodoDePago(metododepago[0]));
-		// c.setMoneda(new C_Moneda("MXN"));
-		//
-		// Impuestos imps = new Impuestos();
-		// Traslados t = new Traslados();
-		// Traslado tras = new Traslado();
-		// tras.setImpuesto(new C_Impuesto("IVA"));
-		// tras.setTasaOCuota(new BigDecimal(0.16).setScale(2,
-		// RoundingMode.HALF_UP));
-		// tras.setTipoFactor(new C_TipoFactor("Tasa"));
-		// tras.setImpuesto(new C_Impuesto("002"));
-		//
-		// Conceptos conceptos = new Conceptos();
-		// Comprobante.Conceptos.Concepto con = new
-		// Comprobante.Conceptos.Concepto();
-		// con.setCantidad(new BigDecimal(f.getCantidad()).setScale(2,
-		// RoundingMode.HALF_UP));
-		// con.setDescripcion(f.getDescripcion());
-		// con.setUnidad(f.getUnidad());
-		// con.setClaveUnidad(new
-		// C_ClaveUnidad(f.getCveUnidad().split("-")[0]));
-		// con.setClaveProdServ(f.getCveProdServ().split("-")[0]);
-		// float vu = Float.parseFloat(f.getValorUnitario());
-		// float total= vu*con.getCantidad().floatValue();
-		// if (f.getIvaIncluido().compareToIgnoreCase("si") == 0) {
-		//
-		// vu = vu / 1.16f;
-		// float importe = vu * con.getCantidad().floatValue();
-		// float impuesto = total-importe;
-		// con.setValorUnitario(new BigDecimal(vu).setScale(2,
-		// RoundingMode.HALF_UP));
-		// con.setImporte(new BigDecimal(importe).setScale(2,
-		// RoundingMode.HALF_UP));
-		// Comprobante.Conceptos.Concepto.Impuestos impuestos= new
-		// Comprobante.Conceptos.Concepto.Impuestos();
-		// Comprobante.Conceptos.Concepto.Impuestos.Traslados traslados= new
-		// Comprobante.Conceptos.Concepto.Impuestos.Traslados();
-		// Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado traslado=
-		// new Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado();
-		// traslado.setBase(new BigDecimal(importe).setScale(2,
-		// RoundingMode.HALF_UP));
-		// traslado.setImporte(new BigDecimal(impuesto).setScale(2,
-		// RoundingMode.HALF_UP));
-		// traslado.setTasaOCuota(new BigDecimal(0.16).setScale(2,
-		// RoundingMode.HALF_UP));
-		// traslado.setTipoFactor(new C_TipoFactor("Tasa"));
-		// traslado.setImpuesto(new C_Impuesto("002"));
-		// traslados.getTraslado().add(traslado);
-		// impuestos.setTraslados(traslados);
-		// con.setImpuestos(impuestos);
-		//
-		// c.setSubTotal(new BigDecimal(importe).setScale(2,
-		// RoundingMode.HALF_UP));
-		// c.setTotal(new BigDecimal(total).setScale(2, RoundingMode.HALF_UP));
-		// tras.setImporte(new BigDecimal(impuesto).setScale(2,
-		// RoundingMode.HALF_UP));
-		//
-		// } else {
-		// con.setValorUnitario(new BigDecimal(vu).setScale(2,
-		// RoundingMode.HALF_UP));
-		// con.setImporte(new BigDecimal(total).setScale(2,
-		// RoundingMode.HALF_UP));
-		// Comprobante.Conceptos.Concepto.Impuestos impuestos= new
-		// Comprobante.Conceptos.Concepto.Impuestos();
-		// Comprobante.Conceptos.Concepto.Impuestos.Traslados traslados= new
-		// Comprobante.Conceptos.Concepto.Impuestos.Traslados();
-		// Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado traslado=
-		// new Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado();
-		// traslado.setBase(new BigDecimal(total).setScale(2,
-		// RoundingMode.HALF_UP));
-		// traslado.setImporte(new BigDecimal(total*0.16).setScale(2,
-		// RoundingMode.HALF_UP));
-		// traslado.setTasaOCuota(new BigDecimal(0.16).setScale(2,
-		// RoundingMode.HALF_UP));
-		// traslado.setTipoFactor(new C_TipoFactor("Tasa"));
-		// traslado.setImpuesto(new C_Impuesto("002"));
-		// traslados.getTraslado().add(traslado);
-		// impuestos.setTraslados(traslados);
-		// con.setImpuestos(impuestos);
-		// c.setSubTotal(new BigDecimal(total).setScale(2,
-		// RoundingMode.HALF_UP));
-		// c.setTotal(new BigDecimal(total*1.16).setScale(2,
-		// RoundingMode.HALF_UP));
-		// tras.setImporte(new BigDecimal(total*0.16).setScale(2,
-		// RoundingMode.HALF_UP));
-		// }
-		// conceptos.getConcepto().add(con);
-		// t.getTraslado().add(tras);
-		// imps.setTraslados(t);
-		// imps.setTotalImpuestosTrasladados(t.getTraslado().get(0).getImporte());
-		// c.setImpuestos(imps);
-		// c.setConceptos(conceptos);
-		// Serial s = serialDAO.consultar(f.getRfcEmisor(), f.getSerie());
-		//
-		// if(s==null){
-		// return "No se encontró la serie: "+f.getSerie();
-		// }
-		//
-		// c.setSerie(s.getSerie());
-		// c.setFolio(s.getFolio() + "");
-		//
-		// ComprobanteVO vo= new ComprobanteVO();
-		// vo.setComprobante(c);
-		// String respuesta=servicioFact.timbrar(vo,sesion);
-		//// facturarenglondao.eliminar(f.getId());
-		// RegistroBitacora bit= new RegistroBitacora();
-		// bit.setEvento(respuesta);
-		// bit.setTipo("Operacional");
-		// bit.setUsuario("Proceso Back");
-		// bit.setFecha(new Date());
-		// bitacoradao.addReg(bit);
-		// return "OK";
 	}
 
 	private String regresaClaveFormaDePago(String formaDePago) {
@@ -511,7 +362,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		domrec.setNumeroExterior(direccion.getNumExterior());
 		domrec.setPais(C_Pais.valueOf(d.getPais()));
 
-//		receptor.setNumRegIdTrib(d.getNumRegIdTrib());
+		// receptor.setNumRegIdTrib(d.getNumRegIdTrib());
 		receptor.setDomicilio(domrec);
 		com.setReceptor(receptor);
 
@@ -548,6 +399,16 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		Complemento compl = new Comprobante.Complemento();
 		compl.getAny().add(com);
 		c.getComplemento().add(compl);
+	}
+
+	private void addAddenda(Comprobante c, Datos d) {
+
+		Addenda ad = new Comprobante.Addenda();
+		Object adden = AddendaFactory.getAdenda(d.getRFC(), d, c);
+		ad.getAny().add(adden);
+		if (adden != null) {
+			c.setAddenda(ad);
+		}
 	}
 
 	private int tipoComprobante(String formaDePago) {

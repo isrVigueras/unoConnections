@@ -1,7 +1,9 @@
 package com.tikal.unoconnections.tralix;
 
 import java.math.BigInteger;
+import java.sql.SQLException;
 
+import com.google.cloud.sql.jdbc.internal.Util;
 import com.tikal.cacao.sat.cfd33.Comprobante;
 import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos.Concepto;
 
@@ -40,9 +42,13 @@ public class AddendaFactory {
 				mx.com.fact.schema.pepsico.RequestCFD.Recepciones.Recepcion.Concepto con=of.createRequestCFDRecepcionesRecepcionConcepto();
 				con.setCantidad(co.getCantidad());
 				con.setDescripcion(co.getDescripcion().split(" ")[0]);
-				con.setImporte(co.getImporte());
+				try {
+					con.setImporte(Util.createBigDecimalWithScale(co.getImporte(), 2));
+					con.setValorUnitario(Util.createBigDecimalWithScale(co.getValorUnitario(),2));
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 				con.setUnidad(co.getUnidad());
-				con.setValorUnitario(co.getValorUnitario());
 				recep.getConcepto().add(con);
 			}
 			receps.getRecepcion().add(recep);

@@ -15,6 +15,7 @@ import com.tikal.cacao.model.ContadorEmpleados;
 import com.tikal.cacao.model.DatosEmisor;
 import com.tikal.cacao.model.DeduccionAusentismo;
 import com.tikal.cacao.model.DeduccionInfonavit;
+import com.tikal.cacao.model.DomicilioCE;
 import com.tikal.cacao.model.Emisor;
 import com.tikal.cacao.model.Empleado;
 import com.tikal.cacao.model.Empresa;
@@ -98,6 +99,7 @@ public class EntityRegister {
 		registrar(ListaDeClasesDeProdServ.class);
 		registrar(FacturaVTT.class);
 		registrar(Datos.class);
+		registrar(DomicilioCE.class);
 	}
 	
 	private <T> void registrar(Class<T> clase) {

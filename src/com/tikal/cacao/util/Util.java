@@ -50,6 +50,7 @@ import com.tikal.cacao.tarifas.subsidioEmpleo.TarifaSubsidio;
 import com.tikal.cacao.tarifas.subsidioEmpleo.TarifaTrabajoRealizado;
 
 import mx.gob.sat.cancelacfd.Acuse;
+import mx.gob.sat.comercioexterior11.ComercioExterior;
 import mx.gob.sat.implocal.ImpuestosLocales;
 import mx.gob.sat.pagos.Pagos;
 
@@ -520,10 +521,18 @@ public class Util {
 						"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd " +
 								"http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd");
 			} else {
-				jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class);
-				jaxbMarshaller = jaxbContext.createMarshaller();
-				jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,	
-						"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd");
+				if(c.getReceptor().getRfc().compareTo("XEXX010101000")==0){
+					jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class, ComercioExterior.class);
+					jaxbMarshaller = jaxbContext.createMarshaller();
+					jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,	
+							"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd"+
+					" http://www.sat.gob.mx/ComercioExterior11 http://www.sat.gob.mx/sitio_internet/cfd/ComercioExterior11/ComercioExterior11.xsd");
+				}else{
+					jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class);
+					jaxbMarshaller = jaxbContext.createMarshaller();
+					jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,	
+							"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd");
+				}
 			}
 		
 			jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");

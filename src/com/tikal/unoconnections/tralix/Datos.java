@@ -42,7 +42,8 @@ public class Datos {
 	private String metodoPago;
 	private String formaPago;
 
-	// #03 //#04
+	// #03 	
+	//#04
 	// private String idUnicoRec; //IdentificadorÚnicoReceptor
 	private String RFC;
 	Direccion direccion;
@@ -56,25 +57,25 @@ public class Datos {
 	// #09
 	// private String idIntReceptor; //IdentificadorInternoReceptor
 	private String email;
-	private String asunto = "null";
-	private String mensaje = "null";
+	private String asunto;
+	private String mensaje;
 	private String adjunto;
 
 	// #10
 	private float version = 0;
 	private int tipoOpe;
 	private String clavePedimento;
-	private String certOrigen = "null"; // certificadoOrigen
-	private String numCertOrigen = "";
-	private String numExportConfiable = "null"; // NumeroDeExportadorConfiable
-	private String incoterm = "null";
-	private String subdiv = "null";
-	private String observaciones = "null";
-	private String tipoCambioUSD = "null";
+	private String certOrigen; // certificadoOrigen
+	private String numCertOrigen;
+	private String numExportConfiable; // NumeroDeExportadorConfiable
+	private String incoterm;
+	private String subdiv;
+	private String observaciones;
+	private String tipoCambioUSD;
 	private String totalUSD;
 
 	// #12
-	private String CURP = "null";
+	private String CURP;
 	private String numRegIdTrib;
 
 	// #14
@@ -124,6 +125,10 @@ public class Datos {
 			}
 			case "09": {
 				this.parsea09(reng);
+				break;
+			}
+			case "10":{
+				this.parsea10(reng);
 				break;
 			}
 			case "12": {
@@ -181,6 +186,14 @@ public class Datos {
 		this.trimear(values);
 		this.RFC = values[2];
 		this.setNombreReceptor(values[3]);
+		this.direccion= new Direccion();
+		direccion.setCalle(values[5]);
+		direccion.setCodigoPostal(values[10]);
+		direccion.setColonia(values[8]);
+		direccion.setLocalidad(values[9]);
+		direccion.setNumExterior(values[6]);
+		direccion.setEstado(values[9].split(" ")[1]);
+		
 	}
 
 	private void parsea05(String reng) {
@@ -194,7 +207,7 @@ public class Datos {
 			d.setDescripcion(values[3]);
 			d.setFraccionArancelaria(values[8]);
 			d.setImporte(Float.parseFloat(values[5]));
-			d.setUnidadMed(values[6]);
+			d.setUnidadMed(values[7]);
 			d.setValorUnit(Float.parseFloat(values[4]));
 			this.conceptos.add(d);
 		} else {
@@ -222,6 +235,47 @@ public class Datos {
 		this.mensaje = values[4];
 		this.adjunto = values[5];
 	}
+	
+	private void parsea10(String reng){
+		String[] values = reng.split("\\|");
+		this.trimear(values);
+		if(!values[2].isEmpty()){
+			this.tipoOpe=Integer.parseInt(values[2]);
+		}
+		if(!values[3].isEmpty()){
+			this.clavePedimento=values[3];
+		}
+		
+		if(!values[3].isEmpty()){
+			this.clavePedimento=values[3];
+		}
+		if(!values[4].isEmpty()){
+			this.certOrigen=values[4];
+		}
+		if(!values[5].isEmpty()){
+			this.numCertOrigen=values[5];
+		}
+		if(!values[6].isEmpty()){
+			this.numExportConfiable=values[6];
+		}
+		if(!values[7].isEmpty()){
+			this.incoterm=values[7];
+		}
+		if(!values[8].isEmpty()){
+			this.subdiv=values[8];
+		}
+		if(!values[9].isEmpty()){
+			this.observaciones=values[9];
+		}
+		if(!values[10].isEmpty()){
+			this.tipoCambioUSD=values[10];
+		}else{
+			this.tipoCambioUSD=tipoCambio+"";
+		}
+		if(!values[11].isEmpty()){
+			this.totalUSD=values[11];
+		}
+	}
 
 	private void parsea12(String reng) {
 		String[] values = reng.split("\\|");
@@ -241,8 +295,8 @@ public class Datos {
 		this.direccion.setLocalidad(values[5]);
 		this.direccion.setMunicipio(values[6]);
 		this.direccion.setEstado(values[7]);
-		this.setPais(values[8]);
-		this.direccion.setCodigoPostal(values[9]);
+		this.setPais(values[9]);
+//		this.direccion.setCodigoPostal(values[10]);
 	}
 	
 	private void trimear(String[] values){

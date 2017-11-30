@@ -99,24 +99,10 @@ app.controller("conceptosController",[
 			});
 		}		
 		
-		document.querySelector('#b_pics').addEventListener('change', function() {
-
-			  var reader = new FileReader();
-			  reader.onload = function() {
-
-			    var arrayBuffer = this.result;
-			      array = new Uint8Array(arrayBuffer),
-			      binaryString = String.fromCharCode.apply(null, array);
-			    console.log(binaryString);
-			    $('#cadena').text(arrayBuffer);
-			  }
-			  reader.readAsText(this.files[0]);
-//			  reader.readAsArrayBuffer(this.files[0]);
-
-			}, false);
+	
 		$scope.ok=function(){
-			var c= $('#cadena').text();
-			archivoService.sendfile2(c,"/conceptos/addMultiple/"+$cookieStore.get("rfcEmpresa")).then(function(data){
+//			var c= $('#cadena').text();
+			archivoService.sendfile2($scope.datos,"/conceptos/addMultiple/"+$cookieStore.get("rfcEmpresa")).then(function(data){
 				console.log(data);
 				alert("Conceptos guardados");
 				$location.path("/conceptosList/"+$routeParams.rfc);

@@ -63,20 +63,28 @@ public class ConceptoController {
 
 			for (int i = 1; i < conceptos.length; i++) {
 				String c = conceptos[i];
-
-				String[] values = c.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+				String[] values = c.split("\t");
+//				String[] values = c.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+//				Concepto con = new Concepto();
+//				con.setNoIdentificacion(values[1]);
+//				con.setDescripcion(values[3].replace("|", ",").replace("\"", ""));
+//				con.setUnidad(values[4]);
+//				if (values.length > 5) {
+//					values[5] = values[5].replace("$", "").trim();
+//					values[5] = values[5].replace("\"", "").trim();
+//					values[5] = values[5].replace(",", "").trim();
+//					if (values[5].length() > 0) {
+//						con.setValorUnitario(Float.parseFloat(values[5]));
+//					}
+//				}
 				Concepto con = new Concepto();
-				con.setNoIdentificacion(values[1]);
-				con.setDescripcion(values[3].replace("|", ",").replace("\"", ""));
-				con.setUnidad(values[4]);
-				if (values.length > 5) {
-					values[5] = values[5].replace("$", "").trim();
-					values[5] = values[5].replace("\"", "").trim();
-					values[5] = values[5].replace(",", "").trim();
-					if (values[5].length() > 0) {
-						con.setValorUnitario(Float.parseFloat(values[5]));
-					}
-				}
+				con.setClaveProdServ(values[4]);
+				con.setClaveUnidad(values[2]);
+				con.setDescripcion(values[6]);
+				con.setDescripcionSAT(values[5]);
+				con.setDescripcionUnidadSAT(values[3]);
+				con.setNoIdentificacion(values[0]);
+				con.setUnidad(values[3]);
 				lista.add(con);
 			}
 			conceptosdao.add(rfc, lista);

@@ -11,7 +11,7 @@
 
 	<div class="row">
 		<input type="radio" ng-model="tipoCarga" name="gender" value="1"> Individual<br>
-		<input type="radio" ng-model="tipoCarga" name="gender" value="2"> Archivo<br>
+		<input type="radio" ng-model="tipoCarga" name="gender" value="2"> M&uacute;ltiple<br>
 	</div>
 	<hr>
 	<form id="forma" name="myForm" ng-show="tipoCarga==1">
@@ -70,8 +70,9 @@
 
 	<div class="row" ng-hide="tipoCarga==1">
 
-		<input id="b_pics" type="file" class="file" multiple="true"
-			multiple-File-Model="b_pics" required />
+	<textarea id="texto" ng-model="datos" required rows="21" cols="150"
+				wrap='off'></textarea>
+		<br>
 
 		<button type="button" class="btn" data-dismiss="modal"
 			ng-click="ok()">Agregar</button>

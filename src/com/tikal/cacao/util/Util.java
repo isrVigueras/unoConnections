@@ -41,6 +41,7 @@ import com.tikal.cacao.sat.cfd.TUbicacion;
 import com.tikal.cacao.sat.cfd.catalogos.C_Estado;
 import com.tikal.cacao.sat.cfd.nomina.C_PeriodicidadPago;
 import com.tikal.cacao.sat.cfd.nomina.NominaElement;
+import com.tikal.cacao.sat.cfd33.Comprobante.Complemento;
 import com.tikal.cacao.sat.timbrefiscaldigital.TimbreFiscalDigital;
 import com.tikal.cacao.tarifas.subsidioEmpleo.TarifaDecenal;
 import com.tikal.cacao.tarifas.subsidioEmpleo.TarifaMensual;
@@ -446,7 +447,7 @@ public class Util {
 	
 	public static com.tikal.cacao.sat.cfd33.Comprobante unmarshallCFDI33XML(String cadenaXML) {
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class, mx.gob.sat.timbrefiscaldigital.TimbreFiscalDigital.class, NominaElement.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class, mx.gob.sat.timbrefiscaldigital.TimbreFiscalDigital.class, NominaElement.class, ComercioExterior.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			StringBuffer xmlStr = new StringBuffer(cadenaXML);
 			com.tikal.cacao.sat.cfd33.Comprobante comprobante = 
@@ -579,6 +580,29 @@ public class Util {
 			return timbreFD;
 		} else {
 			return timbreFD;
+		}
+		
+	}
+	
+	public static ComercioExterior obtenerComplComercioExterior(com.tikal.cacao.sat.cfd33.Comprobante comprobante) {
+		List<Complemento> listaComplemento = comprobante.getComplemento();
+		if (listaComplemento.size() > 0) {
+			Complemento complemento = listaComplemento.get(0);
+			List<Object> any = complemento.getAny();
+			ComercioExterior complementoComExt = null;
+			if (any.size() > 0) {
+				for (Object object : any) {
+					if (object instanceof ComercioExterior) {
+						complementoComExt = (ComercioExterior) object;
+						break;
+					}
+				}
+				return complementoComExt;
+			} else {
+				return complementoComExt;
+			}
+		} else {
+			return null;
 		}
 		
 	}

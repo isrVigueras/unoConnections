@@ -173,7 +173,11 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			c.setMetodoPago(new C_MetodoDePago("PUE"));
 		}
 
-		c.setMoneda(new C_Moneda("MXN"));
+		//c.setMoneda(new C_Moneda("MXN"));
+		c.setMoneda(new C_Moneda(f.getMoneda()));
+		if (!c.getMoneda().getValor().contentEquals("MXN")) {
+			c.setTipoCambio( new BigDecimal( Float.toString( f.getTipoCambio() ) ) );
+		}
 
 		com.tikal.cacao.sat.cfd33.Comprobante.Impuestos imps = new com.tikal.cacao.sat.cfd33.Comprobante.Impuestos();
 		Traslados t = new Traslados();

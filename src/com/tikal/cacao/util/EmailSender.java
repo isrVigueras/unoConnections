@@ -166,14 +166,14 @@ public class EmailSender {
 			pdfFactura.getDocument().open();
 			
 			if (factura.getEstatus().equals(Estatus.TIMBRADO)){
-				pdfFactura.construirPdf(cfdi, factura.getSelloDigital(), factura.getCodigoQR(),urlImg, factura.getEstatus(), factura.getComentarios());
+				pdfFactura.construirPdf(cfdi, factura.getSelloDigital(), factura.getCodigoQR(),urlImg, factura.getEstatus(), factura.getComentarios(), factura.getDatosExtra());
 			} 
 			else if (factura.getEstatus().equals(Estatus.GENERADO)){
 				pdfFactura.construirPdf(cfdi, urlImg, factura.getEstatus(), factura.getComentarios());
 			}
 			else if (factura.getEstatus().equals(Estatus.CANCELADO)) {
 				pdfFactura.construirPdfCancelado(cfdi, factura.getSelloDigital(), factura.getCodigoQR(), urlImg, factura.getEstatus(),
-						factura.getSelloCancelacion(), factura.getFechaCancelacion(), factura.getComentarios());
+						factura.getSelloCancelacion(), factura.getFechaCancelacion(), factura.getComentarios(), factura.getDatosExtra());
 				pdfFactura.crearMarcaDeAgua("CANCELADO", writer);
 			}
 			pdfFactura.getDocument().close();

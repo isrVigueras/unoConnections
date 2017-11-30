@@ -175,6 +175,8 @@ public class Datos {
 		if (!values[11].isEmpty()) {
 			this.tipoCambio = Float.parseFloat(values[11]);
 		}
+		this.nPedido = values[15];
+		this.sPedido = values[16];
 	}
 
 	private void parsea01A(String reng) {

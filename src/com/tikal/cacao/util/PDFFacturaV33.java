@@ -6,7 +6,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
@@ -28,7 +30,10 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.tikal.cacao.factura.Estatus;
+import com.tikal.cacao.model.FacturaVTT;
+import com.tikal.cacao.model.FacturaVTT.DatosExtra;
 import com.tikal.cacao.model.Imagen;
+import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos;
 import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos.Concepto;
 import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado;
 import com.tikal.cacao.sat.cfd33.Comprobante.Impuestos.Retenciones;
@@ -36,6 +41,9 @@ import com.tikal.cacao.sat.cfd33.Comprobante.Impuestos.Retenciones.Retencion;
 import com.tikal.cacao.sat.cfd33.Comprobante;
 import com.tikal.cacao.util.PDFFactura.MyFooter;
 
+import mx.gob.sat.comercioexterior11.ComercioExterior;
+import mx.gob.sat.comercioexterior11.ComercioExterior.Mercancias;
+import mx.gob.sat.comercioexterior11.ComercioExterior.Mercancias.Mercancia;
 import mx.gob.sat.timbrefiscaldigital.TimbreFiscalDigital;
 
 public class PDFFacturaV33 {
@@ -58,8 +66,8 @@ public class PDFFacturaV33 {
 	//private Font fontWhiteDecimals = new Font(Font.FontFamily.HELVETICA, 8.5F, Font.NORMAL, BaseColor.WHITE);
 	
 	private Font fontHead = new Font(Font.FontFamily.HELVETICA, 8.5F, Font.NORMAL);
-	private Font fontHeadConceptos = new Font(Font.FontFamily.HELVETICA, 7.5F, Font.NORMAL);
-	private Font fontConceptos = new Font(Font.FontFamily.HELVETICA, 7.5F, Font.NORMAL);
+	private Font fontHeadConceptos = new Font(Font.FontFamily.HELVETICA, 7.0F, Font.NORMAL);
+	private Font fontConceptos = new Font(Font.FontFamily.HELVETICA, 7.0F, Font.NORMAL);
 	private BaseColor tikalColor;
 	//fontHead.setColor(BaseColor.WHITE);
 
@@ -71,6 +79,8 @@ public class PDFFacturaV33 {
 	private String descripcionUsoDeCFDI;
 	private String descripcionRegimenFiscal;
 	private String descripcionFormaDePago;
+	
+	private Map<String,String> mapaFraccionArancelariaAConcepto;
 	
 	public PDFFacturaV33(String descripcionUsoDeCFDI, String descripcionRegimenFiscal, String descripcionFormaDePago) {
 		fontHead.setColor(BaseColor.WHITE);
@@ -84,7 +94,7 @@ public class PDFFacturaV33 {
 		
 		this.document = new Document();
 		this.document.setPageSize(PageSize.A4);
-		this.document.setMargins(35, 35, 40, 40); // Left Right Top Bottom
+		this.document.setMargins(30, 30, 40, 40); // Left Right Top Bottom
 	
 		this.descripcionUsoDeCFDI = descripcionUsoDeCFDI;
 		this.descripcionRegimenFiscal = descripcionRegimenFiscal;
@@ -128,7 +138,7 @@ public class PDFFacturaV33 {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public Document construirPdf(Comprobante comprobante, String selloDigital, byte[] bytesQRCode, Imagen imagen, Estatus estatus, String comentarios) throws MalformedURLException, DocumentException, IOException {
+	public Document construirPdf(Comprobante comprobante, String selloDigital, byte[] bytesQRCode, Imagen imagen, Estatus estatus, String comentarios, DatosExtra datosExtra) throws MalformedURLException, DocumentException, IOException {
 		List<Object> complementoTFD = comprobante.getComplemento().get(0).getAny();
 		TimbreFiscalDigital tfd = null;
 		if (complementoTFD.size() > 0) {
@@ -139,7 +149,7 @@ public class PDFFacturaV33 {
 			}
 		}
 		
-		this.construirBoceto(comprobante, imagen, estatus, tfd, comentarios);
+		this.construirBoceto(comprobante, imagen, estatus, tfd, comentarios, datosExtra);
 		this.construirTimbre(selloDigital, bytesQRCode, tfd);
 		this.construirHechoPor();
 		return document;
@@ -159,14 +169,32 @@ public class PDFFacturaV33 {
 	 * @throws IOException
 	 */
 	public Document construirPdf(Comprobante comprobante, Imagen imagen, Estatus estatus, String comentarios) throws MalformedURLException, DocumentException, IOException {
-		construirBoceto(comprobante, imagen, estatus, null, comentarios);
+		construirBoceto(comprobante, imagen, estatus, null, comentarios, null);
 		construirHechoPor();
 		return document;
 	}
 	
 	
+	public Document construirPDFComercioExterior(Comprobante comprobante, String selloDigital, byte[] bytesQRCode, Imagen imagen, Estatus estatus, String comentarios, DatosExtra datosExtra) throws MalformedURLException, DocumentException, IOException {
+		List<Object> complementoTFD = comprobante.getComplemento().get(0).getAny();
+		TimbreFiscalDigital tfd = null;
+		if (complementoTFD.size() > 0) {
+			for (Object object : complementoTFD) {
+				if (object instanceof TimbreFiscalDigital) {
+					tfd = (TimbreFiscalDigital) object;
+				}
+			}
+		}
+		
+		this.construirBoceto(comprobante, imagen, estatus, tfd, comentarios, datosExtra);
+		this.construirTimbre(selloDigital, bytesQRCode, tfd);
+		this.construirHechoPor();
+		
+		return document;
+	}
+	
 	public Document construirPdfCancelado(Comprobante comprobante, String selloDigital, byte[] bytesQRCode, Imagen imagen,
-			Estatus estatus, String selloCancelacion, Date fechaCancelacion, String comentarios) throws DocumentException, MalformedURLException, IOException {
+			Estatus estatus, String selloCancelacion, Date fechaCancelacion, String comentarios, DatosExtra datosExtra) throws DocumentException, MalformedURLException, IOException {
 		
 		List<Object> complementoTFD = comprobante.getComplemento().get(0).getAny();
 		TimbreFiscalDigital tfd = null;
@@ -178,20 +206,26 @@ public class PDFFacturaV33 {
 			}
 		}
 		
-		this.construirBoceto(comprobante, imagen, estatus, tfd, comentarios);
+		this.construirBoceto(comprobante, imagen, estatus, tfd, comentarios, datosExtra);
 		this.construirTimbre(selloDigital, bytesQRCode, tfd);
 		this.construirHechoPor();
 		return document;
 	}
 	
-	private void construirBoceto(Comprobante comprobante, Imagen imagen, Estatus estatus, TimbreFiscalDigital tfd, String comentarios) throws MalformedURLException, DocumentException, IOException {
+	private void construirBoceto(Comprobante comprobante, Imagen imagen, Estatus estatus, TimbreFiscalDigital tfd, String comentarios, DatosExtra datosExtra) throws MalformedURLException, DocumentException, IOException {
 		this.construirEncabezado(comprobante, imagen);
 		this.construirInfoReceptorYLugarFecha(comprobante, estatus, tfd);
 		this.construirUsoCFDIYDatosFiscales(comprobante, estatus, tfd);
 		
+		ComercioExterior complementoComExt = Util.obtenerComplComercioExterior(comprobante);
+		if (datosExtra == null) {
+			datosExtra = new FacturaVTT().getDatosExtra();
+		}
+		this.constrirComplementoComercioExterior(comprobante, complementoComExt, datosExtra);
+		
 		this.construirTablaIVA();
 		this.construirTablaConceptos(comprobante);
-		this.construirComentariosEImporteConLetra(comprobante, comentarios);
+		this.construirComentariosEImporteConLetra(comprobante, comentarios, datosExtra.getImporteichon());
 		
 		this.construirLeyendaFiscalYTotal(comprobante, estatus);
 	}
@@ -411,12 +445,12 @@ public class PDFFacturaV33 {
 			chunkNombreEmisor = new Chunk(comprobante.getEmisor().getNombre(), font2);
 		}
 		Chunk chunkRFCEmisor = new Chunk("R.F.C. ".concat(comprobante.getEmisor().getRfc()), font3);
-		//Chunk chunkDomicilioEmisor = new Chunk(comprobante.getEmisor().getDomicilioFiscal().toString(), font3);
+		Chunk chunkDomicilioEmisor = new Chunk("Domicilio Fiscal: AV JUAN MONROY S/N PARQUE INDUSTRIAL", font3);
 		fraseDatosEmisor.add(chunkNombreEmisor);
 		fraseDatosEmisor.add(Chunk.NEWLINE);
 		fraseDatosEmisor.add(chunkRFCEmisor);
 		fraseDatosEmisor.add(Chunk.NEWLINE);
-		//fraseDatosEmisor.add(chunkDomicilioEmisor);
+		fraseDatosEmisor.add(chunkDomicilioEmisor);
 		celdaDatosEmisor.setBorderWidth(1);
 		celdaDatosEmisor.disableBorderSide(PdfPCell.LEFT);
 		celdaDatosEmisor.addElement(fraseDatosEmisor);
@@ -465,6 +499,93 @@ public class PDFFacturaV33 {
 		document.add(tablaReceptorYHoraCert);
 	}
 	
+	
+	private void constrirComplementoComercioExterior(Comprobante cfdi, ComercioExterior complementoComExt, DatosExtra datosExtra) throws DocumentException {
+		PdfPTable tablaVendidoEmbarcarAgenteAduanal = new PdfPTable(3);
+		tablaVendidoEmbarcarAgenteAduanal.setWidthPercentage(100);
+		tablaVendidoEmbarcarAgenteAduanal.setWidths(new float[] {34, 33, 33});
+		
+		PdfPTable subtablaVendidoA = new PdfPTable(1);
+		this.agregarCeldaConFondo("VENDIDO A (SOLD TO): ", fontHead, subtablaVendidoA, true);
+		Phrase fraseVendidoA = new Phrase();
+		this.agregarChunkYNuevaLinea("Clave ", font3, fraseVendidoA);
+		String numRegIdFis = complementoComExt.getReceptor().getNumRegIdTrib();
+		this.agregarChunkYNuevaLinea("Número de identificación o registro fiscal: " + ((numRegIdFis != null) ? numRegIdFis : ""), font3, fraseVendidoA);
+		this.agregarChunkYNuevaLinea("Domicilio: " + complementoComExt.getReceptor().getDomicilio().toString(), font3, fraseVendidoA);
+		PdfPCell subCeldaVendidoA = new PdfPCell();
+		subCeldaVendidoA.setBorderColor(BaseColor.GRAY);
+		subCeldaVendidoA.addElement(fraseVendidoA);
+		subtablaVendidoA.addCell(subCeldaVendidoA);
+		PdfPCell celdaVendidoA = new PdfPCell(subtablaVendidoA);
+		celdaVendidoA.setBorderColor(BaseColor.GRAY);
+		tablaVendidoEmbarcarAgenteAduanal.addCell(celdaVendidoA);
+		
+		PdfPTable subtablaEmbarcarA = new PdfPTable(1);
+		this.agregarCeldaConFondo("EMBARCAR A (SHIP TO)", fontHead, subtablaEmbarcarA, true);
+		Phrase fraseEmbarcarA = new Phrase();
+		this.agregarChunkYNuevaLinea("Domicilio: " + datosExtra.getShipCalle() + " " + datosExtra.getShipLocalidad() + " " +
+				datosExtra.getShipPostCode() + " " + datosExtra.getShipPais(), font3, fraseEmbarcarA);
+		PdfPCell subCeldaEmbarcarA = new PdfPCell();
+		subCeldaEmbarcarA.setBorderColor(BaseColor.GRAY);
+		subCeldaEmbarcarA.addElement(fraseEmbarcarA);
+		subtablaEmbarcarA.addCell(subCeldaEmbarcarA);
+		PdfPCell celdaEmbarcarA = new PdfPCell(subtablaEmbarcarA);
+		celdaEmbarcarA.setBorderColor(BaseColor.GRAY);
+		tablaVendidoEmbarcarAgenteAduanal.addCell(celdaEmbarcarA);
+		
+		PdfPTable subtablaAgenteAduanal = new PdfPTable(1);
+		this.agregarCeldaConFondo("AGENTE ADUANAL (CUSTOM AGENT): ", fontHead, subtablaAgenteAduanal, true);
+		PdfPCell subCeldaAgenteAduanal = new PdfPCell();
+		subCeldaAgenteAduanal.setBorderColor(BaseColor.GRAY);
+		subCeldaAgenteAduanal.addElement(new Phrase(Chunk.NEWLINE));
+		subtablaAgenteAduanal.addCell(subCeldaAgenteAduanal);
+		//this.agregarCelda("", font3, subtablaAgenteAduanal, false);
+		PdfPCell celdaAgenteAduanal = new PdfPCell(subtablaAgenteAduanal);
+		celdaAgenteAduanal.setBorderColor(BaseColor.GRAY);
+		//celdaAgenteAduanal.addElement(subtablaAgenteAduanal);
+		tablaVendidoEmbarcarAgenteAduanal.addCell(celdaAgenteAduanal);
+		
+		tablaVendidoEmbarcarAgenteAduanal.setSpacingAfter(5.0F);
+		document.add(tablaVendidoEmbarcarAgenteAduanal);
+		
+		//TABLA DATOS COMERCIO EXTERIOR
+		PdfPTable tablaCamposComExt = new PdfPTable(6);
+		tablaCamposComExt.setWidthPercentage(100);
+		tablaCamposComExt.setWidths(new float[] {18,18,12,12,20,20});
+		
+		this.agregarCeldaConFondo("REPRESENTANTE (SALES AGENT)", fontHead, tablaCamposComExt, true);
+		this.agregarCeldaConFondo("CONDICIONES DE PAGO (TERMS OF PAYMENT)", fontHead, tablaCamposComExt, true);
+		this.agregarCeldaConFondo("NUESTRO PEDIDO (OUR ORDER)", fontHead, tablaCamposComExt, true);
+		this.agregarCeldaConFondo("SU PEDIDO (YOUR ORDER)", fontHead, tablaCamposComExt, true);
+		this.agregarCeldaConFondo("VIA EMBARQUE (SHIP WAY)", fontHead, tablaCamposComExt, true);
+		this.agregarCeldaConFondo("MONEDA/TIPO DE CAMBIO (COIN/EXCHANGE RATE)", fontHead, tablaCamposComExt, true);
+		
+		this.agregarCelda(datosExtra.getRepresentante(), font3, tablaCamposComExt, false);
+		this.agregarCelda(datosExtra.getCondicionesPago(), font3, tablaCamposComExt, false);
+		this.agregarCelda(datosExtra.getNuestroPedido(), font3, tablaCamposComExt, false);
+		this.agregarCelda(datosExtra.getSuPedido(), font3, tablaCamposComExt, false);
+		this.agregarCelda(datosExtra.getViaEmbarque(), font3, tablaCamposComExt, false);
+		this.agregarCelda(cfdi.getMoneda().getValor() + "/" + cfdi.getTipoCambio(), font3, tablaCamposComExt, false);
+		document.add(tablaCamposComExt);
+
+		PdfPTable segundaTablaCamposComExt = new PdfPTable(5);
+		segundaTablaCamposComExt.setWidthPercentage(100);
+		segundaTablaCamposComExt.setWidths(new float[] {18,21,20,21,20});
+		
+		this.agregarCeldaConFondo("CLAVE DE PEDIMENTO (PACKING LIST)", fontHead, segundaTablaCamposComExt, true);
+		this.agregarCeldaConFondo("INCOTERM (BILL OF LANDING)", fontHead, segundaTablaCamposComExt, true);
+		this.agregarCeldaConFondo("CAMIÓN (TRUCK)", fontHead, segundaTablaCamposComExt, true);
+		this.agregarCeldaConFondo("CÓDIGO PAÍS DESTINO (COUNTRY CODE DESTINATION)", fontHead, segundaTablaCamposComExt, true);
+		this.agregarCeldaConFondo("TRANSPORTISTA (FREIGHT LINE)", fontHead, segundaTablaCamposComExt, true);
+		
+		this.agregarCelda(complementoComExt.getClaveDePedimento().toString(), font3, segundaTablaCamposComExt, false);
+		this.agregarCelda(complementoComExt.getIncoterm().toString(), font3, segundaTablaCamposComExt, false);
+		this.agregarCelda("", font3, segundaTablaCamposComExt, false); //CAMIÓN
+		this.agregarCelda(complementoComExt.getReceptor().getDomicilio().getPais().toString(), font3, segundaTablaCamposComExt, false);
+		this.agregarCelda("", font3, segundaTablaCamposComExt, false); //TRANSPORTISTA
+		segundaTablaCamposComExt.setSpacingAfter(5.0F);
+		document.add(segundaTablaCamposComExt);
+	}
 	
 	private void construirUsoCFDIYDatosFiscales(Comprobante comprobante, Estatus estatus, TimbreFiscalDigital tfd) throws DocumentException {
 		PdfPTable tablaUsoCFDIDatosFis = new PdfPTable(2);
@@ -525,28 +646,36 @@ public class PDFFacturaV33 {
 	}
 	
 	private void construirTablaConceptos(Comprobante comprobante) throws DocumentException {
-		PdfPTable tablaConceptos = new PdfPTable(9);
+		
+		PdfPTable tablaConceptos = new PdfPTable(10);
 		tablaConceptos.setWidthPercentage(100);
-		tablaConceptos.setWidths(new float[] { 9, 9, 8, 8, 8, 15, 15, 15, 13 });
+		tablaConceptos.setWidths(new float[] { 8, 9, 7, 7, 8, 8, 15, 12, 14, 11 });
 
 		agregarCeldaConFondo("Clave ProdServ", fontHeadConceptos, tablaConceptos, true);
 		
-		agregarCeldaConFondo("No. Identificación", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("No. Identificación (Code)", fontHeadConceptos, tablaConceptos, true);
 
-		agregarCeldaConFondo("Cantidad", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Cantidad (Quantity)", fontHeadConceptos, tablaConceptos, true);
 		
 		agregarCeldaConFondo("Clave Unidad", fontHeadConceptos, tablaConceptos, true);
 
-		agregarCeldaConFondo("Unidad", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Unidad (Unit)", fontHeadConceptos, tablaConceptos, true);
+		
+		agregarCeldaConFondo("Fracción Arancelaria (Tarif Number)", fontHeadConceptos, tablaConceptos, true);
 
-		agregarCeldaConFondo("Descripción", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Descripción (Description)", fontHeadConceptos, tablaConceptos, true);
 
-		agregarCeldaConFondo("Valor unitario", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Valor unitario (Unit Price)", fontHeadConceptos, tablaConceptos, true);
 
-		agregarCeldaConFondo("Importe", fontHeadConceptos, tablaConceptos, true);
+		agregarCeldaConFondo("Importe (Amount)", fontHeadConceptos, tablaConceptos, true);
 		
 		agregarCeldaConFondo("Traslado IVA", fontHeadConceptos, tablaConceptos, true);
 
+		ComercioExterior complementoComercioExterior = Util.obtenerComplComercioExterior(comprobante);
+		if (complementoComercioExterior != null) {
+			this.crearMapaFraccionArancelaria(complementoComercioExterior.getMercancias(), comprobante.getConceptos());
+		}
+		
 		List<Concepto> listaConceptos = comprobante.getConceptos().getConcepto();
 		for (Concepto concepto : listaConceptos) {
 			agregarCelda(concepto.getClaveProdServ().getValor(), fontConceptos, tablaConceptos, true);
@@ -554,6 +683,8 @@ public class PDFFacturaV33 {
 			agregarCelda(concepto.getCantidad().toString(), fontConceptos, tablaConceptos, true);
 			agregarCelda(concepto.getClaveUnidad().getValor(), fontConceptos, tablaConceptos, true);
 			agregarCelda(concepto.getUnidad(), fontConceptos, tablaConceptos, true);
+			String fraccionArancelaria = this.mapaFraccionArancelariaAConcepto.get(concepto.getNoIdentificacion());
+			agregarCelda((fraccionArancelaria != null) ? fraccionArancelaria : "", fontConceptos, tablaConceptos, true);
 			agregarCelda(concepto.getDescripcion(), fontConceptos, tablaConceptos, false);
 			double valorUnitario = concepto.getValorUnitario().doubleValue();
 			int decimalesValorUnitario = Util.obtenerDecimales(valorUnitario);
@@ -580,7 +711,7 @@ public class PDFFacturaV33 {
 	}
 	
 	
-	private void construirComentariosEImporteConLetra(Comprobante comprobante, String comentarios) throws DocumentException {
+	private void construirComentariosEImporteConLetra(Comprobante comprobante, String comentarios, String importeLetraComExt) throws DocumentException {
 		//TABLA DE COMENTARIOS DE LA FACTURA
 		if (comentarios != null) {
 			if (!comentarios.contentEquals("")) {
@@ -602,7 +733,10 @@ public class PDFFacturaV33 {
 		double importeTotal = Math.round(comprobante.getTotal().doubleValue() * 100.0) / 100.0;
 		String importeConLetra = NumberToLetterConverter.convertNumberToLetter(importeTotal, comprobante.getMoneda().getValor());
 		Chunk chunkImporteConLetra = new Chunk(importeConLetra, font3);
-		Phrase fraseImporteConLetra = new Phrase(chunkImporteConLetra);
+		Phrase fraseImporteConLetra = new Phrase();
+		fraseImporteConLetra.add(chunkImporteConLetra);
+		fraseImporteConLetra.add(Chunk.NEWLINE);
+		fraseImporteConLetra.add(new Chunk(importeLetraComExt, font3));
 		PdfPCell celdaImporteConLetra = new PdfPCell();
 		// celdaImporteConLetra.setVerticalAlignment(Element.ALIGN_CENTER);
 		celdaImporteConLetra.setBorder(PdfPCell.NO_BORDER);
@@ -806,7 +940,22 @@ public class PDFFacturaV33 {
 		return existeISR;
 	}
 
-	
+	private void crearMapaFraccionArancelaria(Mercancias mercancias, Conceptos conceptos) {
+		this.mapaFraccionArancelariaAConcepto = new HashMap<>();
+		List<Mercancia> listaMercancias = mercancias.getMercancia();
+		List<Concepto> listaConceptos = conceptos.getConcepto();
+		if ( listaMercancias.size() == listaConceptos.size() ) {
+			for (int i = 0; i < listaMercancias.size(); i++) {
+				Mercancia mercancia = listaMercancias.get(i);
+				Concepto concepto = listaConceptos.get(i);
+				if (mercancia.getNoIdentificacion().contentEquals(concepto.getNoIdentificacion())) {
+					this.mapaFraccionArancelariaAConcepto.put(
+							concepto.getNoIdentificacion(), mercancia.getFraccionArancelaria().getValor());
+				}
+				
+			}
+		}
+	}
 	
 	
 	

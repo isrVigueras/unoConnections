@@ -249,7 +249,7 @@ public class FacturaVTT {
 		this.datosExtra = datosExtra;
 	}
 
-	public class DatosExtra{
+	public static class DatosExtra{
 		private String nuestroPedido;
 		
 		private String suPedido;
@@ -269,6 +269,19 @@ public class FacturaVTT {
 		private String shipCalle;
 		
 		private String shipPostCode;
+		
+		public DatosExtra() {
+			this.shipCalle = "";
+			this.shipLocalidad = "";
+			this.shipPais = "";
+			this.shipPostCode = "";
+			this.condicionesPago = "";
+			this.importeichon = "";
+			this.nuestroPedido = "";
+			this.representante = "";
+			this.suPedido = "";
+			this.viaEmbarque = "";
+		}
 
 		public String getNuestroPedido() {
 			return nuestroPedido;

@@ -2874,6 +2874,17 @@ public class ComercioExterior {
             public void setCodigoPostal(String value) {
                 this.codigoPostal = value;
             }
+            
+            @Override
+            public String toString() {
+            	StringBuilder stringBuilder = new StringBuilder();
+            	stringBuilder.append(numeroExterior+" ");
+            	stringBuilder.append(calle+" ");
+            	stringBuilder.append(estado+ " ");
+            	stringBuilder.append(codigoPostal+" ");
+            	stringBuilder.append(pais+" ");
+            	return stringBuilder.toString();
+            }
 
         }
 

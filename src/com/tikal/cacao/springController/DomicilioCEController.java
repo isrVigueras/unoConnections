@@ -33,7 +33,7 @@ public class DomicilioCEController {
 		d.setPais(C_Pais.MEX);
 		d.setMunicipio(new C_Municipio("014"));
 		d.setNumeroExterior("S/N");
-		d.setLocalidad(new C_Localidad("Atlacomulco"));
+		//d.setLocalidad(new C_Localidad("Atlacomulco"));
 		d.setRfc("AAA010101AAA");
 		
 		domdao.guardar(d);

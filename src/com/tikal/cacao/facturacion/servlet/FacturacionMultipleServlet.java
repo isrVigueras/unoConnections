@@ -268,6 +268,8 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		
 		FacturaVTT factura= new FacturaVTT();
 		FacturaVTT.DatosExtra extra= factura.getDatosExtra();
+		extra.setIdCliente(f.getIdCfd());
+		extra.setIdShip(f.getIdShip());
 		extra.setCondicionesPago(f.getCondPago());
 		extra.setImporteichon(f.getTotalLetra());
 		extra.setNuestroPedido(f.getnPedido());

@@ -49,6 +49,7 @@ public class Datos {
 	private String nombreReceptor;
 	
 	// #04
+	private String idShip;
 	private String shipNombre;
 	private String shipPais;
 	private String shipCalle;
@@ -223,6 +224,7 @@ public class Datos {
 	private void parsea04(String reng) {
 		String[] values = reng.split("\\|");
 		this.trimear(values);
+		this.idShip= values[1];
 		this.shipNombre= values[2];
 		this.shipPais= values[3];
 		this.shipCalle= values[4];
@@ -772,6 +774,22 @@ public class Datos {
 
 	public void setShipEstado(String shipEstado) {
 		this.shipEstado = shipEstado;
+	}
+
+	public String getIdCfd() {
+		return idCfd;
+	}
+
+	public void setIdCfd(String idCfd) {
+		this.idCfd = idCfd;
+	}
+
+	public String getIdShip() {
+		return idShip;
+	}
+
+	public void setIdShip(String idShip) {
+		this.idShip = idShip;
 	}
 	
 	

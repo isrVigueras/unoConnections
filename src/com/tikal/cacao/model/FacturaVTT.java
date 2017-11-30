@@ -250,6 +250,11 @@ public class FacturaVTT {
 	}
 
 	public static class DatosExtra{
+		
+		private String idCliente;
+		
+		private String idShip;
+		
 		private String nuestroPedido;
 		
 		private String suPedido;
@@ -361,6 +366,22 @@ public class FacturaVTT {
 
 		public void setShipPostCode(String shipPostCode) {
 			this.shipPostCode = shipPostCode;
+		}
+
+		public String getIdCliente() {
+			return idCliente;
+		}
+
+		public void setIdCliente(String idCliente) {
+			this.idCliente = idCliente;
+		}
+
+		public String getIdShip() {
+			return idShip;
+		}
+
+		public void setIdShip(String idShip) {
+			this.idShip = idShip;
 		}
 		
 		

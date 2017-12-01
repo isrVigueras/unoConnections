@@ -225,7 +225,7 @@ public class Datos {
 	private void parsea04(String reng) {
 		String[] values = reng.split("\\|");
 		this.trimear(values);
-		this.idShip= values[1];
+		this.setIdShip(values[1]);
 		this.shipNombre= values[2];
 		this.shipPais= values[3];
 		this.shipCalle= values[4];
@@ -784,7 +784,7 @@ public class Datos {
 	public void setIdShip(String idShip) {
 		this.idShip = idShip;
 	}
-	
+
 	
 
 }

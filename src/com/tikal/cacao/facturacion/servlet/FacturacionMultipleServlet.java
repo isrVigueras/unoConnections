@@ -212,6 +212,8 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			con.setValorUnitario(new BigDecimal(d.getValorUnit()));
 			con.setImporte(Util.redondearBigD(new BigDecimal(d.getImporte()), 6));
 			con.setNoIdentificacion(d.getClave());
+			
+			d.setUnidadAduana(conce.getUnidadAduana());
 
 			Comprobante.Conceptos.Concepto.Impuestos impuestos = new Comprobante.Conceptos.Concepto.Impuestos();
 			Comprobante.Conceptos.Concepto.Impuestos.Traslados traslados = new Comprobante.Conceptos.Concepto.Impuestos.Traslados();
@@ -386,7 +388,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			if (cua.length() == 1) {
 				cua = "0" + cua;
 			}
-			m.setUnidadAduana(CUnidadAduana.fromValue("06"));
+			m.setUnidadAduana(CUnidadAduana.fromValue(de.getUnidadAduana()));
 			m.setValorDolares(Util.redondearBigD(conc.getImporte(), 2));
 			m.setValorUnitarioAduana(Util.redondearBigD(conc.getValorUnitario(), 2));
 			lista.add(m);

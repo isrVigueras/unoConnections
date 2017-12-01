@@ -12,6 +12,7 @@ public class DatosConcepto {
 		private String unidadMed;
 		private int categoria; //categoria
 		private String fraccionArancelaria;
+		private String unidadAduana;
 		public int getCantidad() {
 			return cantidad;
 		}
@@ -59,6 +60,12 @@ public class DatosConcepto {
 		}
 		public void setClave(String clave) {
 			this.clave = clave;
+		}
+		public String getUnidadAduana() {
+			return unidadAduana;
+		}
+		public void setUnidadAduana(String unidadAduana) {
+			this.unidadAduana = unidadAduana;
 		} 
 
 		

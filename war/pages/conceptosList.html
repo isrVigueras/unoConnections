@@ -31,11 +31,11 @@
 					<td>{{concepto.valorUnitario}}</td>
 					<td>
 						<button class="btn btn-small"
-							ng-click="editarConcepto($index)">
+							ng-click="editarConcepto(concepto.indice)">
 							<i class="glyphicon glyphicon-edit"></i>
 						</button>
 						<button class="btn btn-small"
-							ng-click="eliminarConcepto($index)">
+							ng-click="eliminarConcepto(concepto.indice)">
 							<i class="glyphicon glyphicon-remove"></i>
 						</button>
 					</td>

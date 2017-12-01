@@ -1,66 +1,104 @@
 
 <!--Aqui va-->
 <section class="jumbotron">
-  <div class="container">
-  <h2>Edita Conceptos</h2>
-  <p>{{nombreEmpresa}}</p>
-  <submenu/>
-  </div>
+	<div class="container">
+		<h2>Edita Conceptos</h2>
+		<p>{{nombreEmpresa}}</p>
+		<submenu />
+	</div>
 </section>
 <div class="container">
-  <form id="forma" name="myForm">
-  <div class="row">
-		<div class="col-md-4">
-			Clave: <input class="form-control"
-				ng-model="newConcepto.noIdentificacion" type="text"
-				ng-required="true"><br>
+	<form id="forma" name="myForm">
+		<div class="row">
+			<div class="col-md-4">
+				Clave: <input class="form-control"
+					ng-model="newConcepto.noIdentificacion" type="text"
+					ng-required="true"><br>
+			</div>
+			<div class="col-md-4">
+				Clave Producto-Servicio: <input class="form-control"
+					ng-model="newConcepto.claveProdServ" readonly><br>
+			</div>
+			<div class="col-md-4">
+				Unidad: <input class="form-control" ng-model="newConcepto.unidad"
+					type="text" value="NO APLICA" ng-required="true"><br>
+			</div>
 		</div>
-		<div class="col-md-4">
-			Clave Producto-Servicio:  <input class="form-control" ng-model="newConcepto.claveProdServ" readonly><br>
+		<div class="row">
+			<div class="col-md-4">
+				Descripci&oacute;n: <input class="form-control"
+					ng-model="newConcepto.descripcion" type="text" ng-required="true"><br>
+			</div>
+			<div class="col-md-4">
+				Descripci&oacute;n Producto-Servicio: <input class="form-control"
+					ng-model="newConcepto.descripcionSAT" type="text"
+					ng-required="true" readonly><br>
+			</div>
+			<div class="col-md-4">
+				Valor Unitario: <input class="form-control"
+					ng-model="newConcepto.valorUnitario" type="text" ng-required="true"><br>
+			</div>
 		</div>
-		<div class="col-md-4">
-			Unidad: <input class="form-control" ng-model="newConcepto.unidad"
-				type="text" value="NO APLICA" ng-required="true"><br>
+		<div class="row">
+			<div class="col-md-4">
+				Unidad Aduana: <select ng-model="newConcepto.unidadAduana"  class="form-control">
+					<option value="01">01 KILO</option>
+					<option value="02">02 GRAMO</option>
+					<option value="03">03 METRO LINEAL</option>
+					<option value="04">04 METRO CUADRADO</option>
+					<option value="05">05 METRO CUBICO</option>
+					<option value="06">06 PIEZA</option>
+					<option value="07">07 CABEZA</option>
+					<option value="08">08 LITRO</option>
+					<option value="09">09 PAR</option>
+					<option value="10">10 KILOWATT</option>
+					<option value="11">11 MILLAR</option>
+					<option value="12">12 JUEGO</option>
+					<option value="13">13 KILOWATT/HORA</option>
+					<option value="14">14 TONELADA</option>
+					<option value="15">15 BARRIL</option>
+					<option value="16">16 GRAMO NETO</option>
+					<option value="17">17 DECENAS</option>
+					<option value="18">18 CIENTOS</option>
+					<option value="19">19 DOCENAS</option>
+					<option value="20">20 CAJA</option>
+					<option value="21">21 BOTELLA</option>
+					<option value="99">99 SERVICIO</option>
+				</select>
+			</div>
 		</div>
-    </div>
-    <div class="row">
-		<div class="col-md-4">
-			Descripci&oacute;n: <input class="form-control"
-				ng-model="newConcepto.descripcion" type="text" ng-required="true"><br>
-		</div>
-		<div class="col-md-4">
-			Descripci&oacute;n Producto-Servicio: <input class="form-control" ng-model="newConcepto.descripcionSAT" type="text" ng-required="true" readonly><br>
-		</div>
-		<div class="col-md-4">
-			Valor Unitario: <input class="form-control"
-				ng-model="newConcepto.valorUnitario" type="text" ng-required="true"><br>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-4">	
-				Buscar Clave Unidad:  <input class="form-control"
+		<div class="row">
+			<div class="col-md-4">
+				Buscar Clave Unidad: <input class="form-control"
 					ng-model="newConcepto.nombreUnidad" type="text"><br>
+			</div>
+			<div class="col-md-2">
+				<button class="btn" ng-click="buscarClaveUnidad()"
+					style="margin-top: 18px;">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					Buscar
+				</button>
+			</div>
 		</div>
-		<div class="col-md-2">
-			<button class="btn" ng-click="buscarClaveUnidad()" style="margin-top: 18px;"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar</button>
-		</div>
-	</div>
-	<div class="row" ng-hide="ClaveUnidad">
-		<div class="col-md-4">
-			Seleccionar Clave Unidad:  <select class="form-control" ng-model="newConcepto.claveNombreUnidad" ng-options="clave_unidad for clave_unidad in claves_unidades">				
+		<div class="row" ng-hide="ClaveUnidad">
+			<div class="col-md-4">
+				Seleccionar Clave Unidad: <select class="form-control"
+					ng-model="newConcepto.claveNombreUnidad"
+					ng-options="clave_unidad for clave_unidad in claves_unidades">
 				</select><br>
+			</div>
+			<div class="col-md-4">
+				Clave Unidad Anterior: <input class="form-control"
+					ng-model="newConcepto.descripcionUnidadSAT" type="text" readonly><br>
+			</div>
 		</div>
-		<div class="col-md-4">
-			Clave Unidad Anterior: <input class="form-control" ng-model="newConcepto.descripcionUnidadSAT" type="text" readonly><br>
+		<div class="row">
+			<div class="col-md-12">
+				<button value="Guardar" class="btn"
+					ng-click="myForm.$valid && editaConcepto(newConcepto)">Actualizar</button>
+				<button ng-click="clean()" class="btn">Limpiar</button>
+			</div>
 		</div>
-	</div>	
-	<div class="row">
-		<div class="col-md-12">
-			<button value="Guardar" class="btn"
-				ng-click="myForm.$valid && editaConcepto(newConcepto)">Actualizar</button>
-			<button ng-click="clean()" class="btn">Limpiar</button>
-		</div>
-	</div>
 	</form>
 </div ng-view>
 

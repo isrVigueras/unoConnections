@@ -36,7 +36,7 @@ public class ConceptoController {
 
 	@Autowired
 	PerfilDAO perfildao;
-	
+
 	@Autowired
 	ConceptoSATService conceptosSATService;
 
@@ -47,7 +47,7 @@ public class ConceptoController {
 			AsignadorDeCharset.asignar(re, rs);
 			Conceptos e = (Conceptos) JsonConvertidor.fromJson(json, Conceptos.class);
 			conceptosdao.add(e.getRfc(), e.getConceptos().get(0));
-		}else {
+		} else {
 			rs.sendError(403);
 		}
 	}
@@ -64,19 +64,21 @@ public class ConceptoController {
 			for (int i = 1; i < conceptos.length; i++) {
 				String c = conceptos[i];
 				String[] values = c.split("\t");
-//				String[] values = c.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-//				Concepto con = new Concepto();
-//				con.setNoIdentificacion(values[1]);
-//				con.setDescripcion(values[3].replace("|", ",").replace("\"", ""));
-//				con.setUnidad(values[4]);
-//				if (values.length > 5) {
-//					values[5] = values[5].replace("$", "").trim();
-//					values[5] = values[5].replace("\"", "").trim();
-//					values[5] = values[5].replace(",", "").trim();
-//					if (values[5].length() > 0) {
-//						con.setValorUnitario(Float.parseFloat(values[5]));
-//					}
-//				}
+				// String[] values =
+				// c.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+				// Concepto con = new Concepto();
+				// con.setNoIdentificacion(values[1]);
+				// con.setDescripcion(values[3].replace("|", ",").replace("\"",
+				// ""));
+				// con.setUnidad(values[4]);
+				// if (values.length > 5) {
+				// values[5] = values[5].replace("$", "").trim();
+				// values[5] = values[5].replace("\"", "").trim();
+				// values[5] = values[5].replace(",", "").trim();
+				// if (values[5].length() > 0) {
+				// con.setValorUnitario(Float.parseFloat(values[5]));
+				// }
+				// }
 				Concepto con = new Concepto();
 				con.setClaveProdServ(values[4]);
 				con.setClaveUnidad(values[2]);
@@ -85,11 +87,16 @@ public class ConceptoController {
 				con.setDescripcionUnidadSAT(values[3]);
 				con.setNoIdentificacion(values[0]);
 				con.setUnidad(values[3]);
+				if (values.length > 8) {
+					if (!values[8].isEmpty()) {
+						con.setUnidadAduana(values[8]);
+					}
+				}
 				lista.add(con);
 			}
 			conceptosdao.add(rfc, lista);
 			rs.getWriter().print(JsonConvertidor.toJson(lista));
-		}else {
+		} else {
 			rs.sendError(403);
 		}
 	}
@@ -102,8 +109,7 @@ public class ConceptoController {
 			AsignadorDeCharset.asignar(re, rs);
 			Conceptos e = (Conceptos) JsonConvertidor.fromJson(json, Conceptos.class);
 			conceptosdao.eliminar(e.getRfc(), ind);
-		}
-		else {
+		} else {
 			rs.sendError(403);
 		}
 	}
@@ -116,30 +122,32 @@ public class ConceptoController {
 			AsignadorDeCharset.asignar(re, rs);
 			Conceptos e = (Conceptos) JsonConvertidor.fromJson(json, Conceptos.class);
 			conceptosdao.actualizar(e.getRfc(), indice, e.getConceptos().get(0));
-		}else {
+		} else {
 			rs.sendError(403);
 		}
 	}
 
 	@RequestMapping(value = { "/cargar/{rfc}" }, method = RequestMethod.GET, produces = "application/json")
 	public void cargar(HttpServletRequest re, HttpServletResponse rs, @PathVariable String rfc) throws IOException {
-		if (ServicioSesion.verificarPermiso(re, usuariodao, perfildao, 12)||ServicioSesion.verificarPermiso(re, usuariodao, perfildao, 11)) {
+		if (ServicioSesion.verificarPermiso(re, usuariodao, perfildao, 12)
+				|| ServicioSesion.verificarPermiso(re, usuariodao, perfildao, 11)) {
 			AsignadorDeCharset.asignar(re, rs);
 			Conceptos c = conceptosdao.consultar(rfc);
 			rs.getWriter().println(JsonConvertidor.toJson(c));
-		}else {
+		} else {
 			rs.sendError(403);
 		}
 	}
 
 	@RequestMapping(value = { "/alv/{rfc}" }, method = RequestMethod.GET, produces = "application/json")
 	public void alv(HttpServletRequest re, HttpServletResponse rs, @PathVariable String rfc) throws IOException {
-			AsignadorDeCharset.asignar(re, rs);
-			conceptosdao.alv(rfc);
+		AsignadorDeCharset.asignar(re, rs);
+		conceptosdao.alv(rfc);
 	}
-	
+
 	@RequestMapping(value = { "/getProdServ/{rfc}" }, method = RequestMethod.GET, produces = "application/json")
-	public void getProductosServiciosSAT(HttpServletRequest re, HttpServletResponse rs, @PathVariable String rfc) throws IOException {
+	public void getProductosServiciosSAT(HttpServletRequest re, HttpServletResponse rs, @PathVariable String rfc)
+			throws IOException {
 		AsignadorDeCharset.asignar(re, rs);
 		List<ProductoOServicio> listaPD = conceptosSATService.cargarProdServ(rfc);
 		rs.getWriter().println(JsonConvertidor.toJson(listaPD));

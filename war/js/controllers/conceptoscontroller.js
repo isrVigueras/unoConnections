@@ -134,7 +134,8 @@ app.controller("conceptosListController",[
 				console.log($scope.conceptos);
 				for (var i = 0; i < $scope.conceptos.length; i++) {
 					$scope.conceptos[i].busquedaAttr = $scope.conceptos[i].noIdentificacion
-					+ " "
+					+ " ";
+					$scope.conceptos[i].indice=i;
 //					+ $scope.empleados[i].empleado.nombre.apellidoPaterno
 //					+ " "
 //					+ $scope.empleados[i].empleado.nombre.apellidoMaterno

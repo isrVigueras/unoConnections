@@ -321,8 +321,9 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		mx.gob.sat.comercioexterior11.ObjectFactory of = new mx.gob.sat.comercioexterior11.ObjectFactory();
 		ComercioExterior com = of.createComercioExterior();
 
-		com.setIncoterm(CINCOTERM.valueOf(d.getIncoterm()));
-
+		if(d.getIncoterm()!=null){
+			com.setIncoterm(CINCOTERM.valueOf(d.getIncoterm()));
+		}
 		com.setNumeroExportadorConfiable(d.getNumExportConfiable());
 		com.setObservaciones(d.getObservaciones());
 		if (d.getSubdiv() != null) {

@@ -3,6 +3,8 @@
  */
 package com.tikal.cacao.model;
 
+import com.tikal.cacao.util.Util;
+
 /**
  * @author Tikal
  *
@@ -219,6 +221,19 @@ public class Direccion {
 
 	public void setMunicipio(String municipio) {
 		this.municipio = municipio;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(Util.regresaTextoOCadenaVacia(this.calle) + " ");
+		stringBuilder.append(Util.regresaTextoOCadenaVacia(this.numExterior) + " ");
+		stringBuilder.append(Util.regresaTextoOCadenaVacia(this.numInterior) + " ");
+		stringBuilder.append(Util.regresaTextoOCadenaVacia(this.colonia) + " ");
+		stringBuilder.append(Util.regresaTextoOCadenaVacia(this.codigoPostal) + " ");
+		stringBuilder.append(Util.regresaTextoOCadenaVacia(this.municipio) + " ");
+		stringBuilder.append(Util.regresaTextoOCadenaVacia(this.estado));	
+		return stringBuilder.toString();
 	}
 	
 }

@@ -176,7 +176,7 @@ public class Datos {
 		if (!values[11].isEmpty()) {
 			this.tipoCambio = Float.parseFloat(values[11]);
 		}
-		this.repVentas= values[12];
+		this.repVentas= values[13];
 		this.nPedido = values[15];
 		this.sPedido = values[16];
 	}

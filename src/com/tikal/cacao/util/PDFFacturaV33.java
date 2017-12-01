@@ -221,9 +221,17 @@ public class PDFFacturaV33 {
 		if (datosExtra == null) {
 			datosExtra = new FacturaVTT().getDatosExtra();
 		}
-		this.constrirComplementoComercioExterior(comprobante, complementoComExt, datosExtra);
+		this.construirComplementoComercioExterior(comprobante, complementoComExt, datosExtra);
 		
-		this.construirTablaIVA();
+		List<com.tikal.cacao.sat.cfd33.Comprobante.Impuestos.Traslados.Traslado> traslados = comprobante.getImpuestos().getTraslados().getTraslado();
+		BigDecimal tasaOCuota = null;
+		for (com.tikal.cacao.sat.cfd33.Comprobante.Impuestos.Traslados.Traslado traslado : traslados) {
+			if (traslado.getImpuesto().getValor().contentEquals("002")) {
+				tasaOCuota = traslado.getTasaOCuota();
+			}
+		}
+		
+		this.construirTablaIVA(tasaOCuota.doubleValue());
 		this.construirTablaConceptos(comprobante);
 		this.construirComentariosEImporteConLetra(comprobante, comentarios, datosExtra.getImporteichon());
 		
@@ -500,7 +508,7 @@ public class PDFFacturaV33 {
 	}
 	
 	
-	private void constrirComplementoComercioExterior(Comprobante cfdi, ComercioExterior complementoComExt, DatosExtra datosExtra) throws DocumentException {
+	private void construirComplementoComercioExterior(Comprobante cfdi, ComercioExterior complementoComExt, DatosExtra datosExtra) throws DocumentException {
 		PdfPTable tablaVendidoEmbarcarAgenteAduanal = new PdfPTable(3);
 		tablaVendidoEmbarcarAgenteAduanal.setWidthPercentage(100);
 		tablaVendidoEmbarcarAgenteAduanal.setWidths(new float[] {34, 33, 33});
@@ -508,10 +516,15 @@ public class PDFFacturaV33 {
 		PdfPTable subtablaVendidoA = new PdfPTable(1);
 		this.agregarCeldaConFondo("VENDIDO A (SOLD TO): ", fontHead, subtablaVendidoA, true);
 		Phrase fraseVendidoA = new Phrase();
-		this.agregarChunkYNuevaLinea("Clave ", font3, fraseVendidoA);
-		String numRegIdFis = complementoComExt.getReceptor().getNumRegIdTrib();
-		this.agregarChunkYNuevaLinea("Número de identificación o registro fiscal: " + ((numRegIdFis != null) ? numRegIdFis : ""), font3, fraseVendidoA);
-		this.agregarChunkYNuevaLinea("Domicilio: " + complementoComExt.getReceptor().getDomicilio().toString(), font3, fraseVendidoA);
+		this.agregarChunkYNuevaLinea("Clave " + datosExtra.getIdCliente() + " - " + cfdi.getFolio(), font3, fraseVendidoA);
+		this.agregarChunkYNuevaLinea(cfdi.getReceptor().getNombre(), font3, fraseVendidoA);
+		//		String numRegIdFis = complementoComExt.getReceptor().getNumRegIdTrib();
+//		this.agregarChunkYNuevaLinea("Número de identificación o registro fiscal: " + ((numRegIdFis != null) ? numRegIdFis : ""), font3, fraseVendidoA);
+		if (complementoComExt != null) {
+			this.agregarChunkYNuevaLinea("Domicilio: " + complementoComExt.getReceptor().getDomicilio().toString(), font3, fraseVendidoA);
+		} else {
+			this.agregarChunkYNuevaLinea("Domicilio: " + datosExtra.getSoldTo().toString(), font3, fraseVendidoA);
+		}
 		PdfPCell subCeldaVendidoA = new PdfPCell();
 		subCeldaVendidoA.setBorderColor(BaseColor.GRAY);
 		subCeldaVendidoA.addElement(fraseVendidoA);
@@ -523,6 +536,7 @@ public class PDFFacturaV33 {
 		PdfPTable subtablaEmbarcarA = new PdfPTable(1);
 		this.agregarCeldaConFondo("EMBARCAR A (SHIP TO)", fontHead, subtablaEmbarcarA, true);
 		Phrase fraseEmbarcarA = new Phrase();
+		this.agregarChunkYNuevaLinea(datosExtra.getIdShip(),font3, fraseEmbarcarA);
 		this.agregarChunkYNuevaLinea("Domicilio: " + datosExtra.getShipCalle() + " " + datosExtra.getShipLocalidad() + " " +
 				datosExtra.getShipPostCode() + " " + datosExtra.getShipPais(), font3, fraseEmbarcarA);
 		PdfPCell subCeldaEmbarcarA = new PdfPCell();
@@ -565,7 +579,7 @@ public class PDFFacturaV33 {
 		this.agregarCelda(datosExtra.getNuestroPedido(), font3, tablaCamposComExt, false);
 		this.agregarCelda(datosExtra.getSuPedido(), font3, tablaCamposComExt, false);
 		this.agregarCelda(datosExtra.getViaEmbarque(), font3, tablaCamposComExt, false);
-		this.agregarCelda(cfdi.getMoneda().getValor() + "/" + cfdi.getTipoCambio(), font3, tablaCamposComExt, false);
+		this.agregarCelda(cfdi.getMoneda().getValor() + "/" + ((cfdi.getTipoCambio() != null) ? cfdi.getTipoCambio() : ""), font3, tablaCamposComExt, false);
 		document.add(tablaCamposComExt);
 
 		PdfPTable segundaTablaCamposComExt = new PdfPTable(5);
@@ -578,10 +592,17 @@ public class PDFFacturaV33 {
 		this.agregarCeldaConFondo("CÓDIGO PAÍS DESTINO (COUNTRY CODE DESTINATION)", fontHead, segundaTablaCamposComExt, true);
 		this.agregarCeldaConFondo("TRANSPORTISTA (FREIGHT LINE)", fontHead, segundaTablaCamposComExt, true);
 		
-		this.agregarCelda(complementoComExt.getClaveDePedimento().toString(), font3, segundaTablaCamposComExt, false);
-		this.agregarCelda(complementoComExt.getIncoterm().toString(), font3, segundaTablaCamposComExt, false);
+		String claveDePedimento = " ", incoterm = " ", paisReceptor = " ";
+		if (complementoComExt != null) {
+			claveDePedimento = complementoComExt.getClaveDePedimento().value();
+			incoterm = complementoComExt.getIncoterm().toString();
+			paisReceptor = complementoComExt.getReceptor().getDomicilio().getPais().toString();
+		}
+		
+		this.agregarCelda(claveDePedimento, font3, segundaTablaCamposComExt, false);
+		this.agregarCelda(incoterm, font3, segundaTablaCamposComExt, false);
 		this.agregarCelda("", font3, segundaTablaCamposComExt, false); //CAMIÓN
-		this.agregarCelda(complementoComExt.getReceptor().getDomicilio().getPais().toString(), font3, segundaTablaCamposComExt, false);
+		this.agregarCelda(paisReceptor, font3, segundaTablaCamposComExt, false);
 		this.agregarCelda("", font3, segundaTablaCamposComExt, false); //TRANSPORTISTA
 		segundaTablaCamposComExt.setSpacingAfter(5.0F);
 		document.add(segundaTablaCamposComExt);
@@ -622,7 +643,7 @@ public class PDFFacturaV33 {
 	}
 	
 	
-	private void construirTablaIVA() throws DocumentException {
+	private void construirTablaIVA(double tasaOCuota) throws DocumentException {
 		PdfPTable tablaIVA = new PdfPTable(3);
 		tablaIVA.setWidthPercentage(100);
 		tablaIVA.setWidths(new int[] {33, 33, 34});
@@ -641,7 +662,8 @@ public class PDFFacturaV33 {
 		
 		agregarCelda("002 IVA", fontConceptos, tablaIVA, true);
 		agregarCelda("Tasa", fontConceptos, tablaIVA, true);
-		agregarCelda("16%", fontConceptos, tablaIVA, true);
+		String strTasaOcuota = String.valueOf(tasaOCuota * 100);
+		agregarCelda(strTasaOcuota+"%", fontConceptos, tablaIVA, true);
 		document.add(tablaIVA);
 	}
 	
@@ -683,7 +705,10 @@ public class PDFFacturaV33 {
 			agregarCelda(concepto.getCantidad().toString(), fontConceptos, tablaConceptos, true);
 			agregarCelda(concepto.getClaveUnidad().getValor(), fontConceptos, tablaConceptos, true);
 			agregarCelda(concepto.getUnidad(), fontConceptos, tablaConceptos, true);
-			String fraccionArancelaria = this.mapaFraccionArancelariaAConcepto.get(concepto.getNoIdentificacion());
+			String fraccionArancelaria = null;
+			if (this.mapaFraccionArancelariaAConcepto != null) {
+				fraccionArancelaria = this.mapaFraccionArancelariaAConcepto.get(concepto.getNoIdentificacion());
+			}
 			agregarCelda((fraccionArancelaria != null) ? fraccionArancelaria : "", fontConceptos, tablaConceptos, true);
 			agregarCelda(concepto.getDescripcion(), fontConceptos, tablaConceptos, false);
 			double valorUnitario = concepto.getValorUnitario().doubleValue();
@@ -735,8 +760,10 @@ public class PDFFacturaV33 {
 		Chunk chunkImporteConLetra = new Chunk(importeConLetra, font3);
 		Phrase fraseImporteConLetra = new Phrase();
 		fraseImporteConLetra.add(chunkImporteConLetra);
-		fraseImporteConLetra.add(Chunk.NEWLINE);
-		fraseImporteConLetra.add(new Chunk(importeLetraComExt, font3));
+		if (!comprobante.getMoneda().getValor().contentEquals("MXN")) {
+			fraseImporteConLetra.add(Chunk.NEWLINE);
+			fraseImporteConLetra.add(new Chunk(importeLetraComExt, font3));
+		}
 		PdfPCell celdaImporteConLetra = new PdfPCell();
 		// celdaImporteConLetra.setVerticalAlignment(Element.ALIGN_CENTER);
 		celdaImporteConLetra.setBorder(PdfPCell.NO_BORDER);

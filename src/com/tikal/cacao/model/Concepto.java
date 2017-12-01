@@ -19,6 +19,8 @@ public class Concepto {
 	
 	private String claveUnidad;
 	
+	private String unidadAduana;
+	
 	private String descripcionUnidadSAT;
 
 	public String getNoIdentificacion() {
@@ -83,6 +85,14 @@ public class Concepto {
 
 	public void setDescripcionUnidadSAT(String descripcionUnidadSAT) {
 		this.descripcionUnidadSAT = descripcionUnidadSAT;
+	}
+
+	public String getUnidadAduana() {
+		return unidadAduana;
+	}
+
+	public void setUnidadAduana(String unidadAduana) {
+		this.unidadAduana = unidadAduana;
 	}
 	
 	

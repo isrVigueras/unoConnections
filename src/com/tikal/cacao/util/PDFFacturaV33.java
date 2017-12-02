@@ -151,7 +151,7 @@ public class PDFFacturaV33 {
 		
 		this.construirBoceto(comprobante, imagen, estatus, tfd, comentarios, datosExtra);
 		this.construirTimbre(selloDigital, bytesQRCode, tfd);
-		this.construirHechoPor();
+		//this.construirHechoPor();
 		return document;
 	}
 	
@@ -188,7 +188,7 @@ public class PDFFacturaV33 {
 		
 		this.construirBoceto(comprobante, imagen, estatus, tfd, comentarios, datosExtra);
 		this.construirTimbre(selloDigital, bytesQRCode, tfd);
-		this.construirHechoPor();
+		//this.construirHechoPor();
 		
 		return document;
 	}

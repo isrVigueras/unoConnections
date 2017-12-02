@@ -68,7 +68,7 @@ public class PDFFacturaV33 {
 	private Font fontHead = new Font(Font.FontFamily.HELVETICA, 8.5F, Font.NORMAL);
 	private Font fontHeadConceptos = new Font(Font.FontFamily.HELVETICA, 7.0F, Font.NORMAL);
 	private Font fontConceptos = new Font(Font.FontFamily.HELVETICA, 7.0F, Font.NORMAL);
-	private BaseColor tikalColor;
+	private BaseColor rafypackColor;
 	//fontHead.setColor(BaseColor.WHITE);
 
 	private PdfPCell emptyCell = new PdfPCell();
@@ -87,7 +87,7 @@ public class PDFFacturaV33 {
 		fontHeadConceptos.setColor(BaseColor.WHITE);
 		emptyCell.setBorderWidth(1);
 		emptyCell.setBorderColor(BaseColor.GRAY);
-		tikalColor = new CustomColor(ExtendedColor.TYPE_RGB, 142F / 255F, 0F / 255F, 32F / 255F);
+		rafypackColor = new CustomColor(ExtendedColor.TYPE_RGB, 98F / 255F, 98F / 255F, 98F / 255F);
 		
 		celdaEspacio.setBorder(PdfPCell.NO_BORDER);
 		//celdaEspacio.addElement(Chunk.NEWLINE);
@@ -650,7 +650,7 @@ public class PDFFacturaV33 {
 		
 		PdfPCell celdaInfoIva = new PdfPCell(new Paragraph("Impuesto trasladado a cada concepto del CFDI", fontHead));
 		celdaInfoIva.setColspan(3);
-		celdaInfoIva.setBackgroundColor(this.tikalColor);
+		celdaInfoIva.setBackgroundColor(this.rafypackColor);
 		celdaInfoIva.setPadding(5F);
 		celdaInfoIva.setBorderColor(BaseColor.GRAY);
 		celdaInfoIva.setBorderWidth(1F);
@@ -770,7 +770,7 @@ public class PDFFacturaV33 {
 		celdaImporteConLetra.setPhrase(fraseImporteConLetra);
 		tablaImporteConLetra.addCell(celdaImporteConLetra);
 
-		emptyCell.setBackgroundColor(tikalColor);
+		emptyCell.setBackgroundColor(rafypackColor);
 		tablaImporteConLetra.addCell(emptyCell);
 		document.add(tablaImporteConLetra);
 	}
@@ -911,7 +911,7 @@ public class PDFFacturaV33 {
 		celda.setBorderWidth(1);
 		celda.setBorderColor(BaseColor.GRAY);
 		celda.setPadding(5);
-		celda.setBackgroundColor(tikalColor);
+		celda.setBackgroundColor(rafypackColor);
 
 		if (centrado) {
 			celda.setHorizontalAlignment(Element.ALIGN_CENTER);

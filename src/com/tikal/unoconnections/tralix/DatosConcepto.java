@@ -5,7 +5,7 @@ public class DatosConcepto {
 	//#05
 		//private String idUnicoInterno;
 		private String clave;
-		private int cantidad;
+		private float cantidad;
 		private String descripcion;
 		private float valorUnit;
 		private float importe;
@@ -13,10 +13,10 @@ public class DatosConcepto {
 		private int categoria; //categoria
 		private String fraccionArancelaria;
 		private String unidadAduana;
-		public int getCantidad() {
+		public float getCantidad() {
 			return cantidad;
 		}
-		public void setCantidad(int cantidad) {
+		public void setCantidad(float cantidad) {
 			this.cantidad = cantidad;
 		}
 		public String getDescripcion() {

@@ -241,7 +241,7 @@ public class Datos {
 		if (id.compareTo("0") != 0) {
 			DatosConcepto d = new DatosConcepto();
 			d.setClave(values[1]);
-			d.setCantidad(Integer.parseInt(values[2]));
+			d.setCantidad(Float.parseFloat(values[2]));
 			d.setDescripcion(values[3]);
 			d.setFraccionArancelaria(values[8]);
 			d.setImporte(Float.parseFloat(values[5]));
@@ -784,7 +784,5 @@ public class Datos {
 	public void setIdShip(String idShip) {
 		this.idShip = idShip;
 	}
-
-	
 
 }

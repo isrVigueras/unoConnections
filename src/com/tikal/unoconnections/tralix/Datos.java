@@ -90,6 +90,11 @@ public class Datos {
 
 	// #99
 	private int numLineas;
+	
+	private String error;
+	
+	@Index
+	private boolean pausada;
 
 	// Conceptos
 	private List<DatosConcepto> conceptos;
@@ -100,7 +105,7 @@ public class Datos {
 
 	public Datos(String info) {
 		this.setConceptos(new ArrayList<DatosConcepto>());
-
+		this.pausada=false;
 		String[] rengs = info.split("\n");
 
 		for (String reng : rengs) {
@@ -241,6 +246,7 @@ public class Datos {
 		if (id.compareTo("0") != 0) {
 			DatosConcepto d = new DatosConcepto();
 			d.setClave(values[1]);
+			
 			d.setCantidad(Float.parseFloat(values[2]));
 			d.setDescripcion(values[3]);
 			d.setFraccionArancelaria(values[8]);
@@ -785,4 +791,20 @@ public class Datos {
 		this.idShip = idShip;
 	}
 
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public boolean isPausada() {
+		return pausada;
+	}
+
+	public void setPausada(boolean pausada) {
+		this.pausada = pausada;
+	}
+	
 }

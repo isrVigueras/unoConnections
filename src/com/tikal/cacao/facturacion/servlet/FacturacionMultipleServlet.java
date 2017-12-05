@@ -129,9 +129,12 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			if (respuesta.compareTo("¡La factura se timbró con éxito!") == 0) {
 				datosdao.elimiar(fr);
 			} else {
-				// something to do
+				if(respuesta.startsWith("No se encontró")){
+					fr.setPausada(true);
+					fr.setError(respuesta);
+					datosdao.guardar(fr);
+				}
 			}
-
 		}
 		response.getWriter().print("OK");
 
@@ -203,6 +206,9 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			Comprobante.Conceptos.Concepto con = new Comprobante.Conceptos.Concepto();
 			com.tikal.cacao.model.Concepto conce = mapa.get(d.getClave());
 
+			if(conce==null){
+				return "No se encontró el concepto: "+d.getClave();
+			}
 			con.setCantidad(new BigDecimal(d.getCantidad()));
 			con.setClaveProdServ(conce.getClaveProdServ());
 			con.setUnidad(d.getUnidadMed());
@@ -220,7 +226,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado traslado = new Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado();
 			traslado.setBase(con.getImporte());
 			if (tipo == 0) {
-				traslado.setImporte(Util.redondearBigD(new BigDecimal(d.getImporte() * 0.16), 6));
+				traslado.setImporte(Util.redondearBigD(new BigDecimal(con.getImporte().floatValue() * 0.16), 6));
 				traslado.setTasaOCuota(new BigDecimal(f.getTasa() / 100));
 			} else {
 				traslado.setImporte(Util.redondearBigD(new BigDecimal(0), 2));

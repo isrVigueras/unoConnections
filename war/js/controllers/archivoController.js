@@ -197,7 +197,7 @@ app.service('archivoService',['$http','$q',function($http,$q){
 	 
 }]);
 
-app.controller('archivoController',['$scope','archivoService','fileService', '$cookieStore', function($scope,archivoService,fileService,$cookieStore){
+app.controller('archivoController',['$scope','archivoService','fileService', '$cookieStore', '$http','$interval', function($scope,archivoService,fileService,$cookieStore, $http, $interval){
 	$scope.mensaje="";
 	$scope.ver=false;
 	
@@ -226,30 +226,38 @@ app.controller('archivoController',['$scope','archivoService','fileService', '$c
 			console.log(data);
 			$scope.mensaje= data;
 		});
-		
-// $scope.images = fileService.getFile("b_pics");
-//		
-// if ($scope.images.length) {
-// var file = $scope.images;
-// archivoService.uploadFileToUrl(file, "/file/upload").then(
-// function(data) {
-// var id= data.idEvento;
-// var notfound=true;
-// for(var i = 0;i< $scope.eventos.length;i++){
-// if($scope.eventos[i].idEvento==id){
-// $scope.eventos[i]=data;
-// notfound=false;
-// break;
-// }
-// }
-// if(notfound){
-// $scope.eventos.push(data);
-// }
-// // recursivo
-// });
-// }
+	}
+	
+	$scope.facturasGuardadas=function(){
+		$http.get("facturacion/pendientes/"+$cookieStore.get('rfcEmpresa')).then(function(response){
+			$scope.porProcesar=response.data;
+		});
 		
 	}
+	
+	$scope.activar=function(fr){
+		$http.post("facturacion/activar",f).then(function(data){
+			alert("Registro Actualizado");
+			$window.location.reload();
+		})
+	}
+	
+	$scope.eliminar=function(fr){
+		$http.post("facturacion/eliminarFR",f).then(function(data){
+			alert("Registro eliminado");
+			$window.location.reload();
+		})
+	}
+	$scope.facturasGuardadas();
+	
+	var promise = $interval(function(){ 
+		$scope.facturasGuardadas();
+	}, 50000);
+	
+	$scope.$on('$destroy', function (){ 
+		 $interval.cancel(promise); 
+	});
+	
 }]);
 
 app.controller('imagenController',['$scope','archivoService','fileService','$cookieStore',function($scope,archivoService,fileService, $cookieStore){

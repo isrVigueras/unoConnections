@@ -159,6 +159,29 @@ public class FacturaController {
  		res.getWriter().print(JsonConvertidor.toJson(lista));
 	}
 	
+	@RequestMapping(value = "/eliminarFR", method = RequestMethod.POST, produces="application/json")
+	public void eliminarFR(HttpServletRequest req, HttpServletResponse res, @RequestBody String json) throws IOException {
+		AsignadorDeCharset.asignar(req, res);
+		Datos fr= (Datos) JsonConvertidor.fromJson(json, Datos.class);
+		datosdao.elimiar(fr);
+	}
+	
+	@RequestMapping(value = "/activar", method = RequestMethod.POST, produces="application/json")
+	public void activarFR(HttpServletRequest req, HttpServletResponse res, @RequestBody String json) throws IOException {
+		AsignadorDeCharset.asignar(req, res);
+		Datos fr= (Datos) JsonConvertidor.fromJson(json, Datos.class);
+		fr.setPausada(false);
+		datosdao.guardar(fr);
+	}
+	
+	@RequestMapping(value = "/pendientes/{rfc}", method = RequestMethod.GET, produces="application/json")
+ 	public void pendientes(HttpServletRequest req, HttpServletResponse res, @PathVariable String rfc) throws IOException {
+		AsignadorDeCharset.asignar(req, res);
+ 		List<Datos> lista= new ArrayList<Datos>();
+ 		lista= datosdao.getByRFC(rfc);
+ 		res.getWriter().print(JsonConvertidor.toJson(lista));
+	}
+	
 	@RequestMapping(value = "/emailTo", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public void enviarEmail(HttpServletRequest req, HttpServletResponse res, @RequestBody String json) throws IOException {
 		String[] args= json.split(",");

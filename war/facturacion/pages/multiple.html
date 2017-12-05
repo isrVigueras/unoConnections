@@ -10,9 +10,49 @@
 		<input id="b_pics" type="file" class="file" multiple="true"
 			multiple-File-Model="b_pics" required /><br>
 
-		<button type="button" class="btn data-dismiss="modal"
+		<button type="button" class="btn data-dismiss="
+			modal"
 			ng-click="ok()">Agregar</button>
 		<hr>
-		<label id="cadena" ng-show="false"></label> 
+		<label id="cadena" ng-show="false"></label>
+	</div>
+
+	<div class="row" ng-show="porProcesar">
+		<h4>Facturas en proceso</h4>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Receptor</th>
+					<th>Serie</th>
+					<th>Fecha</th>
+					<th>Total</th>
+					<th>Moneda</th>
+					<th>Error</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="fact in porProcesar">
+					<td>{{fact.RFC}}</td>
+					<td>{{fact.serie+fact.folio}}</td>
+					<td>{{fact.fecha_hora}}</td>
+					<td>{{fact.total}}</td>
+					<td>{{fact.moneda}}</td>
+					<td>{{fact.error}}</td>
+					<td><div class="btn-group">
+							<button type="button" class="btn btn-info"
+								ng-click="activar(fact)" ng-show="fact.error">
+								<i class="glyphicon glyphicon-ok"></i>
+							</button>
+							<button type="button" class="btn btn-danger"
+								ng-click="eliminar(fact)" data-toggle="modal"
+								data-dismiss="modal" data-target="#modalElimina">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button>
+						</div>
+				</tr>
+
+			</tbody>
+		</table>
 	</div>
 </div>

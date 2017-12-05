@@ -26,7 +26,7 @@ public class DatosDAOImp implements DatosDAO{
 
 	@Override
 	public List<Datos> todos() {
-		List<Datos> lista= ofy().load().type(Datos.class).list();
+		List<Datos> lista= ofy().load().type(Datos.class).filter("pausada",false).list();
 		return lista;
 	}
 

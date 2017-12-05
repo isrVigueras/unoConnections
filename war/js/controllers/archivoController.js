@@ -197,7 +197,7 @@ app.service('archivoService',['$http','$q',function($http,$q){
 	 
 }]);
 
-app.controller('archivoController',['$scope','archivoService','fileService', '$cookieStore', '$http','$interval', function($scope,archivoService,fileService,$cookieStore, $http, $interval){
+app.controller('archivoController',['$scope','archivoService','fileService', '$cookieStore', '$http','$interval','$window', function($scope,archivoService,fileService,$cookieStore, $http, $interval, $window){
 	$scope.mensaje="";
 	$scope.ver=false;
 	
@@ -224,6 +224,8 @@ app.controller('archivoController',['$scope','archivoService','fileService', '$c
 		var c= $('#cadena').text();
 		archivoService.sendfile(c, $cookieStore.get("rfcEmpresa")).then(function(data){
 			console.log(data);
+			alert("Datos guardados");
+			$window.location.reload();
 			$scope.mensaje= data;
 		});
 	}
@@ -236,7 +238,7 @@ app.controller('archivoController',['$scope','archivoService','fileService', '$c
 	}
 	
 	$scope.activar=function(fr){
-		$http.post("facturacion/activar",f).then(function(data){
+		$http.post("facturacion/activar",fr).then(function(data){
 			alert("Registro Actualizado");
 			$window.location.reload();
 		})

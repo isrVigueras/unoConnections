@@ -11,6 +11,7 @@ import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,7 @@ import com.tikal.cacao.model.Pago;
 import com.tikal.cacao.model.PeriodosDePago;
 import com.tikal.cacao.model.Regimen;
 import com.tikal.cacao.model.RegistroBitacora;
+import com.tikal.cacao.model.orm.EntidadCatalogo;
 import com.tikal.cacao.sat.cfd.Comprobante;
 import com.tikal.cacao.sat.cfd.TUbicacion;
 import com.tikal.cacao.sat.cfd.catalogos.C_Estado;
@@ -761,6 +763,25 @@ public class Util {
 		RespuestaWebServicePersonalizada respPersonalizada = new RespuestaWebServicePersonalizada();
 		respPersonalizada.setMensajeRespuesta(respuestaError.toString());
 		return respPersonalizada;
+	}
+	
+	public static <T extends EntidadCatalogo> List<T> convertirArrayObjectToHBEntity(List<Object> listaHBObjects, Class<T> claseHB) {
+		List<T> lista = new ArrayList<>();
+		for (Object object : listaHBObjects) {
+			//try {
+				T entidadHB = (T) object;
+//				entidadHB.setId((String) object[0]);
+//				entidadHB.setDescripcion((String) object[1]);
+				lista.add(entidadHB);
+//			} catch (InstantiationException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IllegalAccessException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+		}
+		return lista;
 	}
 	
 }

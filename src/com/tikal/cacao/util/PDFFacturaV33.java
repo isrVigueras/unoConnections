@@ -79,10 +79,11 @@ public class PDFFacturaV33 {
 	private String descripcionUsoDeCFDI;
 	private String descripcionRegimenFiscal;
 	private String descripcionFormaDePago;
+	private String descripcionTipoCFDI;
 	
 	private Map<String,String> mapaFraccionArancelariaAConcepto;
 	
-	public PDFFacturaV33(String descripcionUsoDeCFDI, String descripcionRegimenFiscal, String descripcionFormaDePago) {
+	public PDFFacturaV33(String descripcionUsoDeCFDI, String descripcionRegimenFiscal, String descripcionFormaDePago, String descripcionTipoCFDI) {
 		fontHead.setColor(BaseColor.WHITE);
 		fontHeadConceptos.setColor(BaseColor.WHITE);
 		emptyCell.setBorderWidth(1);
@@ -99,6 +100,7 @@ public class PDFFacturaV33 {
 		this.descripcionUsoDeCFDI = descripcionUsoDeCFDI;
 		this.descripcionRegimenFiscal = descripcionRegimenFiscal;
 		this.descripcionFormaDePago = descripcionFormaDePago;
+		this.descripcionTipoCFDI = descripcionTipoCFDI;
 	}
 	
 	public Document getDocument() {
@@ -613,11 +615,21 @@ public class PDFFacturaV33 {
 		tablaUsoCFDIDatosFis.setWidthPercentage(100);
 		tablaUsoCFDIDatosFis.setWidths(new float[] { 40, 60 });
 
-		agregarCeldaConFondo("Uso de CFDI (Receptor)", fontHead, tablaUsoCFDIDatosFis, false);
+		agregarCeldaConFondo("Uso de CFDI (Receptor) y Tipo de CFDI", fontHead, tablaUsoCFDIDatosFis, false);
 		agregarCeldaConFondo("Otros datos fiscales", fontHead, tablaUsoCFDIDatosFis, false);
 
-		agregarCelda(comprobante.getReceptor().getUsoCFDI().getValor() + " " + this.descripcionUsoDeCFDI
-				, font3, tablaUsoCFDIDatosFis, false);
+		PdfPCell celdaUsoYTipoCFDI = new PdfPCell();
+		celdaUsoYTipoCFDI.setBorderWidth(1);
+		celdaUsoYTipoCFDI.setBorderColor(BaseColor.GRAY);
+		celdaUsoYTipoCFDI.setPadding(5);
+		Phrase fraseUsoYTipoCFDI = new Phrase();
+		Chunk chunkUsoCFDI = new Chunk(comprobante.getReceptor().getUsoCFDI().getValor() + " " + this.descripcionUsoDeCFDI, font3);
+		Chunk chunkTipoCFDI = new Chunk(comprobante.getTipoDeComprobante().getValor() + " " + this.descripcionTipoCFDI, font3);
+		fraseUsoYTipoCFDI.add(chunkUsoCFDI);
+		fraseUsoYTipoCFDI.add(Chunk.NEWLINE);
+		fraseUsoYTipoCFDI.add(chunkTipoCFDI);
+		celdaUsoYTipoCFDI.addElement(fraseUsoYTipoCFDI);
+		tablaUsoCFDIDatosFis.addCell(celdaUsoYTipoCFDI);
 
 		Phrase fraseDatosFiscales = new Phrase();
 		if (estatus.equals(Estatus.TIMBRADO)) { //TODO agregar caso de cancelado
@@ -759,10 +771,11 @@ public class PDFFacturaV33 {
 		String importeConLetra = NumberToLetterConverter.convertNumberToLetter(importeTotal, comprobante.getMoneda().getValor());
 		Chunk chunkImporteConLetra = new Chunk(importeConLetra, font3);
 		Phrase fraseImporteConLetra = new Phrase();
-		fraseImporteConLetra.add(chunkImporteConLetra);
-		if (!comprobante.getMoneda().getValor().contentEquals("MXN")) {
-			fraseImporteConLetra.add(Chunk.NEWLINE);
+		if (!comprobante.getReceptor().getRfc().contentEquals("XEXX010101000|")) {
+			//fraseImporteConLetra.add(Chunk.NEWLINE);
 			fraseImporteConLetra.add(new Chunk(importeLetraComExt, font3));
+		} else {
+			fraseImporteConLetra.add(chunkImporteConLetra);
 		}
 		PdfPCell celdaImporteConLetra = new PdfPCell();
 		// celdaImporteConLetra.setVerticalAlignment(Element.ALIGN_CENTER);

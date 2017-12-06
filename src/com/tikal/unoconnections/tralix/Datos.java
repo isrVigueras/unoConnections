@@ -293,7 +293,6 @@ public class Datos {
 		String[] values = reng.split("\\|");
 		this.trimear(values);
 		this.impuesto = values[1];
-		
 		//cambiar
 		String tsa = Float.toString(tasa);
 		tsa = tsa.replaceAll("," , "");

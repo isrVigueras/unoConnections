@@ -48,6 +48,7 @@ import com.tikal.cacao.model.RegistroBitacora;
 import com.tikal.cacao.model.Serial;
 import com.tikal.cacao.model.orm.FormaDePago;
 import com.tikal.cacao.model.orm.RegimenFiscal;
+import com.tikal.cacao.model.orm.TipoDeComprobante;
 import com.tikal.cacao.model.orm.UsoDeCFDI;
 import com.tikal.cacao.reporte.ReporteRenglon;
 import com.tikal.cacao.sat.cfd33.Comprobante;
@@ -99,6 +100,10 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 	@Autowired
 	@Qualifier("formaDePagoDAOH")
 	private SimpleHibernateDAO<FormaDePago> formaDePagoDAO;
+	
+	@Autowired
+	@Qualifier("tipoDeComprobanteDAOH")
+	private SimpleHibernateDAO<TipoDeComprobante> tipoDeComprobanteDAO;
 
 	@Override
 	public String registrarEmisor(String cadenaUrlCer, String cadenaUrlKey, String pwd, String rfc,
@@ -335,11 +340,12 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 			RegimenFiscal regimenFiscal = regimenFiscalDAO
 					.consultarPorId(cfdi.getEmisor().getRegimenFiscal().getValor());
 			FormaDePago formaDePago = formaDePagoDAO.consultar(cfdi.getFormaPago().getValor());
-			if (usoCFDIHB != null && regimenFiscal != null && formaDePago != null) {
+			TipoDeComprobante tipoDeComprobante = tipoDeComprobanteDAO.consultar(cfdi.getTipoDeComprobante().getValor());
+			if (usoCFDIHB != null && regimenFiscal != null && formaDePago != null && tipoDeComprobante != null) {
 				pdfFactura = new PDFFacturaV33(usoCFDIHB.getDescripcion(), regimenFiscal.getDescripcion(),
-						formaDePago.getDescripcion());
+						formaDePago.getDescripcion(), tipoDeComprobante.getDescripcion());
 			} else {
-				pdfFactura = new PDFFacturaV33("", "", "");
+				pdfFactura = new PDFFacturaV33("", "", "", "");
 			}
 
 			PdfWriter writer = PdfWriter.getInstance(pdfFactura.getDocument(), os);
@@ -392,11 +398,12 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 		UsoDeCFDI usoCFDIHB = usoDeCFDIDAO.consultarPorId(cfdi.getReceptor().getUsoCFDI().getValor());
 		RegimenFiscal regimenFiscal = regimenFiscalDAO.consultarPorId(cfdi.getEmisor().getRegimenFiscal().getValor());
 		FormaDePago formaDePago = formaDePagoDAO.consultar(cfdi.getFormaPago().getValor());
-		if (usoCFDIHB != null && regimenFiscal != null && formaDePago != null) {
+		TipoDeComprobante tipoDeComprobante = tipoDeComprobanteDAO.consultar(cfdi.getTipoDeComprobante().getValor());
+		if (usoCFDIHB != null && regimenFiscal != null && formaDePago != null && tipoDeComprobante != null) {
 			mailero = new EmailSender(usoCFDIHB.getDescripcion(), regimenFiscal.getDescripcion(),
-					formaDePago.getDescripcion());
+					formaDePago.getDescripcion(), tipoDeComprobante.getDescripcion());
 		} else {
-			mailero = new EmailSender("", "", "");
+			mailero = new EmailSender("", "", "", "");
 		}
 
 		Imagen imagen = imagenDAO.get(factura.getRfcEmisor());

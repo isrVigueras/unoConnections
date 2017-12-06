@@ -173,7 +173,8 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		}
 		c.setFormaPago(new C_FormaDePago(this.regresaClaveFormaDePago(f.getMetodoPago().toUpperCase())));
 		c.setMetodoPago(new C_MetodoDePago("PPD"));
-		if (f.getFormaPago().toLowerCase().contains("sola")) {
+		//if (f.getFormaPago().toLowerCase().contains("sola")) {
+		if (!c.getFormaPago().getValor().contentEquals("99")) {
 			c.setMetodoPago(new C_MetodoDePago("PUE"));
 		}
 
@@ -229,8 +230,8 @@ public class FacturacionMultipleServlet extends HttpServlet {
 				traslado.setImporte(Util.redondearBigD(new BigDecimal(con.getImporte().floatValue() * 0.16), 6));
 				traslado.setTasaOCuota(new BigDecimal(f.getTasa() / 100));
 			} else {
-				traslado.setImporte(Util.redondearBigD(new BigDecimal(0), 2));
-				traslado.setTasaOCuota(new BigDecimal(0));
+				traslado.setImporte(Util.redondearBigD(new BigDecimal(con.getImporte().floatValue() * 0.16), 2));
+				traslado.setTasaOCuota(new BigDecimal(f.getTasa() / 100));
 			}
 			traslado.setImpuesto(new C_Impuesto("002"));
 			traslado.setTipoFactor(new C_TipoFactor("Tasa"));
@@ -253,7 +254,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		if (tipo == 0) {
 			trasl.setTasaOCuota(Util.redondearBigD(new BigDecimal(f.getTasa() / 100), 6));
 		} else {
-			trasl.setTasaOCuota(Util.redondearBigD(new BigDecimal(0.0), 6));
+			trasl.setTasaOCuota(Util.redondearBigD(new BigDecimal(f.getTasa() / 100), 6));
 		}
 
 		trask.getTraslado().add(trasl);

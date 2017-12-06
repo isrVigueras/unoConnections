@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.tikal.cacao.dao.sql.SimpleHibernateDAO;
 import com.tikal.cacao.model.orm.FormaDePago;
+import com.tikal.cacao.util.Util;
 
 public class FormaDePagoHibernateDAOImpl extends AbstractDAOHibernate implements SimpleHibernateDAO<FormaDePago> {
 
@@ -19,10 +20,11 @@ public class FormaDePagoHibernateDAOImpl extends AbstractDAOHibernate implements
 	@Override
 	public List<FormaDePago> consultarTodos() {
 		this.sesion = this.sessionFactory.openSession();
-		String hql = "select fp.id, fp.descripcion from FormaDePago fp";
-		List<FormaDePago> listaFormasPago = this.sesion.createQuery(hql).list();
+		String hql = "from FormaDePago fp";
+		List<FormaDePago> listaResultado= this.sesion.createQuery(hql).list();
 		this.sesion.close();
-		return listaFormasPago;
+		//List<FormaDePago> listaFormasPago = Util.convertirArrayObjectToHBEntity(listaResultado, FormaDePago.class);
+		return listaResultado;
 	}
 
 	@Override

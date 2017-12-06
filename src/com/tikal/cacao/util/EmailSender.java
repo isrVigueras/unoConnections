@@ -19,6 +19,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.google.appengine.api.search.query.QueryParser.primitive_return;
 import com.google.apphosting.api.ApiProxy.OverQuotaException;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -33,14 +34,16 @@ public class EmailSender {
 	private String descripcionUsoDeCFDI;
 	private String descripcionRegimenFiscal;
 	private String descripcionFormaDePago;
+	private String descripcionTipoDeComprobante;
 	
 	public EmailSender() {
 	}
 	
-	public EmailSender(String descripcionUsoDeCFDI, String descripcionRegimenFiscal, String descripcionFormaDePago) {
+	public EmailSender(String descripcionUsoDeCFDI, String descripcionRegimenFiscal, String descripcionFormaDePago, String descripcionTipoDeComprobante) {
 		this.descripcionUsoDeCFDI = descripcionUsoDeCFDI;
 		this.descripcionRegimenFiscal = descripcionRegimenFiscal;
 		this.descripcionFormaDePago = descripcionFormaDePago;
+		this.descripcionTipoDeComprobante = descripcionTipoDeComprobante;
 	}
 
 	public void enviaEmail(String emailReceptor, String nombreReceptor, String pass) throws UnsupportedEncodingException {
@@ -154,7 +157,7 @@ public class EmailSender {
 			ByteArrayOutputStream os= new ByteArrayOutputStream();
 			//com.tikal.cacao.sat.cfd33.Comprobante cfdi = Util.unmarshallCFDI33XML(factura.getCfdiXML());
 			
-			PDFFacturaV33 pdfFactura = new PDFFacturaV33(this.descripcionUsoDeCFDI, this.descripcionRegimenFiscal, this.descripcionFormaDePago);
+			PDFFacturaV33 pdfFactura = new PDFFacturaV33(this.descripcionUsoDeCFDI, this.descripcionRegimenFiscal, this.descripcionFormaDePago, this.descripcionTipoDeComprobante);
 			PdfWriter writer= PdfWriter.getInstance(pdfFactura.getDocument(), os);
 			pdfFactura.getPieDePagina().setUuid(factura.getUuid());
 			

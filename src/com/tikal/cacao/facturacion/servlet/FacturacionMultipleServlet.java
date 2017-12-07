@@ -307,6 +307,12 @@ public class FacturacionMultipleServlet extends HttpServlet {
 	}
 
 	private String regresaClaveFormaDePago(String formaDePago) {
+		List<FormaDePago> listaFormaPago = formaDePagoDAO.consultarTodos();
+		for (FormaDePago formaDePagoHB : listaFormaPago) {
+			if ( formaDePago.toUpperCase().contains( formaDePagoHB.getDescripcion().toUpperCase() ) ) {
+				return formaDePagoHB.getId();
+			}
+		}
 		switch (formaDePago.toUpperCase()) {
 		case "EFECTIVO":
 			return "01";

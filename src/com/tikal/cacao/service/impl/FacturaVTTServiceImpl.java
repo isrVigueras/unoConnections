@@ -260,16 +260,18 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 		CancelaCFDIAckResponse cancelaCFDIAckResponse = webServiceClient33.getCancelaCFDIAckResponse(uuid, rfcEmisor);
 		List<Object> respuestaWB = cancelaCFDIAckResponse.getCancelaCFDIAckResult().getAnyType();
 		int codigoRespuesta = -1;
-		if (respuestaWB.get(6) instanceof Integer) {
-			codigoRespuesta = (int) respuestaWB.get(6);
-			
-			if (codigoRespuesta == 0) {
+		String strCodigoRespuesta = "";
+		if (respuestaWB.get(6) instanceof String) {
+			//codigoRespuesta = (int) respuestaWB.get(6);
+			strCodigoRespuesta = (String) respuestaWB.get(6);
+			if (strCodigoRespuesta.contentEquals("0")) {
+			//if (codigoRespuesta == 0) {
 				FacturaVTT facturaACancelar = facturaVTTDAO.consultar(uuid);
 				ReporteRenglon repRenglon = repRenglonDAO.consultar(uuid);
 				
 				String acuseXML = (String) respuestaWB.get(3);
 				StringBuilder stringBuilder = new StringBuilder(acuseXML);
-				stringBuilder.insert(99, " xmlns=\"http://cancelacfd.sat.gob.mx\" ");
+				stringBuilder.insert(106, " xmlns=\"http://cancelacfd.sat.gob.mx\" ");
 				String acuseXML2 = stringBuilder.toString();
 				facturaACancelar.setAcuseCancelacionXML(acuseXML2);
 				Acuse acuse = Util.unmarshallAcuseXML(acuseXML2);
@@ -285,7 +287,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 						e.printStackTrace();
 						return "";
 					}	
-				}
+				} 
 				
 				facturaACancelar.setEstatus(Estatus.CANCELADO);
 				repRenglon.setStatus(Estatus.CANCELADO.toString());
@@ -301,14 +303,23 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 			// ERROR EN LA CANCELACIÓN DEL CFDI
 			else {
 				RespuestaWebServicePersonalizada respPersonalizada = this.construirMensajeError(respuestaWB);
-				RegistroBitacora registroBitacora = Util.crearRegistroBitacora(sesion, "Operacional", respPersonalizada.getMensajeRespuesta() + " UUID:"+uuid);
+				RegistroBitacora registroBitacora = Util.crearRegistroBitacora(sesion, "Operacional", respPersonalizada.getMensajeRespuesta() + "Operación CancelaAck (codigoRespuesta != 0), UUID:"+uuid);
 				bitacoradao.addReg(registroBitacora);
 				return respPersonalizada.getMensajeRespuesta();
 			}
 		} 
 		else {
+			if (respuestaWB.get(6) instanceof  String) {
+				String strRespuesta = (String) respuestaWB.get(6); 
+				if (strRespuesta.contentEquals("0")) {
+					RespuestaWebServicePersonalizada respPersonalizada = this.construirMensaje(respuestaWB);
+					RegistroBitacora registroBitacora = Util.crearRegistroBitacora(sesion, "Operacional", respPersonalizada.getMensajeRespuesta() + " UUID:"+uuid);
+					bitacoradao.addReg(registroBitacora);
+					return respPersonalizada.getMensajeRespuesta();
+				}
+			}
 			RespuestaWebServicePersonalizada respPersonalizada = this.construirMensajeError(respuestaWB);
-			RegistroBitacora registroBitacora = Util.crearRegistroBitacora(sesion, "Operacional", respPersonalizada.getMensajeRespuesta() + " UUID:"+uuid);
+			RegistroBitacora registroBitacora = Util.crearRegistroBitacora(sesion, "Operacional", respPersonalizada.getMensajeRespuesta() + "Operación CancelaAck (codigoRespuesta no es Integer) UUID:"+uuid);
 			bitacoradao.addReg(registroBitacora);
 			return respPersonalizada.getMensajeRespuesta();
 		}
@@ -549,6 +560,21 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 
 		RespuestaWebServicePersonalizada respPersonalizada = new RespuestaWebServicePersonalizada();
 		respPersonalizada.setMensajeRespuesta(respuestaError.toString());
+		return respPersonalizada;
+	}
+	
+	private RespuestaWebServicePersonalizada construirMensaje(List<Object> respuestaWS) {
+		StringBuilder respuesta = new StringBuilder("Mensaje de respuesta: ");
+		respuesta.append(respuestaWS.get(0)+ "\r\n");
+		respuesta.append("Código de error: " + respuestaWS.get(1) + "\r\n");
+		respuesta.append("Mensaje de respuesta: " + respuestaWS.get(2) + "\r\n");
+		respuesta.append("XML : " + respuestaWS.get(3) + "\r\n");
+		respuesta.append("QRCode: " + respuestaWS.get(4) + "\r\n");
+		respuesta.append("Sello: " + respuestaWS.get(5) + "\r\n");
+		respuesta.append( respuestaWS.get(8) + "\r\n");
+		
+		RespuestaWebServicePersonalizada respPersonalizada = new RespuestaWebServicePersonalizada();
+		respPersonalizada.setMensajeRespuesta(respuesta.toString());
 		return respPersonalizada;
 	}
 

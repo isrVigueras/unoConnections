@@ -338,8 +338,10 @@ public class Datos {
 		} else {
 			this.tipoCambioUSD = tipoCambio + "";
 		}
-		if (!values[11].isEmpty()) {
+		if (!values[11].isEmpty() && !values[11].contentEquals("03")) {
 			this.totalUSD = values[11];
+		} else if (this.RFC.contentEquals("XEXX010101000")){
+			this.totalUSD = String.valueOf(this.total);
 		}
 	}
 

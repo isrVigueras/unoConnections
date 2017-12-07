@@ -174,30 +174,22 @@ public class Datos {
 		this.fecha_hora = values[4];
 		
 		//cambiar
-		String s = Float.toString(subtotal);
-		s = s.replaceAll("," , "");
-		this.subtotal = Float.parseFloat(values[5]);
+		this.subtotal = Float.parseFloat(values[5].replaceAll("," , ""));
 		
 		//cambiar
-		String t = Float.toString(total);
-		t = t.replaceAll("," , "");
-		this.total = Float.parseFloat(values[6]);
+		this.total = Float.parseFloat(values[6].replaceAll("," , ""));
 		
 		//cambiar
-		String it = Float.toString(impTrasladados);
-		it = it.replaceAll("," , "");
-		this.impTrasladados = Float.parseFloat(values[7]);
+		this.impTrasladados = Float.parseFloat(values[7].replaceAll("," , ""));
 		
 		//cambiar
-		String ir = Float.toString(impRetenidos);
-		ir = ir.replaceAll("," , "");
-		this.impRetenidos = Float.parseFloat(values[8]);
+		this.impRetenidos = Float.parseFloat(values[8].replaceAll("," , ""));
 		
 		this.totalLetra = values[9];
 		this.moneda = values[10];
 		if (!values[11].isEmpty()) {
-		//cambiar?
-			this.tipoCambio = Float.parseFloat(values[11]);
+		//cambiar
+			this.tipoCambio = Float.parseFloat(values[11].replaceAll("," , ""));
 		}
 		this.repVentas= values[13];
 		this.nPedido = values[15];
@@ -266,18 +258,18 @@ public class Datos {
 			d.setClave(values[1]);
 			
 			//cambiar
-			d.setCantidad(Float.parseFloat(values[2]));
+			d.setCantidad(Float.parseFloat(values[2].replaceAll("," , "")));
 			
 			d.setDescripcion(values[3]);
 			d.setFraccionArancelaria(values[8]);
 			
 			//cambiar
-			d.setImporte(Float.parseFloat(values[5]));
+			d.setImporte(Float.parseFloat(values[5].replaceAll("," , "")));
 			
 			d.setUnidadMed(values[7]);
 			
 			//cambiar
-			d.setValorUnit(Float.parseFloat(values[4]));
+			d.setValorUnit(Float.parseFloat(values[4].replaceAll("," , "")));
 			
 			this.conceptos.add(d);
 		} else {
@@ -293,15 +285,12 @@ public class Datos {
 		String[] values = reng.split("\\|");
 		this.trimear(values);
 		this.impuesto = values[1];
-		//cambiar
-		String tsa = Float.toString(tasa);
-		tsa = tsa.replaceAll("," , "");
-		this.tasa = Float.parseFloat(values[2]);
 		
 		//cambiar
-		String im = Float.toString(imp);
-		im = im.replaceAll("," , "");
-		this.imp = Float.parseFloat(values[3]);
+		this.tasa = Float.parseFloat(values[2].replaceAll("," , ""));
+		
+		//cambiar
+		this.imp = Float.parseFloat(values[3].replaceAll("," , ""));
 	}
 
 	private void parsea09(String reng) {
@@ -317,10 +306,6 @@ public class Datos {
 		String[] values = reng.split("\\|");
 		this.trimear(values);
 		if (!values[2].isEmpty()) {
-			
-			//cambiar
-			String tipo = Float.toString(tipoOpe);
-			tipo = tipo.replaceAll("," , "");
 			this.tipoOpe = Integer.parseInt(values[2]);
 		}
 		if (!values[3].isEmpty()) {

@@ -210,27 +210,32 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			if(conce==null){
 				return "No se encontró el concepto: "+d.getClave();
 			}
-			con.setCantidad(new BigDecimal(d.getCantidad()));
+			con.setCantidad(Util.redondearBigD(new BigDecimal(d.getCantidad()), 3));
 			con.setClaveProdServ(conce.getClaveProdServ());
 			con.setUnidad(d.getUnidadMed());
 			con.setClaveUnidad(new C_ClaveUnidad(conce.getClaveUnidad()));
 			con.setClaveProdServ(conce.getClaveProdServ());
 			con.setDescripcion(d.getDescripcion());
 			con.setValorUnitario(new BigDecimal(d.getValorUnit()));
-			con.setImporte(Util.redondearBigD(new BigDecimal(d.getImporte()), 6));
+			con.setImporte(Util.redondearBigD(new BigDecimal(d.getImporte()), 2));
 			con.setNoIdentificacion(d.getClave());
 			
-			d.setUnidadAduana(conce.getUnidadAduana());
+			if (conce.getUnidadAduana() != null) {
+				d.setUnidadAduana(conce.getUnidadAduana());
+			} else if (f.getRFC().compareTo("XEXX010101000") == 0) {
+				return "No se encontró la unidad de aduana en el concepto " + con.getNoIdentificacion();
+			}
+			
 
 			Comprobante.Conceptos.Concepto.Impuestos impuestos = new Comprobante.Conceptos.Concepto.Impuestos();
 			Comprobante.Conceptos.Concepto.Impuestos.Traslados traslados = new Comprobante.Conceptos.Concepto.Impuestos.Traslados();
 			Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado traslado = new Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado();
 			traslado.setBase(con.getImporte());
 			if (tipo == 0) {
-				traslado.setImporte(Util.redondearBigD(new BigDecimal(con.getImporte().floatValue() * 0.16), 6));
+				traslado.setImporte(Util.redondearBigD(new BigDecimal(con.getImporte().floatValue() * 0.16), 2)); // cambio de decimales 6 a 2
 				traslado.setTasaOCuota(new BigDecimal(f.getTasa() / 100));
 			} else {
-				traslado.setImporte(Util.redondearBigD(new BigDecimal(con.getImporte().floatValue() * 0.16), 2));
+				traslado.setImporte(Util.redondearBigD(new BigDecimal(con.getImporte().floatValue() * f.getTasa()), 2));
 				traslado.setTasaOCuota(new BigDecimal(f.getTasa() / 100));
 			}
 			traslado.setImpuesto(new C_Impuesto("002"));
@@ -248,13 +253,15 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		c.setConceptos(conceptos);
 		Comprobante.Impuestos.Traslados trask = new Comprobante.Impuestos.Traslados();
 		Comprobante.Impuestos.Traslados.Traslado trasl = new Comprobante.Impuestos.Traslados.Traslado();
-		trasl.setImporte(Util.redondearBigD(new BigDecimal(f.getImp()), 6));
+		BigDecimal importeTras = new BigDecimal( Util.redondear( f.getImp() ) );
+		importeTras = Util.redondearBigD(importeTras, 2);
+		trasl.setImporte(Util.redondearBigD(importeTras, 6));
 		trasl.setImpuesto(new C_Impuesto("002"));
 		trasl.setTipoFactor(new C_TipoFactor("Tasa"));
 		if (tipo == 0) {
-			trasl.setTasaOCuota(Util.redondearBigD(new BigDecimal(f.getTasa() / 100), 6));
+			trasl.setTasaOCuota( Util.redondearBigD( new BigDecimal(f.getTasa() / 100), 6));
 		} else {
-			trasl.setTasaOCuota(Util.redondearBigD(new BigDecimal(f.getTasa() / 100), 6));
+			trasl.setTasaOCuota( Util.redondearBigD( new BigDecimal(f.getTasa() / 100), 6));
 		}
 
 		trask.getTraslado().add(trasl);
@@ -269,6 +276,11 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		c.setTotal(Util.redondearBigD(new BigDecimal(f.getTotal()), 2));
 		c.setSubTotal(Util.redondearBigD(new BigDecimal(f.getSubtotal()), 2));
 
+		BigDecimal sumaTotal = c.getSubTotal().add( c.getImpuestos().getTotalImpuestosTrasladados() );
+		if (c.getTotal().compareTo(sumaTotal) != 0) {
+			c.setTotal(sumaTotal);
+		}
+		
 		if (tipo == 2) {
 			this.agregarComercioExterno(c, f);
 		}

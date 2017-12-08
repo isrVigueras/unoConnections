@@ -207,6 +207,9 @@ public class Datos {
 		this.trimear(values);
 		this.condPago = values[1];
 		this.metodoPago = values[2];
+		if (this.metodoPago.toUpperCase().contains("TRANSFERENCIA")) {
+			this.metodoPago = "TRANSFERENCIA ELECTRÓNICA DE FONDOS";
+		}
 		this.formaPago = values[3];
 	}
 

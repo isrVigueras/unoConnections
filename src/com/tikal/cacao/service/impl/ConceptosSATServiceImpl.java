@@ -36,8 +36,13 @@ public class ConceptosSATServiceImpl implements ConceptoSATService {
 		String descripcionProdServ;
 		String claveClase = "";
 		//String claveClaseAux = "";
+		ListaDeClasesDeProdServ lista = listaDeClavesDeClasesDAO.obtener(rfc);
 		ListaDeClasesDeProdServ listaDeClasesDeProdServ = new ListaDeClasesDeProdServ();
 		listaDeClasesDeProdServ.setIdRFC(rfc);
+		if (lista != null) {
+			listaDeClasesDeProdServ.getListaClavesClases().addAll(lista.getListaClavesClases());
+		}
+		
 		
 		for (Object[] object : listaPS) {
 			claveProdServ = (String) object[0];

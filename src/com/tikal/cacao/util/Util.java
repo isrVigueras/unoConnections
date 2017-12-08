@@ -279,6 +279,10 @@ public class Util {
 		return redondearBigD(cantidad).doubleValue();
 	}
 	
+	public static float redondear(float cantidad) {
+		return BigDecimal.valueOf(cantidad).setScale(2, RoundingMode.HALF_UP).floatValue();
+	}
+	
 	public static double truncar(double cantidad) {
 		BigDecimal bigD = BigDecimal.valueOf(cantidad).setScale(0, RoundingMode.DOWN);
 		return bigD.doubleValue();

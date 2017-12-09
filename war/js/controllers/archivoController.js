@@ -245,7 +245,7 @@ app.controller('archivoController',['$scope','archivoService','fileService', '$c
 	}
 	
 	$scope.eliminar=function(fr){
-		$http.post("facturacion/eliminarFR",f).then(function(data){
+		$http.post("facturacion/eliminarFR",fr).then(function(data){
 			alert("Registro eliminado");
 			$window.location.reload();
 		})

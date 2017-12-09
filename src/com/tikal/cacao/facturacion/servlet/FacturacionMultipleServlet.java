@@ -129,11 +129,11 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			if (respuesta.compareTo("¡La factura se timbró con éxito!") == 0) {
 				datosdao.elimiar(fr);
 			} else {
-				if(respuesta.startsWith("No se encontró")){
+				
 					fr.setPausada(true);
 					fr.setError(respuesta);
 					datosdao.guardar(fr);
-				}
+				
 			}
 		}
 		response.getWriter().print("OK");

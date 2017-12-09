@@ -68,6 +68,7 @@ import com.tikal.cacao.util.EmailSender;
 import com.tikal.cacao.util.JsonConvertidor;
 import com.tikal.cacao.util.PDFFactura;
 import com.tikal.cacao.util.Util;
+import com.tikal.unoconnections.exception.DatosTxtException;
 import com.tikal.unoconnections.tralix.Datos;
 
 import localhost.CancelaCFDIAckResponse;
@@ -149,9 +150,18 @@ public class FacturaController {
  		String[] args = json.split("CADENADEESCAPE");
  		List<Datos> lista= new ArrayList<Datos>();
  		for(String arg:args){
- 			Datos datos = new Datos(arg);
- 			datos.setRfcEmisor(rfc);
- 			lista.add(datos);
+ 			try {
+ 				Datos datos = new Datos(arg);
+ 	 			datos.setRfcEmisor(rfc);
+ 	 			lista.add(datos);
+ 			} catch (DatosTxtException e) {
+ 				Datos datosConExcepetion = new Datos();
+ 				datosConExcepetion.setRfcEmisor(rfc);
+ 				datosConExcepetion.setError(e.getMessage());
+ 				datosConExcepetion.setPausada(true);
+ 				lista.add(datosConExcepetion);
+ 			}
+ 			
  		}
 
  		datosdao.guardar(lista);

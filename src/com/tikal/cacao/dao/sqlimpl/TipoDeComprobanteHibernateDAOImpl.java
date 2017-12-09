@@ -16,7 +16,7 @@ public class TipoDeComprobanteHibernateDAOImpl extends AbstractDAOHibernate impl
 	}
 
 	@Override
-	public TipoDeComprobante consultar(String id) {
+	public synchronized TipoDeComprobante consultar(String id) {
 		super.sesion = super.sessionFactory.openSession();
 		TipoDeComprobante tipoDeComprobante = (TipoDeComprobante) super.sesion.get(TipoDeComprobante.class, id);
 		if (super.sesion.isConnected()) {

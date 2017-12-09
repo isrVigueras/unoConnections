@@ -7,6 +7,8 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.tikal.cacao.model.Direccion;
+import com.tikal.cacao.util.Util;
+import com.tikal.unoconnections.exception.DatosTxtException;
 
 @Entity
 public class Datos {
@@ -103,7 +105,7 @@ public class Datos {
 
 	}
 
-	public Datos(String info) {
+	public Datos(String info) throws DatosTxtException {
 		this.setConceptos(new ArrayList<DatosConcepto>());
 		this.pausada=false;
 		String[] rengs = info.split("\n");
@@ -209,6 +211,8 @@ public class Datos {
 		this.metodoPago = values[2];
 		if (this.metodoPago.toUpperCase().contains("TRANSFERENCIA")) {
 			this.metodoPago = "TRANSFERENCIA ELECTRÓNICA DE FONDOS";
+		} else if (this.metodoPago.toUpperCase().contains("OTROS")) {
+			this.metodoPago = "POR DEFINIR";
 		}
 		this.formaPago = values[3];
 	}
@@ -236,6 +240,9 @@ public class Datos {
 		}
 		if (!values[9].isEmpty()) {
 			direccion.setEstado(values[9].split(" ")[1]);
+			if (direccion.getEstado().length() > 3) {
+				direccion.setEstado(values[9].split(",")[1].trim().split(" ")[0]); // El txt tiene que modificarse para agregar una coma entre la ciudad y el estado
+			}
 		}
 
 	}
@@ -252,7 +259,7 @@ public class Datos {
 	
 	}
 	
-	private void parsea05(String reng) {
+	private void parsea05(String reng) throws DatosTxtException {
 		String[] values = reng.split("\\|");
 		this.trimear(values);
 		String id = values[1];
@@ -264,10 +271,16 @@ public class Datos {
 			d.setCantidad(Float.parseFloat(values[2].replaceAll("," , "")));
 			
 			d.setDescripcion(values[3]);
-			d.setFraccionArancelaria(values[8]);
+			if (values[8] != null && !values[8].contentEquals("")) {
+				d.setFraccionArancelaria(values[8]);
+			} else if (this.RFC.contentEquals("XEXX010101000")) {
+				throw new DatosTxtException("El concepto de exportación" + d.getClave() + " no tiene fracción arancelaria. " +
+						"Factura : " + this.serie + this.folio + ".\n\r" + " Debe borrar el registro y volver a subir el archivo .txt");
+			}
+			
 			
 			//cambiar
-			d.setImporte(Float.parseFloat(values[5].replaceAll("," , "")));
+			d.setImporte( Util.redondear( Float.parseFloat(values[5].replaceAll("," , "")) ) );
 			
 			d.setUnidadMed(values[7]);
 			
@@ -341,7 +354,7 @@ public class Datos {
 		} else {
 			this.tipoCambioUSD = tipoCambio + "";
 		}
-		if (!values[11].isEmpty() && !values[11].contentEquals("03")) {
+		if (!values[11].isEmpty() && !values[11].contentEquals("03") && values[11].contentEquals(this.total+"")) {
 			this.totalUSD = values[11];
 		} else if (this.RFC.contentEquals("XEXX010101000")){
 			this.totalUSD = String.valueOf(this.total);

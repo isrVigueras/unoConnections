@@ -15,7 +15,7 @@ public class UsoDeCFDIDAOHibernateImpl extends AbstractDAOHibernate implements U
 	}
 
 	@Override
-	public UsoDeCFDI consultarPorId(String id) {
+	public synchronized UsoDeCFDI consultarPorId(String id) {
 		super.sesion = super.sessionFactory.openSession();
 		UsoDeCFDI usoDeCFDI = (UsoDeCFDI) super.sesion.get(UsoDeCFDI.class, id);
 		if (super.sesion.isConnected()) {

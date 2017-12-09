@@ -28,7 +28,7 @@ public class FormaDePagoHibernateDAOImpl extends AbstractDAOHibernate implements
 	}
 
 	@Override
-	public FormaDePago consultar(String id) {
+	public synchronized FormaDePago consultar(String id) {
 		super.sesion = super.sessionFactory.openSession();
 		FormaDePago formaDePago = (FormaDePago) super.sesion.get(FormaDePago.class, id);
 		if (super.sesion.isConnected()) {

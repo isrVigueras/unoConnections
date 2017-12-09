@@ -16,7 +16,7 @@ public class RegimenFiscalDAOHibernateImpl extends AbstractDAOHibernate implemen
 	}
 
 	@Override
-	public RegimenFiscal consultarPorId(String id) {
+	public synchronized RegimenFiscal consultarPorId(String id) {
 		super.sesion = super.sessionFactory.openSession();
 		RegimenFiscal regimenFiscal = (RegimenFiscal) super.sesion.get(RegimenFiscal.class, id);
 		if (super.sesion.isConnected()) {

@@ -216,7 +216,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			con.setClaveUnidad(new C_ClaveUnidad(conce.getClaveUnidad()));
 			con.setClaveProdServ(conce.getClaveProdServ());
 			con.setDescripcion(d.getDescripcion());
-			con.setValorUnitario(new BigDecimal(d.getValorUnit()));
+			con.setValorUnitario(Util.redondearBigD(new BigDecimal(d.getValorUnit()), 4));
 			con.setImporte(Util.redondearBigD(new BigDecimal(d.getImporte()), 2));
 			con.setNoIdentificacion(d.getClave());
 			

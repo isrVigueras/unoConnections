@@ -386,8 +386,12 @@ public class Util {
 	
 	
 	public static XMLGregorianCalendar getXMLDate(Date date, FormatoFecha formato) {
-    	GregorianCalendar c = new GregorianCalendar();
-    	c.setTime(date);
+    	GregorianCalendar c = new GregorianCalendar(TimeZone.getTimeZone("America/Mexico_City"));
+    	Date dateMexico = c.getTime();
+    	System.out.println(dateMexico);
+    	if (!date.after(dateMexico)) {
+    		c.setTime(date);
+    	}
     	XMLGregorianCalendar date2 = null;
     	try {
 	    	switch (formato) {

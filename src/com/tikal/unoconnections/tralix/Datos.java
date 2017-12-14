@@ -92,6 +92,7 @@ public class Datos {
 
 	// #99
 	private int numLineas;
+	private String usoCFDI;
 	
 	private String error;
 	
@@ -161,6 +162,7 @@ public class Datos {
 				String[] values = reng.split("\\|");
 				this.trimear(values);
 				this.numLineas = Integer.parseInt(values[1]);
+				this.usoCFDI = values[2].split("-")[0].trim();
 			}
 			}
 
@@ -241,8 +243,11 @@ public class Datos {
 		if (!values[9].isEmpty()) {
 			direccion.setEstado(values[9].split(" ")[1]);
 			if (direccion.getEstado().length() > 3) {
-				direccion.setEstado(values[9].split(",")[1].trim().split(" ")[0]); // El txt tiene que modificarse para agregar una coma entre la ciudad y el estado
+				if (values[9].contains(",")) {
+					direccion.setEstado(values[9].split(",")[1].trim().split(" ")[0]); // El txt tiene que modificarse para agregar una coma entre la ciudad y el estado
+				}
 			}
+				
 		}
 
 	}
@@ -271,6 +276,8 @@ public class Datos {
 			d.setCantidad(Float.parseFloat(values[2].replaceAll("," , "")));
 			
 			d.setDescripcion(values[3]);
+			d.setDescripcion( d.getDescripcion().
+					replace("LOS BIENES QUE AMPARA ESTA FACTURA SON PAGADOS EN UNA SOLA EXHIBICIÓN", ""));
 			if (values[8] != null && !values[8].contentEquals("")) {
 				d.setFraccionArancelaria(values[8]);
 			} else if (this.RFC.contentEquals("XEXX010101000")) {
@@ -293,6 +300,8 @@ public class Datos {
 			String desc = d.getDescripcion();
 			desc += " " + values[3];
 			d.setDescripcion(desc);
+			d.setDescripcion( d.getDescripcion().
+					replace(" LOS BIENES QUE AMPARA ESTA FACTURA SON PAGADOS EN UNA SOLA EXHIBICIÓN", ""));
 		}
 
 	}
@@ -549,6 +558,14 @@ public class Datos {
 
 	public void setFormaPago(String formaPago) {
 		this.formaPago = formaPago;
+	}
+
+	public String getUsoCFDI() {
+		return usoCFDI;
+	}
+
+	public void setUsoCFDI(String usoCFDI) {
+		this.usoCFDI = usoCFDI;
 	}
 
 	public String getRFC() {

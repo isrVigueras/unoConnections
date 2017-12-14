@@ -30,42 +30,44 @@ public class ConceptosSATServiceImpl implements ConceptoSATService {
 	
 	@Override
 	public void generarConceptos(String rfc, Object[][] listaPS) {
-		Concepto conceptoSAT = null;
-		List<Concepto> listaC = new ArrayList<>();
-		String claveProdServ;
-		String descripcionProdServ;
-		String claveClase = "";
-		//String claveClaseAux = "";
-		ListaDeClasesDeProdServ lista = listaDeClavesDeClasesDAO.obtener(rfc);
-		ListaDeClasesDeProdServ listaDeClasesDeProdServ = new ListaDeClasesDeProdServ();
-		listaDeClasesDeProdServ.setIdRFC(rfc);
-		if (lista != null) {
-			listaDeClasesDeProdServ.getListaClavesClases().addAll(lista.getListaClavesClases());
-		}
-		
-		
-		for (Object[] object : listaPS) {
-			claveProdServ = (String) object[0];
-			descripcionProdServ = (String) object[1];
-			if (claveClase.equals("") ) {
-				claveClase = claveProdServ.substring(0, 6);
-			} 
-			
-			if (!listaDeClasesDeProdServ.getListaClavesClases().contains(claveClase)) {
-				listaDeClasesDeProdServ.getListaClavesClases().add(claveClase);
+		if (listaPS != null) {
+			Concepto conceptoSAT = null;
+			List<Concepto> listaC = new ArrayList<>();
+			String claveProdServ;
+			String descripcionProdServ;
+			String claveClase = "";
+			//String claveClaseAux = "";
+			ListaDeClasesDeProdServ lista = listaDeClavesDeClasesDAO.obtener(rfc);
+			ListaDeClasesDeProdServ listaDeClasesDeProdServ = new ListaDeClasesDeProdServ();
+			listaDeClasesDeProdServ.setIdRFC(rfc);
+			if (lista != null) {
+				listaDeClasesDeProdServ.getListaClavesClases().addAll(lista.getListaClavesClases());
 			}
 			
-			conceptoSAT = new Concepto();
-			conceptoSAT.setNoIdentificacion(claveProdServ);
-			conceptoSAT.setDescripcion(descripcionProdServ);
-			conceptoSAT.setClaveProdServ(claveProdServ);
-			conceptoSAT.setDescripcionSAT(descripcionProdServ);
-			listaC.add(conceptoSAT);
 			
-			
+			for (Object[] object : listaPS) {
+				claveProdServ = (String) object[0];
+				descripcionProdServ = (String) object[1];
+				if (claveClase.equals("") ) {
+					claveClase = claveProdServ.substring(0, 6);
+				} 
+				
+				if (!listaDeClasesDeProdServ.getListaClavesClases().contains(claveClase)) {
+					listaDeClasesDeProdServ.getListaClavesClases().add(claveClase);
+				}
+				
+				conceptoSAT = new Concepto();
+				conceptoSAT.setNoIdentificacion(claveProdServ);
+				conceptoSAT.setDescripcion(descripcionProdServ);
+				conceptoSAT.setClaveProdServ(claveProdServ);
+				conceptoSAT.setDescripcionSAT(descripcionProdServ);
+				listaC.add(conceptoSAT);
+				
+				
+			}
+			conceptosDAO.add(rfc, listaC);
+			listaDeClavesDeClasesDAO.guardar(listaDeClasesDeProdServ);
 		}
-		conceptosDAO.add(rfc, listaC);
-		listaDeClavesDeClasesDAO.guardar(listaDeClasesDeProdServ);
 	}
 
 	@Override

@@ -59,7 +59,17 @@ public enum C_TipoRelacion {
     
     /** Factura generada por los traslados previos */
     @XmlEnumValue("06")
-    VALUE_6("06");
+    VALUE_6("06"),
+    
+    @XmlEnumValue("07")
+    CFDI_POR_APLICACION_DE_ANTICIPO("07"),
+    
+    @XmlEnumValue("08")
+    FACTURA_GENERADA_POR_PAGOS_EN_PARCIALIDADES("08"),
+    
+    @XmlEnumValue("09")
+    FACTURA_GENERADA_POR_PAGOS_DIFERIDOS("09");
+    
     private final String value;
 
     C_TipoRelacion(String v) {

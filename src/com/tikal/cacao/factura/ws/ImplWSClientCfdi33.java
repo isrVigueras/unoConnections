@@ -37,24 +37,24 @@ public class ImplWSClientCfdi33 extends WSClientCfdi33 {
 	private String usuarioIntegrador;
 	
 	public ImplWSClientCfdi33() {
-//		if(Util.detectarAmbienteProductivo()) {
-//			uri = "https://timbracfdi33.mx:1443/Timbrado.asmx";
-//			usuarioIntegrador = "SSaC3HanfgtTGP+gChvWNg==";
-//			this.getWebServiceTemplate().getMessageSenders()[0] = this.crearMessageSender();
-//		} else {
+		if(Util.detectarAmbienteProductivo()) {
+			uri = "https://timbracfdi33.mx:1443/Timbrado.asmx";
+			usuarioIntegrador = "SSaC3HanfgtTGP+gChvWNg==";
+			this.getWebServiceTemplate().getMessageSenders()[0] = this.crearMessageSender();
+		} else {
 			uri = "https://cfdi33-pruebas.buzoncfdi.mx:1443/Timbrado.asmx";
 			usuarioIntegrador = "mvpNUXmQfK8=";
-//		}
+		}
 	}
 
 	@Override
-	public RegistraEmisorResponse getRegistraEmisorResponse(String rfcEmisor, String pass, InputStream cer, InputStream ker) {
+	public RegistraEmisorResponse getRegistraEmisorResponse(String rfcEmisor, String pass, InputStream cer, InputStream key) {
 		RegistraEmisor request = of.createRegistraEmisor();
 		request.setUsuarioIntegrador(getUsuarioIntegrador());
-		request.setRfcEmisor(getRfcEmisor());
-		request.setBase64Cer(getBase64("WEB-INF/aaa010101aaa__csd_01.cer"));
-		request.setBase64Key(getBase64("WEB-INF/aaa010101aaa__csd_01.key"));
-		request.setContrasena(getContraseña());
+		request.setRfcEmisor(rfcEmisor);
+		request.setBase64Cer(getByteArrayBase64(cer));
+		request.setBase64Key(getByteArrayBase64(key));
+		request.setContrasena(pass);
 		
 		RegistraEmisorResponse response = (RegistraEmisorResponse) getWebServiceTemplate()
 				.marshalSendAndReceive(uri,
@@ -140,7 +140,7 @@ public class ImplWSClientCfdi33 extends WSClientCfdi33 {
 	public ObtieneCFDIResponse getObtieneCFDIResponse(String uuid, String rfcEmisor) {
 		ObtieneCFDI request = of.createObtieneCFDI();
 		request.setUsuarioIntegrador(getUsuarioIntegrador());
-		request.setRfcEmisor(getRfcEmisor());
+		request.setRfcEmisor(rfcEmisor);
 		request.setFolioUUID(uuid);
 		
 		ObtieneCFDIResponse response = 
@@ -167,10 +167,14 @@ public class ImplWSClientCfdi33 extends WSClientCfdi33 {
 	
 	private HttpComponentsMessageSender crearMessageSender() {
 		HttpComponentsMessageSender messageSender = new HttpComponentsMessageSender();
-		messageSender.setConnectionTimeout(60000);
-		messageSender.setReadTimeout(60000);
+		messageSender.setConnectionTimeout(70000);
+		messageSender.setReadTimeout(70000);
 		//messageSender.
 		return messageSender;
+	}
+	
+	private String getByteArrayBase64(InputStream inputStream) {
+		return base64.encodeByteArrayIS(inputStream);
 	}
 	
 	private String getFolioUUID() {

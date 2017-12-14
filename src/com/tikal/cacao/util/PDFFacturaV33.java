@@ -518,7 +518,8 @@ public class PDFFacturaV33 {
 		PdfPTable subtablaVendidoA = new PdfPTable(1);
 		this.agregarCeldaConFondo("VENDIDO A (SOLD TO): ", fontHead, subtablaVendidoA, true);
 		Phrase fraseVendidoA = new Phrase();
-		this.agregarChunkYNuevaLinea("Clave " + datosExtra.getIdCliente() + " - " + cfdi.getFolio(), font3, fraseVendidoA);
+		String numRegIdFiscal = ( cfdi.getReceptor().getNumRegIdTrib() != null ? cfdi.getReceptor().getNumRegIdTrib() : "");
+		this.agregarChunkYNuevaLinea("Clave " + datosExtra.getIdCliente() + " - " + cfdi.getFolio() + " - " + numRegIdFiscal, font3, fraseVendidoA);
 		this.agregarChunkYNuevaLinea(cfdi.getReceptor().getNombre(), font3, fraseVendidoA);
 		//		String numRegIdFis = complementoComExt.getReceptor().getNumRegIdTrib();
 //		this.agregarChunkYNuevaLinea("Número de identificación o registro fiscal: " + ((numRegIdFis != null) ? numRegIdFis : ""), font3, fraseVendidoA);

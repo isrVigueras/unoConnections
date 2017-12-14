@@ -3,6 +3,7 @@ package com.tikal.cacao.facturacion.servlet;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -157,13 +158,19 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		}
 		receptor.setNombre(f.getNombreReceptor());
 		receptor.setRfc(f.getRFC());
-		receptor.setUsoCFDI(new C_UsoCFDI("P01"));
+		receptor.setUsoCFDI(new C_UsoCFDI(f.getUsoCFDI()));
 		receptor.setResidenciaFiscal(new com.tikal.cacao.sat.cfd.catalogos.dyn.C_Pais(f.getPais()));
 
 		// receptor.setDomicilio(recept.getDomicilio());
 		c.setReceptor(receptor);
 		c.setVersion("3.3");
-		c.setFecha(Util.getXMLDate(new Date(), FormatoFecha.COMPROBANTE));
+		Date fechaTxt = Util.obtenerFecha(f.getFecha_Hora(), new SimpleDateFormat("yyyy/MM/dd'T'HH:mm:ss"));
+		if (fechaTxt != null) {
+			c.setFecha(Util.getXMLDate(fechaTxt, FormatoFecha.COMPROBANTE));
+		} else {
+			c.setFecha(Util.getXMLDate(new Date(), FormatoFecha.COMPROBANTE));
+		}
+		
 
 		c.setLugarExpedicion(new C_CodigoPostal(empresa.getDireccion().getCodigoPostal()));
 		if (tipo != 1) {

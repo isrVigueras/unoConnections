@@ -26,6 +26,7 @@ import com.tikal.cacao.sat.cfd.catalogos.dyn.comext.C_Colonia;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.comext.C_FraccionArancelaria;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.comext.C_Localidad;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.comext.C_Municipio;
+import com.tikal.cacao.util.Util;
 import com.tikal.cacao.util.xmladapters.C_CodigoPostalAdapter;
 import com.tikal.cacao.util.xmladapters.C_ColoniaAdapter;
 import com.tikal.cacao.util.xmladapters.C_FraccionArancelariaAdapter;
@@ -2878,10 +2879,10 @@ public class ComercioExterior {
             @Override
             public String toString() {
             	StringBuilder stringBuilder = new StringBuilder();
-            	stringBuilder.append(numeroExterior+" ");
-            	stringBuilder.append(calle+" ");
-            	stringBuilder.append(estado+ " ");
-            	stringBuilder.append(codigoPostal+" ");
+            	stringBuilder.append(Util.regresaTextoOCadenaVacia(numeroExterior)+" ");
+            	stringBuilder.append(Util.regresaTextoOCadenaVacia(calle)+" ");
+            	stringBuilder.append(Util.regresaTextoOCadenaVacia(estado)+ " ");
+            	stringBuilder.append(Util.regresaTextoOCadenaVacia(codigoPostal)+" ");
             	stringBuilder.append(pais+" ");
             	return stringBuilder.toString();
             }

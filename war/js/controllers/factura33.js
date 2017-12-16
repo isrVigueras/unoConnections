@@ -251,6 +251,7 @@ app.service("comprobanteService33", ['$http','$q',function($http,$q) {
 			serieFolioFiscalOrig : null,
 			fechaFolioFiscalOrig : null,
 			montoFolioFiscalOrig : null,
+			cfdiRelacionados : null,
 
 			emisor : {
 				rfc : null, //hardcode para Web Service de pruebas
@@ -946,6 +947,16 @@ app.controller("comprobante33", [ '$scope', '$location', 'comprobanteService33',
 				$scope.comprobante.folio = $scope.serialElegido.folio;
 				if($scope.comentarios==null){
 					$scope.comentarios=="";
+				}
+				if ($scope.aplicaCFDIRelacionado) {
+					var cfdiRelacionadoAux = {
+							uuid : $scope.uuidRelacionado
+					}
+					$scope.comprobante.cfdiRelacionados = {
+							cfdiRelacionado : [],
+							tipoRelacion : $scope.claveTipoRelacion
+					}
+					$scope.comprobante.cfdiRelacionados.cfdiRelacionado.push(cfdiRelacionadoAux);
 				}
 				var send ={
 						comentarios: $scope.comentarios,

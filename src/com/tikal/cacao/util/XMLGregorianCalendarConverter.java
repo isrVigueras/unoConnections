@@ -1,6 +1,7 @@
 package com.tikal.cacao.util;
 
 import java.lang.reflect.Type;
+import java.util.Date;
 
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
@@ -13,6 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.tikal.cacao.factura.FormatoFecha;
 
 /**
  * @author Tikal
@@ -52,10 +54,8 @@ public class XMLGregorianCalendarConverter {
             		JsonPrimitive obj = jsonElement.getAsJsonPrimitive();
             		if (obj.isString()) {
             			String strFecha = obj.getAsString();
-            			XMLGregorianCalendar xmlGregCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(strFecha);
-            			xmlGregCalendar.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
-            			xmlGregCalendar.setFractionalSecond(null);
-            			xmlGregCalendar.setHour(xmlGregCalendar.getHour()-6);
+            			Date fecha = Util.obtenerFecha(strFecha);
+            			XMLGregorianCalendar xmlGregCalendar = Util.getXMLDate(fecha, FormatoFecha.COMPROBANTE);
             			return xmlGregCalendar;
             		} else 
             			return null;

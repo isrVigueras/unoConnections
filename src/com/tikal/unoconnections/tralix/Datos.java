@@ -162,7 +162,19 @@ public class Datos {
 				String[] values = reng.split("\\|");
 				this.trimear(values);
 				this.numLineas = Integer.parseInt(values[1]);
-				this.usoCFDI = values[2].split("-")[0].trim();
+				if (values.length >= 3) {
+					this.usoCFDI = values[2].split("-")[0].trim();
+					if (this.usoCFDI.length() < 3) {
+						throw new DatosTxtException("¡Advertencia! No se indica el Uso de CFDI. "
+								+ "Debe eliminar este registro y volver a cargar el archivo con el Uso de CFDI. "
+								+ "Factura: " + this.getSerie() + this.getFolio());
+					}
+				} else {
+					throw new DatosTxtException("¡Advertencia! No se indica el Uso de CFDI. "
+							+ "Debe eliminar este registro y volver a cargar el archivo con el Uso de CFDI. "
+							+ "Factura: " + this.getSerie() + this.getFolio());
+				}
+				
 			}
 			}
 

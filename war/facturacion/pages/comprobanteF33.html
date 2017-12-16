@@ -184,8 +184,47 @@
 						</div>
 					</div>
 				</div>
+				
 			</div>
-			<div class="row"></div>
+			
+			<div class="row">
+				<div class="col-md-2">
+					<div class="checkbox">
+						<label for=chbxCFDIRelacionado>
+							<input name="chbxCFDIRelacionado" type="checkbox" ng-model="aplicaCFDIRelacionado">Agregar CFDI relacionado
+						</label>
+					</div>
+				</div>
+				
+				<div class="col-md-4" ng-show="aplicaCFDIRelacionado">
+					<div class="form-group">
+						<label for="cfdiRelacionado" class="col-2 col-form-label">CFDI Relacionado:</label>
+						<div class="col-10">
+							<input class="form-control facInp" type="text" name="cfdiRelacionado"
+								ng-model=uuidRelacionado
+								placeholder="65c9710a-f15f-4d16-a64b-68fa697d7519">
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-4" ng-show="aplicaCFDIRelacionado">
+					<label for="tipoRelacion" class="col-2 col-form-label">Tipo de relaci&oacute;n:</label>
+					<div class="col-10">
+						<select class="form-control facInp" name="tipoRelacion"
+							ng-model="claveTipoRelacion">
+								<option value="01">01-Nota de cr&eacute;dito de los documentos relacionados</option>
+								<option value="02">02-Nota de d&eacute;bito de los documentos relacionados</option>
+								<option value="03">03-Devoluci&oacute;n de mercanc&iacute;a sobre facturas o traslados previos</option>
+								<option value="04">04-Sustituci&oacute;n de los CFDI previos</option>
+								<option value="05">05-Traslados de mercancias facturados previamente</option>
+								<option value="06">06-Factura generada por los traslados previos</option>
+								<option value="07">07-CFDI por aplicaci&oacute;n de anticipo</option>
+								<option value="08">08-Factura generada por pagos en parcialidades</option>
+								<option value="09">09-Factura generada por pagos diferidos</option>
+						</select>
+					</div>
+				</div>
+			</div>
 			
 			<!-- Opciones para pago en parcialidades -->
 			<!-- <div class="form-group ">

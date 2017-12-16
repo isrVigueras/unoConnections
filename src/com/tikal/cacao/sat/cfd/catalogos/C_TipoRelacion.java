@@ -12,6 +12,8 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.gson.annotations.SerializedName;
+
 
 /**
  * <p>Java class for c_TipoRelacion.
@@ -38,35 +40,44 @@ import javax.xml.bind.annotation.XmlType;
 public enum C_TipoRelacion {
 
 	/** Nota de cr&eacute;dito de los documentos relacionados */
+	@SerializedName("01")
     @XmlEnumValue("01")
     VALUE_1("01"),
     
     /** Nota de d&eacute;bito de los documentos relacionados */
+    @SerializedName("02")
     @XmlEnumValue("02")
     VALUE_2("02"),
     
     /** Devoluci&oacute;n de mercancía sobre facturas o traslados previos */
+    @SerializedName("03")
     @XmlEnumValue("03")
     VALUE_3("03"),
     
     /** Sustituci&oacute;n de los CFDI previos */
+    @SerializedName("04")
     @XmlEnumValue("04")
     VALUE_4("04"),
     
     /** Traslados de mercancias facturados previamente */
+    @SerializedName("05")
     @XmlEnumValue("05")
     VALUE_5("05"),
     
     /** Factura generada por los traslados previos */
+    @SerializedName("06")
     @XmlEnumValue("06")
     VALUE_6("06"),
     
+    @SerializedName("07")
     @XmlEnumValue("07")
     CFDI_POR_APLICACION_DE_ANTICIPO("07"),
     
+    @SerializedName("08")
     @XmlEnumValue("08")
     FACTURA_GENERADA_POR_PAGOS_EN_PARCIALIDADES("08"),
     
+    @SerializedName("09")
     @XmlEnumValue("09")
     FACTURA_GENERADA_POR_PAGOS_DIFERIDOS("09");
     

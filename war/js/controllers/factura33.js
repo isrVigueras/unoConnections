@@ -337,7 +337,7 @@ app.service("comprobanteService33", ['$http','$q',function($http,$q) {
 				rfc : null, //hardcode para Web Service de pruebas
 				nombre : null,
 				regimenFiscal :  {
-				    valor: null
+				    valor: "601"
 				} 
 			},
 			receptor : {
@@ -371,7 +371,7 @@ app.service("comprobanteService33", ['$http','$q',function($http,$q) {
                     	   idDocumento : uuidRelacionado,
                     	   serie : null,
                     	   folio : null,
-                    	   monedaDR : null,
+                    	   monedaDR : {valor:"MXN"},
                     	   tipoCambioDR : null,
                     	   metodoDePagoDR : {valor:"PPD"},
                     	   numParcialidad : null,
@@ -380,7 +380,7 @@ app.service("comprobanteService33", ['$http','$q',function($http,$q) {
                     	   impSaldoInsoluto : null
                        }
 				   ],
-				   fechaPago : null,
+				   fechaPago : new Date(),
 				   formaDePagoP : null,
 				   monedaP : null,
 				   tipoCambioP : null,
@@ -638,6 +638,21 @@ app.service("comprobanteService33", ['$http','$q',function($http,$q) {
 	this.getXMLs=function(ids){
 		var d = $q.defer();
 		$http.get("/facturacion/obtenerXMLmultiple/"+ids).then(
+			function(response) {
+				console.log(response);
+				d.resolve(response.data);
+			}, function(response) {
+				if(response.status==403){
+					alert("No está autorizado para realizar esta acción");
+					$location.path("/");
+				}
+			});
+		return d.promise;
+	}
+	
+	this.timbrarComplemento=function(send){
+		var d = $q.defer();
+		$http.post("/complementos/timbrar",send).then(
 			function(response) {
 				console.log(response);
 				d.resolve(response.data);

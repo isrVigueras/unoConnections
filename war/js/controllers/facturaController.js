@@ -223,11 +223,20 @@ app.controller("facturaListController",['comprobanteService','comprobanteService
 		
 	}
 	
-	$scope.agregarPago = function (uuidRelacionado, index) {
+	$scope.addComplemento = function (uuidRelacionado, index) {
 		$scope.uuidParaComplementoPago = uuidRelacionado;
 		$scope.cfdiParaPago = comprobanteService33.getCFDIParaPago();
 		$scope.complementoPagos = comprobanteService33.getComplementoPago();
+		$scope.complementoPagos.pago[0].doctoRelacionado[0].idDocumento=uuidRelacionado;
+		$scope.resta= $scope.complementoPagos.pago[0].doctoRelacionado[0].impSaldoAnt*1-$scope.complementoPagos.pago[0].monto*1;
 	}
+	
+	$scope.$watch('complementoPagos', function(){
+		if($scope.complementoPagos.pago[0].doctoRelacionado[0].impSaldoAnt && $scope.complementoPagos.pago[0].monto){
+			$scope.complementoPagos.pago[0].doctoRelacionado[0].impSaldoInsoluto= $scope.complementoPagos.pago[0].doctoRelacionado[0].impSaldoAnt*1-$scope.complementoPagos.pago[0].monto*1;
+			$scope.complementoPagos.pago[0].doctoRelacionado[0].impPagado=$scope.complementoPagos.pago[0].monto;
+		}
+	}, true)
 	
 	$scope.tabIds = [ "comprobante", "complementoDePago" ];
 	var myEl = angular.element("#comprobante");
@@ -244,6 +253,17 @@ app.controller("facturaListController",['comprobanteService','comprobanteService
 		var myEl = angular.element("#" + id);
 		myEl.addClass('active in show');
 	}
+	
+	$scope.enviarComplemento=function(){
+		$scope.cfdiParaPago.conceptos={}
+		var send={uuid:$scope.uuidParaComplementoPago,
+				complementoPagos:$scope.complementoPagos,
+				serie:$scope.serialElegido
+		}
+		console.log(send)
+		comprobanteService33.timbrarComplemento(send);
+	}
+	
 	
 }]);
 

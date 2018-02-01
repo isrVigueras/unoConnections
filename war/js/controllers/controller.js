@@ -211,6 +211,11 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : "facturaListController"
 	});
 	
+	$routeProvider.when('/listComplementos', {
+		templateUrl : "facturacion/pages/listComplementos.html",
+		controller : "complementoListController"
+	});
+	
 	
 	$routeProvider.when('/editaFactura/:rfc/:uuid', {
 		templateUrl : "facturacion/pages/comprobanteF32.html",
@@ -248,7 +253,17 @@ app.config([ '$routeProvider', function($routeProvider) {
 		controller : "serieEditController"
 	});
 	
-	//altaImagen
+	$routeProvider.when('/listComplementos', {
+		templateUrl : "facturacion/pages/listComplementos.html",
+		controller : "listComplementosController"
+	});
+	
+	$routeProvider.when('/complementoManual', {
+		templateUrl : "facturacion/pages/complemento33.html",
+		controller : "complementoController"
+	});
+	
+	//altaImagen#/listComplementos
 	
 	$routeProvider.when('/altaImagen', {
 		templateUrl : "pages/altaImagen.html",

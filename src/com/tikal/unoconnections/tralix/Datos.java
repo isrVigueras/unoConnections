@@ -23,13 +23,13 @@ public class Datos {
 	private String serie;
 	private String folio;
 	private String fecha_hora;
-	private float subtotal;
-	private float total;
-	private float impTrasladados; // total
-	private float impRetenidos; // totalImpuestos
+	private double subtotal;
+	private double total;
+	private double impTrasladados; // total
+	private double impRetenidos; // totalImpuestos
 	private String totalLetra;
 	private String moneda;
-	private float tipoCambio;
+	private double tipoCambio;
 	private String referencia;
 	private String repVentas; // representante_ventas
 	private String viaEmbarque;
@@ -60,8 +60,8 @@ public class Datos {
 
 	// #06
 	private String impuesto;
-	private float tasa;
-	private float imp; // importe
+	private double tasa;
+	private double imp; // importe
 
 	// #09
 	// private String idIntReceptor; //IdentificadorInternoReceptor
@@ -190,22 +190,22 @@ public class Datos {
 		this.fecha_hora = values[4];
 		
 		//cambiar
-		this.subtotal = Float.parseFloat(values[5].replaceAll("," , ""));
+		this.subtotal = Double.parseDouble(values[5].replaceAll("," , ""));
 		
 		//cambiar
-		this.total = Float.parseFloat(values[6].replaceAll("," , ""));
+		this.total = Double.parseDouble(values[6].replaceAll("," , ""));
 		
 		//cambiar
-		this.impTrasladados = Float.parseFloat(values[7].replaceAll("," , ""));
+		this.impTrasladados = Double.parseDouble(values[7].replaceAll("," , ""));
 		
 		//cambiar
-		this.impRetenidos = Float.parseFloat(values[8].replaceAll("," , ""));
+		this.impRetenidos = Double.parseDouble(values[8].replaceAll("," , ""));
 		
 		this.totalLetra = values[9];
 		this.moneda = values[10];
 		if (!values[11].isEmpty()) {
 		//cambiar
-			this.tipoCambio = Float.parseFloat(values[11].replaceAll("," , ""));
+			this.tipoCambio = Double.parseDouble(values[11].replaceAll("," , ""));
 		}
 		this.repVentas= values[13];
 		this.nPedido = values[15];
@@ -285,7 +285,7 @@ public class Datos {
 			d.setClave(values[1]);
 			
 			//cambiar
-			d.setCantidad(Float.parseFloat(values[2].replaceAll("," , "")));
+			d.setCantidad(Double.parseDouble(values[2].replaceAll("," , "")));
 			
 			d.setDescripcion(values[3]);
 			d.setDescripcion( d.getDescripcion().
@@ -299,12 +299,12 @@ public class Datos {
 			
 			
 			//cambiar
-			d.setImporte( Util.redondear( Float.parseFloat(values[5].replaceAll("," , "")) ) );
+			d.setImporte( Util.redondear( Double.parseDouble(values[5].replaceAll("," , "")) ) );
 			
 			d.setUnidadMed(values[7]);
 			
 			//cambiar
-			d.setValorUnit(Float.parseFloat(values[4].replaceAll("," , "")));
+			d.setValorUnit(Double.parseDouble(values[4].replaceAll("," , "")));
 			
 			this.conceptos.add(d);
 		} else {
@@ -324,10 +324,10 @@ public class Datos {
 		this.impuesto = values[1];
 		
 		//cambiar
-		this.tasa = Float.parseFloat(values[2].replaceAll("," , ""));
+		this.tasa = Double.parseDouble(values[2].replaceAll("," , ""));
 		
 		//cambiar
-		this.imp = Float.parseFloat(values[3].replaceAll("," , ""));
+		this.imp = Double.parseDouble(values[3].replaceAll("," , ""));
 	}
 
 	private void parsea09(String reng) {
@@ -444,35 +444,35 @@ public class Datos {
 		this.fecha_hora = fecha_hora;
 	}
 
-	public float getSubtotal() {
+	public double getSubtotal() {
 		return subtotal;
 	}
 
-	public void setSubtotal(float subtotal) {
+	public void setSubtotal(double subtotal) {
 		this.subtotal = subtotal;
 	}
 
-	public float getTotal() {
+	public double getTotal() {
 		return total;
 	}
 
-	public void setTotal(float total) {
+	public void setTotal(double total) {
 		this.total = total;
 	}
 
-	public float getImpTrasladados() {
+	public double getImpTrasladados() {
 		return impTrasladados;
 	}
 
-	public void setImpTrasladados(float impTrasladados) {
+	public void setImpTrasladados(double impTrasladados) {
 		this.impTrasladados = impTrasladados;
 	}
 
-	public float getImpRetenidos() {
+	public double getImpRetenidos() {
 		return impRetenidos;
 	}
 
-	public void setImpRetenidos(float impRetenidos) {
+	public void setImpRetenidos(double impRetenidos) {
 		this.impRetenidos = impRetenidos;
 	}
 
@@ -492,11 +492,11 @@ public class Datos {
 		this.moneda = moneda;
 	}
 
-	public float getTipoCambio() {
+	public double getTipoCambio() {
 		return tipoCambio;
 	}
 
-	public void setTipoCambio(float tipoCambio) {
+	public void setTipoCambio(double tipoCambio) {
 		this.tipoCambio = tipoCambio;
 	}
 
@@ -604,19 +604,19 @@ public class Datos {
 		this.impuesto = impuesto;
 	}
 
-	public float getTasa() {
+	public double getTasa() {
 		return tasa;
 	}
 
-	public void setTasa(float tasa) {
+	public void setTasa(double tasa) {
 		this.tasa = tasa;
 	}
 
-	public float getImp() {
+	public double getImp() {
 		return imp;
 	}
 
-	public void setImp(float imp) {
+	public void setImp(double imp) {
 		this.imp = imp;
 	}
 

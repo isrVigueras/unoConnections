@@ -181,14 +181,14 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		c.setFormaPago(new C_FormaDePago(this.regresaClaveFormaDePago(f.getMetodoPago().toUpperCase())));
 		c.setMetodoPago(new C_MetodoDePago("PPD"));
 		//if (f.getFormaPago().toLowerCase().contains("sola")) {
-		if (!c.getFormaPago().getValor().contentEquals("99")) {
+		if (f.getCondPago().toLowerCase().contains("sola")) {
 			c.setMetodoPago(new C_MetodoDePago("PUE"));
 		}
 
 		// c.setMoneda(new C_Moneda("MXN"));
 		c.setMoneda(new C_Moneda(f.getMoneda()));
 		if (!c.getMoneda().getValor().contentEquals("MXN")) {
-			c.setTipoCambio(new BigDecimal(Float.toString(f.getTipoCambio())));
+			c.setTipoCambio(new BigDecimal(Double.toString(f.getTipoCambio())));
 		}
 
 		com.tikal.cacao.sat.cfd33.Comprobante.Impuestos imps = new com.tikal.cacao.sat.cfd33.Comprobante.Impuestos();
@@ -217,13 +217,13 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			if(conce==null){
 				return "No se encontró el concepto: "+d.getClave();
 			}
-			con.setCantidad(Util.redondearBigD(new BigDecimal(d.getCantidad()), 3));
+			con.setCantidad(Util.redondearBigD(new BigDecimal(d.getCantidad()).setScale(2, RoundingMode.FLOOR), 2));
 			con.setClaveProdServ(conce.getClaveProdServ());
 			con.setUnidad(d.getUnidadMed());
 			con.setClaveUnidad(new C_ClaveUnidad(conce.getClaveUnidad()));
 			con.setClaveProdServ(conce.getClaveProdServ());
 			con.setDescripcion(d.getDescripcion());
-			con.setValorUnitario(Util.redondearBigD(new BigDecimal(d.getValorUnit()), 4));
+			con.setValorUnitario(Util.redondearBigD(new BigDecimal(d.getValorUnit()), 2));
 			con.setImporte(Util.redondearBigD(new BigDecimal(d.getImporte()), 2));
 			con.setNoIdentificacion(d.getClave());
 			
@@ -239,10 +239,10 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado traslado = new Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado();
 			traslado.setBase(con.getImporte());
 			if (tipo == 0) {
-				traslado.setImporte(Util.redondearBigD(new BigDecimal(con.getImporte().floatValue() * 0.16), 2)); // cambio de decimales 6 a 2
+				traslado.setImporte(Util.redondearBigD(new BigDecimal(con.getImporte().doubleValue() * 0.16), 2)); // cambio de decimales 6 a 2
 				traslado.setTasaOCuota(new BigDecimal(f.getTasa() / 100));
 			} else {
-				traslado.setImporte(Util.redondearBigD(new BigDecimal(con.getImporte().floatValue() * f.getTasa()), 2));
+				traslado.setImporte(Util.redondearBigD(new BigDecimal(con.getImporte().floatValue() * (f.getTasa() / 100f)), 2));
 				traslado.setTasaOCuota(new BigDecimal(f.getTasa() / 100));
 			}
 			traslado.setImpuesto(new C_Impuesto("002"));
@@ -316,7 +316,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		String respuesta = servicioFact.timbrar(vo, sesion, true, extra);
 		// facturarenglondao.eliminar(f.getId());
 		RegistroBitacora bit = new RegistroBitacora();
-		bit.setEvento(respuesta);
+		bit.setEvento(f.getSerie()+f.getFolio()+ " "+respuesta);
 		bit.setTipo("Operacional");
 		bit.setUsuario("Proceso Back");
 		bit.setFecha(new Date());
@@ -361,7 +361,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		if (d.getSubdiv() != null) {
 			com.setSubdivision(Integer.parseInt(d.getSubdiv()));
 		}
-		com.setTipoCambioUSD(Util.redondearBigD(new BigDecimal(d.getTipoCambio()), 2));
+		com.setTipoCambioUSD(Util.redondearBigD(new BigDecimal(d.getTipoCambio()), 4));
 		com.setTotalUSD(Util.redondearBigD(new BigDecimal(d.getTotalUSD()), 2));
 		if (d.getNumCertOrigen() == null) {
 			com.setCertificadoOrigen(0);
@@ -414,7 +414,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			DatosConcepto de = d.getConceptos().get(i);
 
 			Mercancia m = of.createComercioExteriorMercanciasMercancia();
-			m.setCantidadAduana(conc.getCantidad());
+			m.setCantidadAduana(Util.redondearBigD(conc.getCantidad(), 2));
 			m.setFraccionArancelaria(new C_FraccionArancelaria(de.getFraccionArancelaria()));
 			m.setNoIdentificacion(conc.getNoIdentificacion());
 			String cua = de.getUnidadMed();

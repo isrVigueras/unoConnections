@@ -1,24 +1,19 @@
 package com.tikal.cacao.springController.viewObjects.v33;
 
-import com.tikal.cacao.sat.cfd33.Comprobante;
+import com.tikal.cacao.model.Serial;
 
 import mx.gob.sat.pagos.Pagos;
 
 public class ComprobanteConComplementoPagosVO {
 
-	private Comprobante cfdiParaPago;
+	private String uuid;
+	
+	private Serial serie;
 	
 	private Pagos complementoPagos;
 	
 	private String email;
 
-	public Comprobante getComprobante() {
-		return cfdiParaPago;
-	}
-
-	public void setComprobante(Comprobante comprobante) {
-		this.cfdiParaPago = comprobante;
-	}
 
 	public Pagos getComplementoPagos() {
 		return complementoPagos;
@@ -35,6 +30,22 @@ public class ComprobanteConComplementoPagosVO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public Serial getSerie() {
+		return serie;
+	}
+
+	public void setSerie(Serial serie) {
+		this.serie = serie;
+	}
+
 	
 }

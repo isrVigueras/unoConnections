@@ -22,7 +22,8 @@ public class AddendaFactory {
 			ObjectFactory of= new ObjectFactory();
 			RequestCFD re=of.createRequestCFD();
 			
-			re.setIdPedido(d.getsPedido());
+			re.setVersion("2.0");
+			re.setIdPedido(d.getsPedido().split("~")[0]);
 			re.setTipo("AddendaPCO");
 			
 			Documento doc=of.createRequestCFDDocumento();
@@ -36,7 +37,7 @@ public class AddendaFactory {
 			
 			Recepciones receps= of.createRequestCFDRecepciones();
 			Recepcion recep= of.createRequestCFDRecepcionesRecepcion();
-			recep.setIdRecepcion(d.getnPedido());
+			recep.setIdRecepcion(d.getsPedido().split("~")[1]);
 			
 			for(Concepto co: c.getConceptos().getConcepto()){
 				mx.com.fact.schema.pepsico.RequestCFD.Recepciones.Recepcion.Concepto con=of.createRequestCFDRecepcionesRecepcionConcepto();

@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
-import javax.naming.ldap.UnsolicitedNotificationEvent;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,24 +23,24 @@ import org.tempuri.TimbraCFDIResponse;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfGState;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.tikal.cacao.dao.BitacoraDAO;
+import com.tikal.cacao.dao.ComplementoRenglonDAO;
 import com.tikal.cacao.dao.FacturaVttDAO;
 import com.tikal.cacao.dao.ImagenDAO;
 import com.tikal.cacao.dao.ReporteRenglonDAO;
 import com.tikal.cacao.dao.SerialDAO;
-import com.tikal.cacao.dao.sql.SimpleHibernateDAO;
 import com.tikal.cacao.dao.sql.RegimenFiscalDAO;
+import com.tikal.cacao.dao.sql.SimpleHibernateDAO;
 import com.tikal.cacao.dao.sql.UsoDeCFDIDAO;
 import com.tikal.cacao.factura.Estatus;
 import com.tikal.cacao.factura.RespuestaWebServicePersonalizada;
 import com.tikal.cacao.factura.ws.WSClientCfdi33;
-import com.tikal.cacao.model.Factura;
 import com.tikal.cacao.model.FacturaVTT;
 import com.tikal.cacao.model.Imagen;
 import com.tikal.cacao.model.RegistroBitacora;
@@ -50,9 +49,10 @@ import com.tikal.cacao.model.orm.FormaDePago;
 import com.tikal.cacao.model.orm.RegimenFiscal;
 import com.tikal.cacao.model.orm.TipoDeComprobante;
 import com.tikal.cacao.model.orm.UsoDeCFDI;
+import com.tikal.cacao.reporte.ComplementoRenglon;
 import com.tikal.cacao.reporte.ReporteRenglon;
+import com.tikal.cacao.sat.cfd.catalogos.dyn.C_MetodoDePago;
 import com.tikal.cacao.sat.cfd33.Comprobante;
-import com.tikal.cacao.sat.cfd33.Comprobante.Complemento;
 import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos.Concepto;
 import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado;
 import com.tikal.cacao.sat.cfd33.Comprobante.Impuestos;
@@ -80,6 +80,8 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 	@Autowired
 	private ReporteRenglonDAO repRenglonDAO;
 
+	@Autowired ComplementoRenglonDAO complementoDAO;
+	
 	@Autowired
 	private BitacoraDAO bitacoradao;
 
@@ -117,7 +119,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 
 		try {
 			URL urlCer = new URL(strUrlCer);
-
+ 
 			connCer = (HttpURLConnection) urlCer.openConnection();
 			connCer.connect();
 			objCer = (ByteArrayInputStream) connCer.getContent();
@@ -165,7 +167,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 		factura.setComentarios(comprobanteConComentario.getComentario());
 
 		facturaVTTDAO.guardar(factura);
-		this.crearReporteRenglon(factura);
+		this.crearReporteRenglon(factura, c.getMetodoPago(), c.getTipoDeComprobante().getValor());
 
 		String evento = "Se guardó la prefactura con id: " + factura.getUuid();
 		RegistroBitacora registroBitacora = Util.crearRegistroBitacora(sesion, "Operacional", evento);
@@ -184,7 +186,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 		factura.setComentarios(comprobanteConComentario.getComentario());
 
 		facturaVTTDAO.guardar(factura);
-		this.crearReporteRenglon(factura);
+		this.crearReporteRenglon(factura, c.getMetodoPago(), c.getTipoDeComprobante().getValor());
 
 		String evento = "Se actualizó la prefactura con id: " + factura.getUuid();
 		RegistroBitacora registroBitacora = Util.crearRegistroBitacora(sesion, "Operacional", evento);
@@ -425,9 +427,24 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 		bitacoradao.addReg(registroBitacora);
 	}
 
-	private void crearReporteRenglon(FacturaVTT factura) {
-		ReporteRenglon reporteRenglon = new ReporteRenglon(factura);
-		repRenglonDAO.guardar(reporteRenglon);
+	private void crearReporteRenglon(FacturaVTT factura, C_MetodoDePago metodoPago, String tipo) {
+		
+		switch(tipo){
+		case "P":{
+			ComplementoRenglon reporterenglon= new ComplementoRenglon(factura);
+			complementoDAO.guardar(reporterenglon);
+			break;
+		}
+		default:{
+			ReporteRenglon reporteRenglon = new ReporteRenglon(factura);
+			if(metodoPago.getValor().compareTo("PPD")==0){
+				reporteRenglon.setTieneComplementoPago(true);
+			}
+			repRenglonDAO.guardar(reporteRenglon);
+			break;
+		}
+		}
+		
 	}
 
 	private void incrementarFolio(String rfc, String serie) {
@@ -474,10 +491,12 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 	}
 
 	private void agregarCerosATasaOCuota(Impuestos impuestosGlobales) {
-		List<com.tikal.cacao.sat.cfd33.Comprobante.Impuestos.Traslados.Traslado> listaT = impuestosGlobales
-				.getTraslados().getTraslado();
-		for (com.tikal.cacao.sat.cfd33.Comprobante.Impuestos.Traslados.Traslado traslado : listaT) {
-			traslado.setTasaOCuota(Util.redondearBigD(traslado.getTasaOCuota(), 6));
+		if(impuestosGlobales!=null){
+			List<com.tikal.cacao.sat.cfd33.Comprobante.Impuestos.Traslados.Traslado> listaT = impuestosGlobales
+					.getTraslados().getTraslado();
+			for (com.tikal.cacao.sat.cfd33.Comprobante.Impuestos.Traslados.Traslado traslado : listaT) {
+				traslado.setTasaOCuota(Util.redondearBigD(traslado.getTasaOCuota(), 6));
+			}
 		}
 	}
 
@@ -526,7 +545,7 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 				
 				facturaTimbrada.setComentarios(comentarios);
 				facturaVTTDAO.guardar(facturaTimbrada);
-				this.crearReporteRenglon(facturaTimbrada);
+				this.crearReporteRenglon(facturaTimbrada, comprobante.getMetodoPago(), comprobante.getTipoDeComprobante().getValor());
 
 				EmailSender mailero = new EmailSender();
 				Imagen imagen = imagenDAO.get(cfdiTimbrado.getEmisor().getRfc());
@@ -541,11 +560,24 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 
 			// CASO DE ERROR EN EL TIMBRADO
 			else {
+				RegistroBitacora r= new RegistroBitacora();
+				r.setEvento("Fallo en factura xml: "+ xmlCFDI);
+				r.setFecha(new Date());
+				r.setTipo("Operativo");
+				r.setUsuario("Backend");
+				bitacoradao.addReg(r);
 				return construirMensajeError(respuestaWB);
 			}
 		} else {
+			RegistroBitacora r= new RegistroBitacora();
+			r.setEvento("Fallo en factura xml: "+ xmlCFDI);
+			r.setFecha(new Date());
+			r.setTipo("Operativo");
+			r.setUsuario("Backend");
+			bitacoradao.addReg(r);
 			textoCodigoRespuesta = (String) respuestaWB.get(1);
 			return construirMensajeError(respuestaWB);
+			
 		}
 	}
 

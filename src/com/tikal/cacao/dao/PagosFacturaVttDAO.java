@@ -8,5 +8,7 @@ public interface PagosFacturaVttDAO {
 
 	List<PagosFacturaVTT> consultarPorUuidRelacionado(String uuidRelacionado);
 	
+	PagosFacturaVTT consultarUUID(String uuid);
+	
 	List<PagosFacturaVTT> cosultarPorCliente(String rfcCliente);
 }

@@ -42,8 +42,8 @@ public class PagosFacturaVTTController {
 			if (ServicioSesion.verificarPermiso(req, usuarioDAO, perfilDAO, 11)) {
 				AsignadorDeCharset.asignar(req, res);
 				ComprobanteConComplementoPagosVO comprobanteConComplementoPagosVO = (ComprobanteConComplementoPagosVO) JsonConvertidor.fromJson(json, ComprobanteConComplementoPagosVO.class);
-				String mensajeResultado = pagosFacturaVTTService.agregar(comprobanteConComplementoPagosVO, uuidRelacionado);
-				res.getWriter().println(mensajeResultado);
+//				String mensajeResultado = pagosFacturaVTTService.agregar(comprobanteConComplementoPagosVO, uuidRelacionado);
+//				res.getWriter().println(mensajeResultado);
 			} else {
 				res.sendError(HttpServletResponse.SC_FORBIDDEN);
 			}
@@ -60,8 +60,8 @@ public class PagosFacturaVTTController {
 			if (ServicioSesion.verificarPermiso(req, usuarioDAO, perfilDAO, 11)) {
 				AsignadorDeCharset.asignar(req, res);
 				ComprobanteConComplementoPagosVO comprobanteConComplementoPagosVO = (ComprobanteConComplementoPagosVO) JsonConvertidor.fromJson(json, ComprobanteConComplementoPagosVO.class);
-				RespuestaWebServicePersonalizada respuestaWS = pagosFacturaVTTService.timbrar(comprobanteConComplementoPagosVO, uuidRelacionado);
-				res.getWriter().println(respuestaWS.getMensajeRespuesta());
+//				RespuestaWebServicePersonalizada respuestaWS = pagosFacturaVTTService.timbrar(comprobanteConComplementoPagosVO, uuidRelacionado);
+//				res.getWriter().println(respuestaWS.getMensajeRespuesta());
 			} else {
 				res.sendError(HttpServletResponse.SC_FORBIDDEN);
 			}

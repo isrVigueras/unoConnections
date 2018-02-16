@@ -665,6 +665,20 @@ app.service("comprobanteService33", ['$http','$q',function($http,$q) {
 		return d.promise;
 	}
 	
+	this.timbrarComplementoM=function(send){
+		var d = $q.defer();
+		$http.post("/complementos/timbrarManual",send).then(
+			function(response) {
+				console.log(response);
+				d.resolve(response.data);
+			}, function(response) {
+				if(response.status==403){
+					alert("No está autorizado para realizar esta acción");
+					$location.path("/");
+				}
+			});
+		return d.promise;
+	}
 }]);
 
 app.controller("comprobante33", [ '$scope', '$location', 'comprobanteService33','$routeParams','conceptosService','serialService','$window',

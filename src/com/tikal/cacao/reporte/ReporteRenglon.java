@@ -18,36 +18,36 @@ import com.tikal.cacao.util.Util;
 @Entity
 public class ReporteRenglon {
 	@Id
-	private String uuid;
+	protected String uuid;
 	@Index
-	private Date fechaCertificacion; //antes fecha  y tipo String //Probar reporte de Isra
+	protected Date fechaCertificacion; //antes fecha  y tipo String //Probar reporte de Isra
 	
 	@Ignore
-	private String strFechaCertificacion;
+	protected String strFechaCertificacion;
 	
 	@Index
-	private String rfcEmisor;
-	private String emisor;
+	protected String rfcEmisor;
+	protected String emisor;
 	@Index
-	private String serie;
-	private String folio;
-	private String nombreRec;
+	protected String serie;
+	protected String folio;
+	protected String nombreRec;
 	@Index
-	private String rfcReceptor; //antes rfcRec
-	private String lugar;
+	protected String rfcReceptor; //antes rfcRec
+	protected String lugar;
 	
-	private String subtotal;
-	private String iva;
-	private String total;
-	private String estatus; //antes status
+	protected String subtotal;
+	protected String iva;
+	protected String total;
+	protected String estatus; //antes status
 	
-	private boolean tieneComplementoPago;
+	protected boolean tieneComplementoPago;
 	
 	@Index
-	private boolean pagado;
+	protected boolean pagado;
 	
 	@Index 
-	private VersionCFDI version;
+	protected VersionCFDI version;
 	
 	public ReporteRenglon(){}
 	
@@ -100,6 +100,7 @@ public class ReporteRenglon {
 				&& !cfdi.getFormaPago().getValor().contentEquals("99")) {
 			this.pagado = true;
 		}
+		this.tieneComplementoPago=false;
 	}
 	
 	public String getStrFechaCertificacion() {

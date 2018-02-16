@@ -1,6 +1,7 @@
 package com.tikal.cacao.springController.viewObjects.v33;
 
 import com.tikal.cacao.model.Serial;
+import com.tikal.cacao.sat.cfd33.Comprobante;
 
 import mx.gob.sat.pagos.Pagos;
 
@@ -14,6 +15,7 @@ public class ComprobanteConComplementoPagosVO {
 	
 	private String email;
 
+	private Comprobante cfdi;
 
 	public Pagos getComplementoPagos() {
 		return complementoPagos;
@@ -45,6 +47,14 @@ public class ComprobanteConComplementoPagosVO {
 
 	public void setSerie(Serial serie) {
 		this.serie = serie;
+	}
+
+	public Comprobante getCfdi() {
+		return cfdi;
+	}
+
+	public void setCfdi(Comprobante cfdi) {
+		this.cfdi = cfdi;
 	}
 
 	

@@ -40,6 +40,7 @@ import com.tikal.cacao.model.FacturaVTT;
 import com.tikal.cacao.model.RegistroBitacora;
 import com.tikal.cacao.model.orm.FormaDePago;
 import com.tikal.cacao.sat.cfd.catalogos.C_Pais;
+import com.tikal.cacao.sat.cfd.catalogos.C_TipoRelacion;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.C_ClaveUnidad;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.C_CodigoPostal;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.C_FormaDePago;
@@ -53,6 +54,8 @@ import com.tikal.cacao.sat.cfd.catalogos.dyn.C_UsoCFDI;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.comext.C_FraccionArancelaria;
 import com.tikal.cacao.sat.cfd33.Comprobante;
 import com.tikal.cacao.sat.cfd33.Comprobante.Addenda;
+import com.tikal.cacao.sat.cfd33.Comprobante.CfdiRelacionados;
+import com.tikal.cacao.sat.cfd33.Comprobante.CfdiRelacionados.CfdiRelacionado;
 import com.tikal.cacao.sat.cfd33.Comprobante.Complemento;
 import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos;
 import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos.Concepto;
@@ -177,6 +180,12 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			c.setTipoDeComprobante(new C_TipoDeComprobante("I"));
 		} else {
 			c.setTipoDeComprobante(new C_TipoDeComprobante("E"));
+			CfdiRelacionados relacionados= new Comprobante.CfdiRelacionados();
+			relacionados.setTipoRelacion(C_TipoRelacion.VALUE_1);
+			CfdiRelacionado relacionado= new Comprobante.CfdiRelacionados.CfdiRelacionado();
+			relacionado.setUUID(f.getUuidRelacionado());
+			relacionados.getCfdiRelacionado().add(relacionado);
+			c.setCfdiRelacionados(relacionados);
 		}
 		c.setFormaPago(new C_FormaDePago(this.regresaClaveFormaDePago(f.getMetodoPago().toUpperCase())));
 		c.setMetodoPago(new C_MetodoDePago("PPD"));

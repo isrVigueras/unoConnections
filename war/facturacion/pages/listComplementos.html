@@ -7,44 +7,42 @@
 </section>
 <div class="main container">
 	<div class="row">
-		<div class="col-md-3">
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="RFC Cliente" ng-model="buscar.rfc">
-				<div class="input-group-btn">
-					<button class="btn" type="submit" ng-click="buscarRfc(buscar.rfc)">
-						<i class="glyphicon glyphicon-search"></i>
-					</button>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-3">
-			<div class="input-group">
-				<select ng-model="filtroSerie" class="form-control" placeholder="Serie..." ng-options="r.serie for r in seriales">
-<!-- 					<option disabled selected>Serie...</option> -->
-<!-- 					<option>Z</option> -->
-				</select>
-				<div class="input-group-btn">
-					<button class="btn" type="submit" ng-click="buscarSerie(filtroSerie)">
-						<i class="glyphicon glyphicon-search"></i>
-					</button>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="col-md-10">
-				<div class="input-group input-daterange">
-					<input type="text" class="form-control" ng-model="fechaInicio">
-					<div class="input-group-addon">-</div>
-					<input type="text" class="form-control" ng-model="fechaFin">
-				</div>
-			</div>
-			<div class="col-md-2">
-				<button class="btn btn-small" ng-click="buscar()">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-				</button>
-			</div>
-		</div>
-
+<!-- 		<div class="col-md-3"> -->
+<!-- 			<div class="input-group"> -->
+<!-- 				<input type="text" class="form-control" placeholder="RFC Cliente" ng-model="buscar.rfc"> -->
+<!-- 				<div class="input-group-btn"> -->
+<!-- 					<button class="btn" type="submit" ng-click="buscarRfc(buscar.rfc)"> -->
+<!-- 						<i class="glyphicon glyphicon-search"></i> -->
+<!-- 					</button> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-md-3"> -->
+<!-- 			<div class="input-group"> -->
+<!-- 				<select ng-model="filtroSerie" class="form-control" placeholder="Serie..." ng-options="r.serie for r in seriales"> -->
+<!-- 				</select> -->
+<!-- 				<div class="input-group-btn"> -->
+<!-- 					<button class="btn" type="submit" ng-click="buscarSerie(filtroSerie)"> -->
+<!-- 						<i class="glyphicon glyphicon-search"></i> -->
+<!-- 					</button> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-md-6"> -->
+<!-- 			<div class="col-md-10"> -->
+<!-- 				<div class="input-group input-daterange"> -->
+<!-- 					<input type="text" class="form-control" ng-model="fechaInicio"> -->
+<!-- 					<div class="input-group-addon">-</div> -->
+<!-- 					<input type="text" class="form-control" ng-model="fechaFin"> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			<div class="col-md-2"> -->
+<!-- 				<button class="btn btn-small" ng-click="buscar()"> -->
+<!-- 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span> -->
+<!-- 				</button> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+		<a href="#/complementoManual">Nuevo Complemento de Pago</a>
 	</div>
 	<hr>
 	<div ng-hide="todos">
@@ -109,10 +107,10 @@
 <!-- 						BOTONES A MOSTRAR VERSION 3.3 -->
 						<div ng-show="fact.version === 'V3_3'"class="v3_3">
 						<a class="btn2 btn-small btn-danger"
-						href="/factura33/obtenerPDF/{{fact.uuid}}"
+						href="/complementos/obtenerPDF/{{fact.uuid}}"
 						download="{{fact.serie+''+fact.folio+'.pdf'}}">PDF</a><a
 						class="btn2 btn-small btn-info"
-						href="/factura33/obtenerXML/{{fact.uuid}}"
+						href="/complementos/obtenerXML/{{fact.uuid}}"
 						download="{{fact.serie+''+fact.folio+'.xml'}}">XML</a> 
 						<button class="btn2 btn-small btn-success" data-toggle="modal"
 							ng-show="fact.estatus === 'GENERADO'" type="button"
@@ -442,42 +440,10 @@
 							</div>
 							
 							<div class="col-md-3">
-									<label for="example-text-input" class="col-2 col-form-label">Num Parcialidad*:</label>
+									<label for="example-text-input" class="col-2 col-form-label">Num Parcialidad:</label>
 									<div class="col-10">
 										<input class="form-control facInp" type="text"
 											ng-model="complementoPagos.pago[0].doctoRelacionado[0].numParcialidad">
-									</div>
-							</div>
-							
-							<div class="col-md-3">
-									<label for="example-text-input" class="col-2 col-form-label">Cta Beneficiario:</label>
-									<div class="col-10">
-										<input class="form-control facInp" type="text"
-											ng-model="complementoPagos.pago[0].ctaBeneficiario">
-									</div>
-							</div>
-							
-							<div class="col-md-3">
-									<label for="example-text-input" class="col-2 col-form-label">RFC Emisor Cuenta Beneficiario:</label>
-									<div class="col-10">
-										<input class="form-control facInp" type="text"
-											ng-model="complementoPagos.pago[0].rfcEmisorCtaBen">
-									</div>
-							</div>
-							
-							<div class="col-md-3">
-									<label for="example-text-input" class="col-2 col-form-label">Cuenta Ordenante:</label>
-									<div class="col-10">
-										<input class="form-control facInp" type="text"
-											ng-model="complementoPagos.pago[0].ctaOrdenante">
-									</div>
-							</div>
-							
-							<div class="col-md-3">
-									<label for="example-text-input" class="col-2 col-form-label">RFC Emisor Cuenta Ordenante:</label>
-									<div class="col-10">
-										<input class="form-control facInp" type="text"
-											ng-model="complementoPagos.pago[0].rfcEmisorCtaOrd">
 									</div>
 							</div>
 						</div>

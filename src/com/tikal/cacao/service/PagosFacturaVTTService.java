@@ -9,13 +9,14 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.tikal.cacao.factura.RespuestaWebServicePersonalizada;
 import com.tikal.cacao.model.PagosFacturaVTT;
+import com.tikal.cacao.sat.cfd33.Comprobante;
 import com.tikal.cacao.springController.viewObjects.v33.ComprobanteConComplementoPagosVO;
 
 public interface PagosFacturaVTTService {
 
-	String agregar(ComprobanteConComplementoPagosVO comprobanteConComplementoPagos, String uuidRelacionado);
+	String agregar(ComprobanteConComplementoPagosVO comprobanteConComplementoPagos, Comprobante comprobante, String uuidRelacionado);
 	
-	RespuestaWebServicePersonalizada timbrar(ComprobanteConComplementoPagosVO comprobanteConComplementoPagos, String uuidRelacionado);
+	RespuestaWebServicePersonalizada timbrar(ComprobanteConComplementoPagosVO comprobanteConComplementoPagos, Comprobante comprobante, String uuidRelacionado);
 	
 	List<PagosFacturaVTT> consultarPorUuidRelacionado(String uuidRelacionado);
 	

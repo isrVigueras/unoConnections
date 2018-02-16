@@ -282,6 +282,7 @@ import com.tikal.cacao.util.xmladapters.C_TipoFactorAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
+		"version",
     "pago"
 })
 @XmlRootElement(name = "Pagos")

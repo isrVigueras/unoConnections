@@ -5,5 +5,6 @@
 // Generated on: 2017.11.30 at 12:24:31 PM CST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.fact.com.mx/schema/pepsico", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+//@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.fact.com.mx/schema/pepsico", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package mx.com.fact.schema.pepsico;

@@ -93,6 +93,7 @@ public class Datos {
 	// #99
 	private int numLineas;
 	private String usoCFDI;
+	private String uuidRelacionado;
 	
 	private String error;
 	
@@ -168,6 +169,9 @@ public class Datos {
 						throw new DatosTxtException("¡Advertencia! No se indica el Uso de CFDI. "
 								+ "Debe eliminar este registro y volver a cargar el archivo con el Uso de CFDI. "
 								+ "Factura: " + this.getSerie() + this.getFolio());
+					}
+					if(values.length>=4){
+						this.uuidRelacionado = values[3].trim();
 					}
 				} else {
 					throw new DatosTxtException("¡Advertencia! No se indica el Uso de CFDI. "
@@ -874,6 +878,14 @@ public class Datos {
 
 	public void setPausada(boolean pausada) {
 		this.pausada = pausada;
+	}
+
+	public String getUuidRelacionado() {
+		return uuidRelacionado;
+	}
+
+	public void setUuidRelacionado(String uuidRelacionado) {
+		this.uuidRelacionado = uuidRelacionado;
 	}
 	
 }

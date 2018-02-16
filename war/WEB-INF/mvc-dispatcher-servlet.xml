@@ -23,10 +23,10 @@
 		<property name="password" value="nMVKLZ7yuj" />
 		
 		<!-- Development Driver -->
-		<!-- <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://127.0.0.1:3306/catalogos" />
-		<property name="username" value="devismael" /> 
-		<property name="password" value="1123581321dev/"/> -->
+<!-- 		<property name="driverClassName" value="com.mysql.jdbc.Driver" /> -->
+<!-- 		<property name="url" value="jdbc:mysql://192.168.100.11:3306/catalogos" /> -->
+<!-- 		<property name="username" value="felipe" />  -->
+<!-- 		<property name="password" value="123456"/> -->
 		
 		<property name="validationQuery" value="SELECT 1"/>
 	</bean>
@@ -131,8 +131,10 @@
 	<bean class="com.tikal.cacao.dao.impl.SerialDAOImp"></bean>
 	<bean class="com.tikal.cacao.dao.impl.ImagenDAOImp"/>
 	<bean class="com.tikal.cacao.dao.impl.ReporteRenglonDAOImpl"/>
+	<bean class="com.tikal.cacao.dao.impl.ComplementoRenglonDAOImp"/>
 	<bean class="com.tikal.cacao.dao.impl.ListaDeClavesDeClasesDAOImpl" />
 	<bean class="com.tikal.cacao.dao.impl.FacturaVttDAOImpl" />
+	<bean class="com.tikal.cacao.dao.impl.PagosFacturaVttDAOImp" />
 	<bean class="com.tikal.cacao.dao.impl.DatosDAOImp" />
 	<bean class="com.tikal.cacao.dao.impl.DomicilioCEDAOImp" />
 

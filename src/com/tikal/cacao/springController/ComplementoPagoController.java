@@ -27,10 +27,12 @@ import com.tikal.cacao.reporte.ComplementoRenglon;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.C_ClaveUnidad;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.C_Moneda;
 import com.tikal.cacao.sat.cfd.catalogos.dyn.C_TipoDeComprobante;
+import com.tikal.cacao.sat.cfd.catalogos.dyn.C_UsoCFDI;
 import com.tikal.cacao.sat.cfd33.Comprobante;
 import com.tikal.cacao.sat.cfd33.Comprobante.Complemento;
 import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos;
 import com.tikal.cacao.sat.cfd33.Comprobante.Conceptos.Concepto;
+import com.tikal.cacao.sat.cfd33.Comprobante.Receptor;
 import com.tikal.cacao.sat.cfd33.ObjectFactoryComprobante33;
 import com.tikal.cacao.security.PerfilDAO;
 import com.tikal.cacao.security.UsuarioDAO;
@@ -66,6 +68,7 @@ public class ComplementoPagoController {
 	@Autowired
 	PagosFacturaVttDAO pagosFacturaDAO;
 	
+	
 	@RequestMapping(value={"timbrar"}, method= RequestMethod.POST, consumes="application/json")
 	public void timbrar(HttpServletResponse res, HttpServletRequest req, @RequestBody String json) throws UnsupportedEncodingException{
 			AsignadorDeCharset.asignar(req, res);
@@ -87,6 +90,23 @@ public class ComplementoPagoController {
 			System.out.println(respuesta.getMensajeRespuesta());
 	}
 	
+	@RequestMapping(value = "/cancelarAck", method = RequestMethod.POST)
+	public void cancelarConAcuse(HttpServletRequest req, HttpServletResponse res, @RequestBody String body) {
+		try {
+			if (ServicioSesion.verificarPermiso(req, usuarioDAO, perfilDAO, 11)) {
+				AsignadorDeCharset.asignar(req, res);
+				String[] uuidYrfc = body.split(",");
+				String textoRespuesta = pagoService.cancelarAck(uuidYrfc[0], uuidYrfc[1], req.getSession());
+				res.getWriter().println(textoRespuesta);
+			} else {
+				res.sendError(HttpServletResponse.SC_FORBIDDEN);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	@RequestMapping(value={"timbrarManual"}, method= RequestMethod.POST, consumes="application/json")
 	public void timbrar2(HttpServletResponse res, HttpServletRequest req, @RequestBody String json) throws UnsupportedEncodingException{
 			AsignadorDeCharset.asignar(req, res);
@@ -100,7 +120,6 @@ public class ComplementoPagoController {
 			c.setFecha(pago.getFechaPago());
 			c.setSerie(cVO.getSerie().getSerie());
 			RespuestaWebServicePersonalizada respuesta=	pagoService.timbrar(cVO, c, cVO.getUuid());
-			
 			
 			System.out.println(respuesta.getMensajeRespuesta());
 	}
@@ -238,6 +257,8 @@ public class ComplementoPagoController {
 		aux.setLugarExpedicion(c.getLugarExpedicion());
 //		aux.setMetodoPago(c.getMetodoPago());
 		aux.setMoneda(new C_Moneda("XXX"));
+		Receptor receptor= c.getReceptor();
+		receptor.setUsoCFDI(new C_UsoCFDI("P01"));
 		aux.setReceptor(c.getReceptor());
 		aux.setSerie(c.getSerie());
 		aux.setSubTotal(c.getSubTotal());

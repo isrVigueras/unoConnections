@@ -261,7 +261,12 @@ app.controller("facturaListController",['comprobanteService','comprobanteService
 				serie:$scope.serialElegido
 		}
 		console.log(send)
-		comprobanteService33.timbrarComplemento(send);
+		waitingDialog.show('Enviando Complemento', {dialogSize: 'md', progressType: 'warning'});
+		comprobanteService33.timbrarComplemento(send).then(function(data){
+			waitingDialog.hide();
+			alert(data);
+			$location.path("/listComplementos");
+		});
 	}
 	
 	

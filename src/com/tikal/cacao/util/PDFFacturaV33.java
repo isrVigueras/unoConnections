@@ -1,4 +1,4 @@
-package com.tikal.cacao.util;
+	package com.tikal.cacao.util;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -61,6 +61,7 @@ public class PDFFacturaV33 {
 	private NumberFormat formatter = NumberFormat.getCurrencyInstance();
 	private MyFooter pieDePagina = new MyFooter(null);
 
+	private Font fontUuid = new Font(Font.FontFamily.HELVETICA, 6.5F, Font.BOLD);
 	private Font fontTituloSellos = new Font(Font.FontFamily.HELVETICA, 7.5F, Font.BOLD);
 	private Font fontContenidoSellos = new Font(Font.FontFamily.COURIER, 7.5F, Font.NORMAL);
 	private Font fontLeyendaFiscal = new Font(Font.FontFamily.HELVETICA, 7.5F, Font.NORMAL);
@@ -225,7 +226,7 @@ public class PDFFacturaV33 {
 
 		this.construirBoceto(comprobante, imagen, estatus, tfd, comentarios, datosExtra);
 		this.construirTimbre(selloDigital, bytesQRCode, tfd);
-		this.construirHechoPor();
+//		this.construirHechoPor();
 		return document;
 	}
 
@@ -509,7 +510,11 @@ public class PDFFacturaV33 {
 		PdfPCell celdaSubTablaEncabezado = new PdfPCell();
 		celdaSubTablaEncabezado.setBorderWidth(1);
 		PdfPTable subTablaEncabezado = new PdfPTable(1);
-		agregarCeldaSinBorde("FACTURA", fontHeadFactura, subTablaEncabezado, true);
+		if (this.descripcionTipoCFDI.compareTo("Pago") != 0) {
+			agregarCeldaSinBorde("FACTURA", fontHeadFactura, subTablaEncabezado, true);
+		}else{
+			agregarCeldaSinBorde("Complemento de Pago", fontHeadFactura, subTablaEncabezado, true);
+		}
 		subTablaEncabezado.addCell(celdaEspacio);
 		agregarCeldaSinBorde(getFolioYSerie(comprobante), fontSerieYFolio, subTablaEncabezado, true);
 		celdaSubTablaEncabezado.addElement(subTablaEncabezado);
@@ -870,7 +875,7 @@ public class PDFFacturaV33 {
 	private void construirTablaDocumentosRelacionados(Comprobante comprobante, Pago pago) throws DocumentException{
 		PdfPTable tablaConceptos = new PdfPTable(9);
 		tablaConceptos.setWidthPercentage(100);
-		tablaConceptos.setWidths(new float[] { 28, 6, 6, 7, 7, 7, 8, 8, 8});
+		tablaConceptos.setWidths(new float[] { 24, 6, 10, 7, 7, 7, 8, 8, 8});
 
 		agregarCeldaConFondo("UUID DR", fontHeadConceptos, tablaConceptos, true);
 		
@@ -891,7 +896,7 @@ public class PDFFacturaV33 {
 		agregarCeldaConFondo("Importe Saldo Insoluto", fontHeadConceptos, tablaConceptos, true);
 
 		for(DoctoRelacionado doc:pago.getDoctoRelacionado()){
-			this.agregarCeldaSinBorde(doc.getIdDocumento(), font3, tablaConceptos, false);
+			this.agregarCeldaSinBorde(doc.getIdDocumento(), fontUuid, tablaConceptos, false);
 			this.agregarCeldaSinBorde(doc.getSerie(), font3, tablaConceptos, false);
 			this.agregarCeldaSinBorde(doc.getFolio(), font3, tablaConceptos, false);
 			this.agregarCeldaSinBorde(doc.getMonedaDR().getValor(), font3, tablaConceptos, false);

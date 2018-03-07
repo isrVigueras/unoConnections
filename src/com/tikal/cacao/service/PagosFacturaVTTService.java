@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.tikal.cacao.factura.RespuestaWebServicePersonalizada;
@@ -21,4 +23,6 @@ public interface PagosFacturaVTTService {
 	List<PagosFacturaVTT> consultarPorUuidRelacionado(String uuidRelacionado);
 	
 	PdfWriter obtenerPDF(PagosFacturaVTT factura, OutputStream os) throws MalformedURLException, DocumentException, IOException;
+	
+	String cancelarAck(String uuid, String rfcEmisor, HttpSession sesion);
 }

@@ -14,6 +14,24 @@ app.service('complementoService',['$http','$q', function($http, $q){
 		return d.promise;
 	}
 	
+	this.cancelarFactura=function(uuid,rfc){
+		var d = $q.defer();
+		var send=uuid+","+rfc
+		$http.post("/complementos/cancelarAck",send).then(
+			function(response) {
+				console.log(response);
+				d.resolve(response.data);
+			}, function(response) {
+				if(response.status==403){
+					alert("No está autorizado para realizar esta acción");
+					$location.path("/");
+				}
+			});
+		return d.promise;
+	}
+	
+	
+	
 	this.getComplementos=function(url, page){
 		var d = $q.defer();
 		$http.get(url+"/"+page).then(
@@ -43,6 +61,9 @@ app.service('complementoService',['$http','$q', function($http, $q){
 			});
 		return d.promise;
 	}
+	
+	
+	
 }]);
 
 
@@ -207,20 +228,20 @@ app.controller("listComplementosController",['complementoService','$rootScope','
 	});
 	
 	
-	
 	$('.input-daterange input').each(function() {
 	    $(this).datepicker("format","mm-dd-yyyy");
 	});
 
 	$scope.cancelarFactura=function(){
-		var uuid=$scope.uuidParaCancelar;
+		var uuid=$scope.uuidParaCancelar33;
 		var rfc= $cookieStore.get("rfcEmpresa");
+		waitingDialog.show('Cancelando', {dialogSize: 'sm', progressType: 'warning'});
 		complementoService.cancelarFactura(uuid,rfc).then(function (data){
-			if(data[1]!='0'){
-				alert("No se pudo cancelar, intente más tarde");
-			}else{
-				alert("Factura Cancelada");
-			}
+			
+			waitingDialog.hide();
+			alert(data);
+			$window.location.reload();
+			
 		})
 	}
 	$scope.cancelarFactura33=function(){
@@ -236,8 +257,6 @@ app.controller("listComplementosController",['complementoService','$rootScope','
 		})
 	}
 	$scope.cargarFacturas(1);
-	
-
 	
 	$scope.buscarSerie = function(serie){
 		var rfc= $cookieStore.get("rfcEmpresa");

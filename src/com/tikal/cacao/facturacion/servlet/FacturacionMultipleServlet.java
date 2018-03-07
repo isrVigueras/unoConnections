@@ -155,6 +155,18 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		emisor.setRegimenFiscal(new C_RegimenFiscal("601"));
 		c.setEmisor(emisor);
 		Comprobante.Receptor receptor = new Comprobante.Receptor();
+		if (tipo != 1) {
+			c.setTipoDeComprobante(new C_TipoDeComprobante("I"));
+		} else {
+			c.setTipoDeComprobante(new C_TipoDeComprobante("E"));
+			CfdiRelacionados relacionados= new Comprobante.CfdiRelacionados();
+			relacionados.setTipoRelacion(C_TipoRelacion.VALUE_1);
+			CfdiRelacionado relacionado= new Comprobante.CfdiRelacionados.CfdiRelacionado();
+			relacionado.setUUID(f.getUuidRelacionado());
+			relacionados.getCfdiRelacionado().add(relacionado);
+			c.setCfdiRelacionados(relacionados);
+		}
+		
 		if (f.getRFC().compareTo("XEXX010101000") == 0) {
 			receptor.setNumRegIdTrib(f.getNumRegIdTrib());
 			tipo = 2;
@@ -176,17 +188,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		
 
 		c.setLugarExpedicion(new C_CodigoPostal(empresa.getDireccion().getCodigoPostal()));
-		if (tipo != 1) {
-			c.setTipoDeComprobante(new C_TipoDeComprobante("I"));
-		} else {
-			c.setTipoDeComprobante(new C_TipoDeComprobante("E"));
-			CfdiRelacionados relacionados= new Comprobante.CfdiRelacionados();
-			relacionados.setTipoRelacion(C_TipoRelacion.VALUE_1);
-			CfdiRelacionado relacionado= new Comprobante.CfdiRelacionados.CfdiRelacionado();
-			relacionado.setUUID(f.getUuidRelacionado());
-			relacionados.getCfdiRelacionado().add(relacionado);
-			c.setCfdiRelacionados(relacionados);
-		}
+		
 		c.setFormaPago(new C_FormaDePago(this.regresaClaveFormaDePago(f.getMetodoPago().toUpperCase())));
 		c.setMetodoPago(new C_MetodoDePago("PPD"));
 		//if (f.getFormaPago().toLowerCase().contains("sola")) {
@@ -393,6 +395,8 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		emisor.setDomicilio(
 				(mx.gob.sat.comercioexterior11.ComercioExterior.Emisor.Domicilio) domdao.get(d.getRfcEmisor()));
 		com.setEmisor(emisor);
+		
+//		emisor.getDomicilio().setLocalidad(null);
 
 		mx.gob.sat.comercioexterior11.ComercioExterior.Receptor receptor = of.createComercioExteriorReceptor();
 		mx.gob.sat.comercioexterior11.ComercioExterior.Receptor.Domicilio domrec = of

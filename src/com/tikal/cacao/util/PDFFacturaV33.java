@@ -511,7 +511,11 @@ public class PDFFacturaV33 {
 		celdaSubTablaEncabezado.setBorderWidth(1);
 		PdfPTable subTablaEncabezado = new PdfPTable(1);
 		if (this.descripcionTipoCFDI.compareTo("Pago") != 0) {
-			agregarCeldaSinBorde("FACTURA", fontHeadFactura, subTablaEncabezado, true);
+			if(comprobante.getTipoDeComprobante().getValor().compareToIgnoreCase("E")==0){
+				agregarCeldaSinBorde("Nota de Crédito", fontHeadFactura, subTablaEncabezado, true);	
+			}else{
+				agregarCeldaSinBorde("FACTURA", fontHeadFactura, subTablaEncabezado, true);
+			}
 		}else{
 			agregarCeldaSinBorde("Complemento de Pago", fontHeadFactura, subTablaEncabezado, true);
 		}

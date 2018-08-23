@@ -540,7 +540,11 @@ public class Util {
 					" http://www.sat.gob.mx/ComercioExterior11 http://www.sat.gob.mx/sitio_internet/cfd/ComercioExterior11/ComercioExterior11.xsd");
 				}else{
 					if(c.getComplemento()!=null){
-						jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class, mx.gob.sat.pagos.Pagos.class);
+						if(c.getReceptor().getRfc().compareTo("SAB730510K44")==0){
+							jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class, mx.gob.sat.pagos.Pagos.class, mx.com.fact.schema.pepsico.RequestCFD.class);
+						}else{
+							jaxbContext = JAXBContext.newInstance(com.tikal.cacao.sat.cfd33.Comprobante.class, mx.gob.sat.pagos.Pagos.class);
+						}
 						jaxbMarshaller = jaxbContext.createMarshaller();
 						jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,	
 								"http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd"+" http://www.sat.gob.mx/Pagos http://www.sat.gob.mx/sitio_internet/cfd/Pagos/Pagos10.xsd");

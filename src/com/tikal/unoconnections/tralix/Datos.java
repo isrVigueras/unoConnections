@@ -94,6 +94,7 @@ public class Datos {
 	private int numLineas;
 	private String usoCFDI;
 	private String uuidRelacionado;
+	private String descuento;
 	
 	private String error;
 	
@@ -305,19 +306,70 @@ public class Datos {
 			//cambiar
 			d.setImporte( Util.redondear( Double.parseDouble(values[5].replaceAll("," , "")) ) );
 			
-			d.setUnidadMed(values[7]);
+			d.setUnidadMed(values[6]);
 			
 			//cambiar
 			d.setValorUnit(Double.parseDouble(values[4].replaceAll("," , "")));
-			
 			this.conceptos.add(d);
 		} else {
 			DatosConcepto d = this.conceptos.get(this.conceptos.size() - 1);
+			if(d.getUnidadMed().compareTo("LY")==0){
+				String aux= values[3];
+				if(aux.contains("M2=")){
+					String[] arr=aux.split("M2=");
+					aux= arr[1].trim();
+					aux=aux.replace(",", "");
+					aux=aux.replace("'", "");
+					arr= aux.split(" ");
+					d.setUnidadAduana("04");
+					double cantidadAduana= Double.parseDouble(arr[0]);
+					d.setCantidadAduana(cantidadAduana);
+					d.setValorUnitAduana(d.getImporte()/cantidadAduana);
+				}
+			}else{
+				//meter aquí la condición de los clienteses
+				if(this.getNombreReceptor().contains("TEXENE")){
+					String aux= values[3];
+					if(aux.contains("KG=")){
+						String[] arr=aux.split("KG=");
+						aux= arr[1].trim();
+						aux=aux.replace(",", "");
+						aux=aux.replace("'", "");
+						arr= aux.split(" ");
+						d.setUnidadAduana("01");
+						double cantidadAduana= Double.parseDouble(arr[0]);
+						d.setCantidadAduana(cantidadAduana);
+						d.setValorUnitAduana(d.getImporte()/cantidadAduana);
+					}
+				}else if(this.getNombreReceptor().contains("COVALENCE")){
+					String aux= values[3];
+					if(aux.contains("M2=")){
+						String[] arr=aux.split("M2=");
+						aux= arr[1].trim();
+						aux=aux.replace(",", "");
+						aux=aux.replace("'", "");
+						arr= aux.split(" ");
+						d.setUnidadAduana("04");
+						double cantidadAduana= Double.parseDouble(arr[0]);
+						d.setCantidadAduana(cantidadAduana);
+						d.setValorUnitAduana(d.getImporte()/cantidadAduana);
+					}
+				}
+			}
+			
 			String desc = d.getDescripcion();
 			desc += " " + values[3];
 			d.setDescripcion(desc);
-			d.setDescripcion( d.getDescripcion().
-					replace(" LOS BIENES QUE AMPARA ESTA FACTURA SON PAGADOS EN UNA SOLA EXHIBICIÓN", ""));
+			
+			if(d.getDescripcion().contains("PAGADOS EN UNA SOLA")){
+				d.setDescripcion( d.getDescripcion().
+						replace(" LOS BIENES QUE AMPARA ESTA FACTURA SON PAGADOS EN UNA SOLA EXHIBICIÓN", ""));
+				if(d.getClave().contains("ALWCAS")&& this.conceptos.size()>1){
+					
+					this.descuento= d.getImporte()+"";
+					this.conceptos.remove(d);
+				}
+			}
 		}
 
 	}
@@ -887,5 +939,14 @@ public class Datos {
 	public void setUuidRelacionado(String uuidRelacionado) {
 		this.uuidRelacionado = uuidRelacionado;
 	}
+
+	public String getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(String descuento) {
+		this.descuento = descuento;
+	}
+	
 	
 }

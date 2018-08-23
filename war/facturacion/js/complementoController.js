@@ -9,6 +9,7 @@ app.controller("complementoController",['serialService', 'comprobanteService33',
 //	$scope.resta= $scope.complementoPagos.pago[0].doctoRelacionado[0].impSaldoAnt*1-$scope.complementoPagos.pago[0].monto*1;
 	
 	$scope.addDoc=function(){
+		
 		 var doc={
       	   idDocumento : "",
       	   serie : null,
@@ -57,7 +58,7 @@ app.controller("complementoController",['serialService', 'comprobanteService33',
 		
 			$scope.cfdiParaPago.conceptos.concepto=[];
 			var send={cfdi:$scope.cfdiParaPago,
-					email:$scope.comprobante.email,
+//					email:$scope.comprobante.email,
 					complementoPagos:$scope.complementoPagos,
 					serie:$scope.serialElegido
 			}

@@ -710,6 +710,7 @@ app.controller("comprobante33", [ '$scope', '$location', 'comprobanteService33',
 			var valorUnitario= $scope.concepto.valorUnitario;
 			var unidad= $scope.concepto.unidad
 			var noIdentificacion=$scope.concepto.noIdentificacion;
+			var descuento= concepto.descuento;
 			concepto={
 					cantidad:cantidad,
 					importe:importe,
@@ -726,6 +727,9 @@ app.controller("comprobante33", [ '$scope', '$location', 'comprobanteService33',
 
 					}
 			} 
+			if(descuento){
+				concepto.descuento=descuento*1;
+			}
 			var trasladoIVA=comprobanteService33.getTraslado();
 						
 			if($scope.ivaIncluido){
@@ -1025,10 +1029,12 @@ app.controller("comprobante33", [ '$scope', '$location', 'comprobanteService33',
 		
 		$scope.getSubtotal = function(arregloConcepto) {
 			if (arregloConcepto != undefined && arregloConcepto != null) {
+				$scope.totalDescuento=0;
 				var tamArreglo = arregloConcepto.length;
 				var i, subtotal = 0.0;
 				for (i = 0; i < tamArreglo; i++) {
 					subtotal += arregloConcepto[i].importe;
+					$scope.totalDescuento+= arregloConcepto[i].descuento;
 				}
 				if($scope.ivaIncluido) {
 //					subtotal = subtotal +0.01;
@@ -1040,7 +1046,13 @@ app.controller("comprobante33", [ '$scope', '$location', 'comprobanteService33',
 		
 		$scope.actualizaTotal=function(){
 			$scope.comprobante.total= $scope.comprobante.subTotal-$scope.comprobante.descuento+$scope.comprobante.impuestos.totalImpuestosTrasladados-$scope.comprobante.impuestos.totalImpuestosRetenidos;
+			
 			$scope.comprobante.total = $scope.comprobante.total.toFixed(2)*1;
+			if($scope.totalDescuento){
+				$scope.comprobante.descuento= $scope.totalDescuento;
+//				$scope.comprobante.total-= $scope.totalDescuento;
+				$scope.comprobante.total = $scope.comprobante.total.toFixed(2)*1;
+			}
 		}
 		
 		$scope.getTotal = function(subtotal, descuentos, impTras, impRet) {

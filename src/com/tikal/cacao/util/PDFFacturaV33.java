@@ -583,7 +583,11 @@ public class PDFFacturaV33 {
 					font3, fraseVendidoA);
 		} else {
 			if (datosExtra != null) {
+				if(datosExtra.getSoldTo()!=null)
 				this.agregarChunkYNuevaLinea("Domicilio: " + datosExtra.getSoldTo().toString(), font3, fraseVendidoA);
+				else{
+					return ;
+				}
 			}
 		}
 		PdfPCell subCeldaVendidoA = new PdfPCell();
@@ -1128,6 +1132,11 @@ public class PDFFacturaV33 {
 				.getTraslado();
 		boolean existeIVATraslado = false;
 		double importe = 0.0;
+		if(comprobante.getDescuento()!=null){
+			agregarCeldaConFondo("Descuento", fontHead, subTablaEtqTotal, true);
+			PdfPCell celdaDescuento = new PdfPCell(subTablaEtqTotal);
+			celdaDescuento.setHorizontalAlignment(Element.ALIGN_CENTER);
+		}
 		if (traslados.size() > 0) {
 			if (traslados.get(0).getImpuesto().getValor().contentEquals("002")) {
 				existeIVATraslado = true;
@@ -1140,20 +1149,26 @@ public class PDFFacturaV33 {
 
 		boolean existeISR = agregarEtiquetaRetenciones(comprobante.getImpuestos().getRetenciones(), subTablaEtqTotal);
 
+		
+		
 		agregarCeldaConFondo("Total", fontHead, subTablaEtqTotal, true);
 		PdfPCell celdaTablaEtqTotal = new PdfPCell(subTablaEtqTotal);
 		celdaTablaEtqTotal.setHorizontalAlignment(Element.ALIGN_CENTER);
-		tablaLeyendaTotal.addCell(celdaTablaEtqTotal);
+//		tablaLeyendaTotal.addCell(celdaTablaEtqTotal);
 
 		PdfPTable subTablaValoresTotal = new PdfPTable(1);
 		agregarCelda(formatter.format(comprobante.getSubTotal().doubleValue()), font3, subTablaValoresTotal, true);
-
+		if(comprobante.getDescuento()!=null){
+			agregarCelda(formatter.format(comprobante.getDescuento().doubleValue()), font3, subTablaValoresTotal, true);
+	
+		}
 		if (existeIVATraslado) {
 			agregarCelda(formatter.format(importe), font3, subTablaValoresTotal, true);
 		} else {
 			subTablaValoresTotal.addCell(emptyCell);
 		}
 
+		
 		if (existeISR) {
 			List<Retencion> listaRetencion = comprobante.getImpuestos().getRetenciones().getRetencion();
 			double importeISR = 0.0;
@@ -1167,11 +1182,17 @@ public class PDFFacturaV33 {
 			agregarCelda(formatter.format(importeISR), font3, subTablaValoresTotal, true);
 		}
 
+		
+		
 		agregarCelda(formatter.format(comprobante.getTotal().doubleValue()), font3, subTablaValoresTotal, true);
 		PdfPCell celdaTablaValoresTotal = new PdfPCell(subTablaValoresTotal);
 		celdaTablaValoresTotal.setHorizontalAlignment(Element.ALIGN_CENTER);
-		tablaLeyendaTotal.addCell(celdaTablaValoresTotal);
+		
 
+
+		tablaLeyendaTotal.addCell(subTablaEtqTotal);
+		tablaLeyendaTotal.addCell(celdaTablaValoresTotal);
+		
 		document.add(tablaLeyendaTotal);
 	}
 
@@ -1259,7 +1280,11 @@ public class PDFFacturaV33 {
 		CfdiRelacionados rs=c.getCfdiRelacionados();
 		for(CfdiRelacionado r: rs.getCfdiRelacionado()){
 			agregarCelda(r.getUUID(), fontConceptos, tablaIVA, true);
-			agregarCelda("01 - Nota de crédito de los documentos relacionados", fontConceptos, tablaIVA, true);
+			if(c.getDescuento()==null){
+				agregarCelda("01 - Nota de crédito de los documentos relacionados", fontConceptos, tablaIVA, true);
+			}else{
+				agregarCelda("07 - CFDI por aplicación de anticipo", fontConceptos, tablaIVA, true);
+			}
 		}
 		
 		document.add(tablaIVA);

@@ -219,7 +219,6 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		for (com.tikal.cacao.model.Concepto conce : cps.getConceptos()) {
 			mapa.put(conce.getNoIdentificacion(), conce);
 		}
-
 		float total = 0;
 		for (DatosConcepto d : f.getConceptos()) {
 			Comprobante.Conceptos.Concepto con = new Comprobante.Conceptos.Concepto();
@@ -228,7 +227,12 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			if(conce==null){
 				return "No se encontró el concepto: "+d.getClave();
 			}
-			con.setCantidad(Util.redondearBigD(new BigDecimal(d.getCantidad()).setScale(2, RoundingMode.FLOOR), 2));
+			
+			if(f.getRFC().compareTo("MME080729180")==0){
+				con.setCantidad(Util.redondearBigD(new BigDecimal(d.getCantidad()).setScale(3, RoundingMode.HALF_UP), 3));
+			}else{
+				con.setCantidad(Util.redondearBigD(new BigDecimal(d.getCantidad()).setScale(2, RoundingMode.HALF_UP), 2));
+			}
 			con.setClaveProdServ(conce.getClaveProdServ());
 			con.setUnidad(d.getUnidadMed());
 			con.setClaveUnidad(new C_ClaveUnidad(conce.getClaveUnidad()));
@@ -239,7 +243,9 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			con.setNoIdentificacion(d.getClave());
 			
 			if (conce.getUnidadAduana() != null) {
-				d.setUnidadAduana(conce.getUnidadAduana());
+				if(d.getUnidadAduana()==null){
+					d.setUnidadAduana(conce.getUnidadAduana());
+				}
 			} else if (f.getRFC().compareTo("XEXX010101000") == 0) {
 				return "No se encontró la unidad de aduana en el concepto " + con.getNoIdentificacion();
 			}
@@ -260,20 +266,59 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			traslado.setTipoFactor(new C_TipoFactor("Tasa"));
 			traslados.getTraslado().add(traslado);
 			impuestos.setTraslados(traslados);
-			con.setImpuestos(impuestos);
+			
 
 			total += d.getValorUnit() * d.getCantidad();
+			
+			f.setSubtotal(total);
+			con.setImpuestos(impuestos);
 			conceptos.getConcepto().add(con);
 			// t.getTraslado().add(traslado);
 
 		}
+		
+		if(f.getDescuento()!=null){
+			double descuento= Double.parseDouble(f.getDescuento());
+			c.setDescuento(Util.redondearBigD(new BigDecimal(descuento),2));
+			double porcientoDes= descuento/total;
+			
+			for(Concepto con: conceptos.getConcepto()){
+				double descuentin = con.getImporte().doubleValue()* porcientoDes;
+				descuento = descuento - descuentin;
+				con.setDescuento(Util.redondearBigD(new BigDecimal(descuentin), 2));
+				con.getImpuestos().getTraslados().getTraslado().get(0).setBase(Util.redondearBigD(new BigDecimal(con.getImporte().doubleValue() -descuentin), 2));
+				con.getImpuestos().getTraslados().getTraslado().get(0).setImporte(Util.redondearBigD(new BigDecimal((con.getImporte().doubleValue() -descuentin)* 0.16), 2));
+			}
+			if(descuento != 0){
+				Concepto con= conceptos.getConcepto().get(conceptos.getConcepto().size()-1);
+				double descuentin= con.getDescuento().doubleValue();
+				descuentin+= descuento;
+				con.setDescuento(Util.redondearBigD(new BigDecimal(descuentin), 2));
+				con.getImpuestos().getTraslados().getTraslado().get(0).setBase(Util.redondearBigD(new BigDecimal(con.getImporte().doubleValue() -descuentin), 2));
+				con.getImpuestos().getTraslados().getTraslado().get(0).setImporte(Util.redondearBigD(new BigDecimal((con.getImporte().doubleValue() -descuentin)* 0.16), 2));
+			}
+			
+//			total -= descuento;
+//			traslado.setBase(Util.redondearBigD(new BigDecimal(con.getImporte().doubleValue() -descuento), 2));
+//			traslado.setImporte(Util.redondearBigD(new BigDecimal((con.getImporte().doubleValue() -descuento)* 0.16), 2));
+//			con.setDescuento(Util.redondearBigD(new BigDecimal(descuento),2));
+			
+//			f.setSubtotal(total);
+			CfdiRelacionados cr= new Comprobante.CfdiRelacionados();
+			cr.setTipoRelacion(C_TipoRelacion.CFDI_POR_APLICACION_DE_ANTICIPO);
+			CfdiRelacionado crel= new Comprobante.CfdiRelacionados.CfdiRelacionado();
+			crel.setUUID(f.getUuidRelacionado());
+			cr.getCfdiRelacionado().add(crel);
+			c.setCfdiRelacionados(cr);
+		}
+		
 
 		c.setConceptos(conceptos);
 		Comprobante.Impuestos.Traslados trask = new Comprobante.Impuestos.Traslados();
 		Comprobante.Impuestos.Traslados.Traslado trasl = new Comprobante.Impuestos.Traslados.Traslado();
 		BigDecimal importeTras = new BigDecimal( Util.redondear( f.getImp() ) );
 		importeTras = Util.redondearBigD(importeTras, 2);
-		trasl.setImporte(Util.redondearBigD(importeTras, 6));
+		trasl.setImporte(Util.redondearBigD(importeTras, 2));
 		trasl.setImpuesto(new C_Impuesto("002"));
 		trasl.setTipoFactor(new C_TipoFactor("Tasa"));
 		if (tipo == 0) {
@@ -295,6 +340,9 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		c.setSubTotal(Util.redondearBigD(new BigDecimal(f.getSubtotal()), 2));
 
 		BigDecimal sumaTotal = c.getSubTotal().add( c.getImpuestos().getTotalImpuestosTrasladados() );
+		if(f.getDescuento()!=null){
+			sumaTotal=sumaTotal.subtract(c.getDescuento());
+		}
 		if (c.getTotal().compareTo(sumaTotal) != 0) {
 			c.setTotal(sumaTotal);
 		}
@@ -303,6 +351,7 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			this.agregarComercioExterno(c, f);
 		}
 
+		
 		ComprobanteVO vo = new ComprobanteVO();
 		vo.setComprobante(c);
 
@@ -324,8 +373,8 @@ public class FacturacionMultipleServlet extends HttpServlet {
 		
 		this.addAddenda(c, f);
 
+		//Timbrado del comprobante
 		String respuesta = servicioFact.timbrar(vo, sesion, true, extra);
-		// facturarenglondao.eliminar(f.getId());
 		RegistroBitacora bit = new RegistroBitacora();
 		bit.setEvento(f.getSerie()+f.getFolio()+ " "+respuesta);
 		bit.setTipo("Operacional");
@@ -396,7 +445,6 @@ public class FacturacionMultipleServlet extends HttpServlet {
 				(mx.gob.sat.comercioexterior11.ComercioExterior.Emisor.Domicilio) domdao.get(d.getRfcEmisor()));
 		com.setEmisor(emisor);
 		
-//		emisor.getDomicilio().setLocalidad(null);
 
 		mx.gob.sat.comercioexterior11.ComercioExterior.Receptor receptor = of.createComercioExteriorReceptor();
 		mx.gob.sat.comercioexterior11.ComercioExterior.Receptor.Domicilio domrec = of
@@ -427,7 +475,13 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			DatosConcepto de = d.getConceptos().get(i);
 
 			Mercancia m = of.createComercioExteriorMercanciasMercancia();
-			m.setCantidadAduana(Util.redondearBigD(conc.getCantidad(), 2));
+			if(de.getCantidadAduana()==0){
+				m.setCantidadAduana(Util.redondearBigD(conc.getCantidad(), 2));
+				m.setValorUnitarioAduana(Util.redondearBigD(conc.getValorUnitario(), 2));
+			}else{
+				m.setCantidadAduana(Util.redondearBigD(new BigDecimal(de.getCantidadAduana()), 2));
+				m.setValorUnitarioAduana(Util.redondearBigD(new BigDecimal(de.getValorUnitAduana()), 2));
+			}
 			m.setFraccionArancelaria(new C_FraccionArancelaria(de.getFraccionArancelaria()));
 			m.setNoIdentificacion(conc.getNoIdentificacion());
 			String cua = de.getUnidadMed();
@@ -436,7 +490,6 @@ public class FacturacionMultipleServlet extends HttpServlet {
 			}
 			m.setUnidadAduana(CUnidadAduana.fromValue(de.getUnidadAduana()));
 			m.setValorDolares(Util.redondearBigD(conc.getImporte(), 2));
-			m.setValorUnitarioAduana(Util.redondearBigD(conc.getValorUnitario(), 2));
 			lista.add(m);
 			// m.setCantidadAduana(con.getCantidad());
 			// m.setFraccionArancelaria();

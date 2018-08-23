@@ -6,8 +6,11 @@ public class DatosConcepto {
 		//private String idUnicoInterno;
 		private String clave;
 		private double cantidad;
+		private double cantidadAduana;
 		private String descripcion;
 		private double valorUnit;
+		private double valorDolares;
+		private double valorUnitAduana;
 		private double importe;
 		private String unidadMed;
 		private int categoria; //categoria
@@ -66,6 +69,24 @@ public class DatosConcepto {
 		}
 		public void setUnidadAduana(String unidadAduana) {
 			this.unidadAduana = unidadAduana;
+		}
+		public double getCantidadAduana() {
+			return cantidadAduana;
+		}
+		public void setCantidadAduana(double cantidadAduana) {
+			this.cantidadAduana = cantidadAduana;
+		}
+		public double getValorDolares() {
+			return valorDolares;
+		}
+		public void setValorDolares(double valorDolares) {
+			this.valorDolares = valorDolares;
+		}
+		public double getValorUnitAduana() {
+			return valorUnitAduana;
+		}
+		public void setValorUnitAduana(double valorUnitAduana) {
+			this.valorUnitAduana = valorUnitAduana;
 		}
 
 		

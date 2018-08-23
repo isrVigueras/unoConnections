@@ -24,8 +24,8 @@
 		
 		<!-- Development Driver -->
 <!-- 		<property name="driverClassName" value="com.mysql.jdbc.Driver" /> -->
-<!-- 		<property name="url" value="jdbc:mysql://192.168.100.11:3306/catalogos" /> -->
-<!-- 		<property name="username" value="felipe" />  -->
+<!-- 		<property name="url" value="jdbc:mysql://192.168.100.200:3306/catalogos" /> -->
+<!-- 		<property name="username" value="admin" />  -->
 <!-- 		<property name="password" value="123456"/> -->
 		
 		<property name="validationQuery" value="SELECT 1"/>
@@ -143,8 +143,7 @@
 	<!-- <bean class="com.tikal.cacao.springController.EmpleadosController"></bean> -->
 	<!-- <bean class="com.tikal.cacao.springController.RegimenController"></bean> -->
 	<!-- <bean class="com.tikal.cacao.springController.PruebaController"></bean> -->
-	<!-- <context:component-scan base-package="com.tikal.cacao.sat.calculos" 
-		/> -->
+	<!-- <context:component-scan base-package="com.tikal.cacao.sat.calculos"/> -->
 	<!-- Register Bean for Objectify's Entities -->
 	<bean class="com.tikal.cacao.util.EntityRegister" scope="singleton"></bean>
 	<bean class="com.tikal.cacao.util.TDESEncrypter" scope="singleton"/>

@@ -89,4 +89,7 @@ app.controller('headerController',['$scope','$rootScope','$location','$http','em
 		});
 	};
 	
+	
+	$rootScope.nombreEmpresa= $cookieStore.get('nombreEmpresa');
+	
 }]);

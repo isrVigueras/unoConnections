@@ -83,7 +83,7 @@ public class ComplementoPagoController {
 			pago.getDoctoRelacionado().get(0).setFolio(c.getFolio());
 			pago.getDoctoRelacionado().get(0).setSerie(c.getSerie());
 			Complemento complemento= new Comprobante.Complemento();
-			c.setFecha(pago.getFechaPago());
+//			c.setFecha(pago.getFechaPago());
 			RespuestaWebServicePersonalizada respuesta=	pagoService.timbrar(cVO, c, cVO.getUuid());
 			
 			
@@ -108,20 +108,22 @@ public class ComplementoPagoController {
 	
 	
 	@RequestMapping(value={"timbrarManual"}, method= RequestMethod.POST, consumes="application/json")
-	public void timbrar2(HttpServletResponse res, HttpServletRequest req, @RequestBody String json) throws UnsupportedEncodingException{
+	public void timbrar2(HttpServletResponse res, HttpServletRequest req, @RequestBody String json) throws IOException{
 			AsignadorDeCharset.asignar(req, res);
 			ComprobanteConComplementoPagosVO cVO=(ComprobanteConComplementoPagosVO) JsonConvertidor.fromJson(json, ComprobanteConComplementoPagosVO.class);
 			
 			Comprobante c= this.nuevoComplemento(cVO.getCfdi());
 			
 			Pagos complementoPagos= cVO.getComplementoPagos();
+			
 			Pago pago=complementoPagos.getPago().get(0);
 			Complemento complemento= new Comprobante.Complemento();
-			c.setFecha(pago.getFechaPago());
+//			c.setFecha(pago.getFechaPago());
 			c.setSerie(cVO.getSerie().getSerie());
 			RespuestaWebServicePersonalizada respuesta=	pagoService.timbrar(cVO, c, cVO.getUuid());
 			
-			System.out.println(respuesta.getMensajeRespuesta());
+			res.getWriter().print(respuesta.getMensajeRespuesta());
+			System.out.print(respuesta);
 	}
 	
 	@RequestMapping(value = "/consultar/{rfc}/{page}", method = RequestMethod.GET)

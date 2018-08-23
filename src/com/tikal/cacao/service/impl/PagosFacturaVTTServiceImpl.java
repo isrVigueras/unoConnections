@@ -186,20 +186,20 @@ public class PagosFacturaVTTServiceImpl implements PagosFacturaVTTService {
 			else {
 				RespuestaWebServicePersonalizada respuesta=Util.construirMensajeError(respuestaWB);
 				RegistroBitacora br = new RegistroBitacora();
-				br.setEvento(respuesta.getMensajeRespuesta());
+				br.setEvento(respuesta.getMensajeRespuesta()+ "xml= "+ xmlCFDIPago);
 				br.setFecha(new Date());
 				br.setTipo("Operativo");
-				br.setUsuario("Usuario");
+				br.setUsuario("Usuario 1");
 				bitacoradao.addReg(br);
 				return respuesta;
 			}
 		} else {
 			RespuestaWebServicePersonalizada respuesta=Util.construirMensajeError(respuestaWB);
 			RegistroBitacora br = new RegistroBitacora();
-			br.setEvento(respuesta.getMensajeRespuesta());
+			br.setEvento(respuesta.getMensajeRespuesta()+ "xml= "+ xmlCFDIPago);
 			br.setFecha(new Date());
 			br.setTipo("Operativo");
-			br.setUsuario("Usuario");
+			br.setUsuario("Usuario 2");
 			bitacoradao.addReg(br);
 			return respuesta;
 		}

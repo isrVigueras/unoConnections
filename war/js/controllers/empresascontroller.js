@@ -279,6 +279,7 @@ app.controller("empresasDetailsController", [ '$scope', '$http', '$location',
 				$rootScope.nombreEmpresa=$scope.empresa.nombre;
 				$cookies.rfcEmpresa=$rootScope.rfc;
 				$cookieStore.put('rfcEmpresa',$scope.empresa.RFC);
+				$cookieStore.put('nombreEmpresa',$scope.empresa.nombre);
 				$scope.regimenes=data[1];
 //				console.log($scope.regimenes);
 			});

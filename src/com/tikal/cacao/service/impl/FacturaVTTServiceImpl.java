@@ -547,7 +547,12 @@ public class FacturaVTTServiceImpl implements FacturaVTTService {
 				facturaVTTDAO.guardar(facturaTimbrada);
 				this.crearReporteRenglon(facturaTimbrada, comprobante.getMetodoPago(), comprobante.getTipoDeComprobante().getValor());
 
-				EmailSender mailero = new EmailSender();
+				UsoDeCFDI usoCFDIHB = usoDeCFDIDAO.consultarPorId(cfdiTimbrado.getReceptor().getUsoCFDI().getValor());
+				RegimenFiscal regimenFiscal = regimenFiscalDAO.consultarPorId(cfdiTimbrado.getEmisor().getRegimenFiscal().getValor());
+				FormaDePago formaDePago = formaDePagoDAO.consultar(cfdiTimbrado.getFormaPago().getValor());
+				TipoDeComprobante tipoDeComprobante = tipoDeComprobanteDAO.consultar(cfdiTimbrado.getTipoDeComprobante().getValor());
+				
+				EmailSender mailero = new EmailSender(usoCFDIHB.getDescripcion(), regimenFiscal.getDescripcion(), formaDePago.getDescripcion(), tipoDeComprobante.getDescripcion());
 				Imagen imagen = imagenDAO.get(cfdiTimbrado.getEmisor().getRfc());
 				if (email != null) {
 					mailero.enviaFactura(email, facturaTimbrada, "", imagen, cfdiTimbrado);

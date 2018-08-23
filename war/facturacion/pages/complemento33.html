@@ -14,7 +14,7 @@
 				y Hora de Expedici&oacute;n:</label>
 			<div class="col-10">
 				<input class="form-control facInp" type="date" value="" id="fecha"
-					ng-model="complementoPagos.pago[0].fechaPago">
+					ng-model="cfdiParaPago.fecha">
 			</div>
 		</div>
 		<div class="form-group ">
@@ -70,6 +70,14 @@
 			</div>
 		</div>
 		<div class="col-md-3">
+			<label for="example-text-input" class="col-2 col-form-label">*Fecha
+				de Pago:</label>
+			<div class="col-10">
+				<input class="form-control facInp" type="date" value="" id="fecha"
+					ng-model="complementoPagos.pago[0].fechaPago">
+			</div>
+		</div>
+		<div class="col-md-3">
 			<label for="example-text-input" class="col-2 col-form-label">Moneda*:</label>
 			<div class="col-10">
 				<input class="form-control facInp" type="text" value="MXN"
@@ -77,10 +85,31 @@
 			</div>
 		</div>
 		<div class="col-md-3">
+			<label for="example-text-input" class="col-2 col-form-label">Tipo de Cambio:</label>
+			<div class="col-10">
+				<input class="form-control facInp" type="text" id="monto"
+					ng-model="complementoPagos.pago[0].tipoCambioP">
+			</div>
+		</div>
+		<div class="col-md-3">
 			<label for="example-text-input" class="col-2 col-form-label">Monto*:</label>
 			<div class="col-10">
 				<input class="form-control facInp" type="text" id="monto"
 					ng-model="complementoPagos.pago[0].monto">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<label for="example-text-input" class="col-2 col-form-label">N&uacute;mero de Operaci&oacute;n:</label>
+			<div class="col-10">
+				<input class="form-control facInp" type="text" id="monto"
+					ng-model="complementoPagos.pago[0].numOperacion">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<label for="example-text-input" class="col-2 col-form-label">Nombre Banco Ordenante:</label>
+			<div class="col-10">
+				<input class="form-control facInp" type="text" id="monto"
+					ng-model="complementoPagos.pago[0].nomBancoOrdExt">
 			</div>
 		</div>
 		<div class="col-md-3">
@@ -152,6 +181,14 @@
 			<div class="col-10">
 				<input class="form-control facInp" type="text"
 					ng-model="doctoRelacionado.monedaDR.valor">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<label for="example-text-input" class="col-2 col-form-label">Tipo de Cambio
+				:</label>
+			<div class="col-10">
+				<input class="form-control facInp" type="text"
+					ng-model="doctoRelacionado.tipoCambioDR">
 			</div>
 		</div>
 		<div class="col-md-3">

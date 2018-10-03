@@ -114,75 +114,76 @@ public class Datos {
 		String[] rengs = info.split("\n");
 
 		for (String reng : rengs) {
-			String head = reng.substring(0, reng.indexOf("|"));
-			switch (head) {
-			case "01": {
-				this.parsea01(reng);
-				break;
-			}
-			case "01A": {
-				this.parsea01A(reng);
-				break;
-			}
-			case "02": {
-				this.parsea02(reng);
-				break;
-			}
-			case "03": {
-				this.parsea03(reng);
-				break;
-			}
-			case "04":{
-				this.parsea04(reng);
-				break;
-			}
-			case "05": {
-				this.parsea05(reng);
-				break;
-			}
-			case "06": {
-				this.parsea06(reng);
-				break;
-			}
-			case "09": {
-				this.parsea09(reng);
-				break;
-			}
-			case "10": {
-				this.parsea10(reng);
-				break;
-			}
-			case "12": {
-				this.parsea12(reng);
-				break;
-			}
-			case "14": {
-				this.parsea14(reng);
-				break;
-			}
-			case "99": {
-				String[] values = reng.split("\\|");
-				this.trimear(values);
-				this.numLineas = Integer.parseInt(values[1]);
-				if (values.length >= 3) {
-					this.usoCFDI = values[2].split("-")[0].trim();
-					if (this.usoCFDI.length() < 3) {
+			if(reng.contains("|")){
+				String head = reng.substring(0, reng.indexOf("|"));
+				switch (head) {
+				case "01": {
+					this.parsea01(reng);
+					break;
+				}
+				case "01A": {
+					this.parsea01A(reng);
+					break;
+				}
+				case "02": {
+					this.parsea02(reng);
+					break;
+				}
+				case "03": {
+					this.parsea03(reng);
+					break;
+				}
+				case "04":{
+					this.parsea04(reng);
+					break;
+				}
+				case "05": {
+					this.parsea05(reng);
+					break;
+				}
+				case "06": {
+					this.parsea06(reng);
+					break;
+				}
+				case "09": {
+					this.parsea09(reng);
+					break;
+				}
+				case "10": {
+					this.parsea10(reng);
+					break;
+				}
+				case "12": {
+					this.parsea12(reng);
+					break;
+				}
+				case "14": {
+					this.parsea14(reng);
+					break;
+				}
+				case "99": {
+					String[] values = reng.split("\\|");
+					this.trimear(values);
+					this.numLineas = Integer.parseInt(values[1]);
+					if (values.length >= 3) {
+						this.usoCFDI = values[2].split("-")[0].trim();
+						if (this.usoCFDI.length() < 3) {
+							throw new DatosTxtException("¡Advertencia! No se indica el Uso de CFDI. "
+									+ "Debe eliminar este registro y volver a cargar el archivo con el Uso de CFDI. "
+									+ "Factura: " + this.getSerie() + this.getFolio());
+						}
+						if(values.length>=4){
+							this.uuidRelacionado = values[3].trim();
+						}
+					} else {
 						throw new DatosTxtException("¡Advertencia! No se indica el Uso de CFDI. "
 								+ "Debe eliminar este registro y volver a cargar el archivo con el Uso de CFDI. "
 								+ "Factura: " + this.getSerie() + this.getFolio());
 					}
-					if(values.length>=4){
-						this.uuidRelacionado = values[3].trim();
-					}
-				} else {
-					throw new DatosTxtException("¡Advertencia! No se indica el Uso de CFDI. "
-							+ "Debe eliminar este registro y volver a cargar el archivo con el Uso de CFDI. "
-							+ "Factura: " + this.getSerie() + this.getFolio());
+					
 				}
-				
+				}
 			}
-			}
-
 		}
 	}
 
@@ -328,7 +329,7 @@ public class Datos {
 				}
 			}else{
 				//meter aquí la condición de los clienteses
-				if(this.getNombreReceptor().contains("TEXENE")){
+				if(this.getNombreReceptor().contains("TEXENE")||this.getNombreReceptor().contains("COVALENCE")){
 					String aux= values[3];
 					if(aux.contains("KG=")){
 						String[] arr=aux.split("KG=");

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="UTF-8">
+	<title>Facturación</title>
+	<!--Bootstrap-->	
+	
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/estilos.css">
+	<link id="bsdp-css" href="bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!--angular-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.js"></script>
+	<script src="bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+	<script src="bootstrap-datepicker/js/locales/bootstrap-datepicker.es.min.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="js/jspdf.min.js"></script>
+	<script type="text/javascript" src="js/html2canvas.js"></script>
+	<script type="text/javascript" src="js/waiting.js"></script>
+	<!--Controladores de páginas-->
+	<script src="js/controllers/controller.js"></script>
+	<script src="js/controllers/headerController.js"></script>
+	<script src="js/controllers/empresascontroller.js"></script>
+	<script src="js/controllers/esquemascontroller.js"></script>
+	<script src="js/controllers/empleadoscontroller.js"></script>
+	<script src="js/controllers/empresaslistcontroller.js"></script>
+	<script src="js/controllers/clientescontroller.js"></script>
+	<script src="js/controllers/conceptoscontroller.js"></script>
+	<script src="js/controllers/cfdicontroller.js"></script>
+	<script src="js/controllers/serialController.js"></script>
+	<script src="js/controllers/cerController.js"></script>
+	
+	<script src="js/controllers/usuario.js"></script>
+	<script src="js/controllers/perfil.js"></script>
+	<script src="js/controllers/bitacoraController.js"></script>
+	<script src="js/controllers/archivoController.js"></script>
+	<script src="js/controllers/reporteController.js"></script>
+	<script src="js/controllers/factura.js"></script>
+	<script src="js/controllers/facturaController.js"></script>
+	<script src="js/controllers/factura33.js"></script>
+	<script src="js/controllers/complementoPago.js"></script>
+	<script src="facturacion/js/complementoController.js"></script>
+	
+	<script>
+// 			if (location.protocol != 'https:')
+// 			{
+// 			 location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+// 			}
+	</script>
+	
+</head>
+
+<body>
+
+	<header ng-controller="headerController">
+		<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-togle="collapse" data-target="#navegacion-fm">
+						<span class="sr-only">Desplegar /Ocultar Menu</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+				<!--Inicia Menu-->
+				<div class="collapse navbar-collapse" id="navegacion-fm">
+					<ul class="nav navbar-nav">
+						<li><a href="#/login" ng-hide="variable">Login</a></li>
+						<li class="dropdown">
+						<a ng-show="variable" class="dropdown-toggle" data-toggle="dropdown" role="button">
+							Administración <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#/altaperfiles">Alta Perfil</a></li>
+							<li><a href="#/modificarperfiles">Modificar Perfil</a></li>
+							<li><a href="#/altausuarios">Alta Usuario</a></li>
+							<li><a href="#/modificarusuarios">Modificar Usuario</a></li>
+						</ul>					
+						</li>
+						<li><a href="#/empresas/list" ng-show="variable">Empresas</a></li>	
+						<li><a href="" ng-click="CerrarSesion()" ng-show="variable">Cerrar Sesión</a></li>
+						<li class="dropdown" ng-show="variable">
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#" ng-repeat="empresa in empresas" value="{{empresa.empresa.RFC}}">{{empresa.empresa.nombre}}</a></li>																								
+						</ul>
+						</li>		
+						<!-- <li><a href="#/esquemas">Esquemas</a></li>
+						<li><a href="#/empleados">Empleados</a></li> -->	
+<!-- 						<li><a href="#/cfdi">CFDI</a></li>							 -->
+<!-- 						<li><a href="#/cfdisinqr">CFDI sin QR</a></li>			 -->
+<!-- 						<li><a>Pagos</a></li> -->
+					</ul>
+					<ul class="nav navbar-nav navbar-right" ng-show="variable">
+						<li> <select ng-model="empresaElegida">
+							<option>Elija una empresa</option>
+							<option ng-repeat="empresa in empresas" value="{{empresa.empresa.RFC}}">{{empresa.empresa.nombre}}</option>
+						</select> </li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<div ng-view></div>
+</body>
+<footer id="footer" class="clearfix dark">
+
+				<!-- .footer start -->
+				<!-- ================ -->
+	<div class="footer">
+			<div class="footer-content">
+<!-- 				<div class="col-md-offset-4"> -->
+<!-- 					<div class="footer-content"> -->
+<!-- 						<ul class="social-links circle animated-effect-1"> -->
+<!-- 							<li class="col-md-1"><a href="https://www.facebook.com/tikaltecnologias/" target="_blank"><img src="https://cdn-images.mailchimp.com/icons/social-block-v2/outline-color-facebook-96.png" alt="Facebook" width="48" style="width:48px;max-width:48px;display:block"></a></li> -->
+<!-- 							<li class="col-md-1"><a href="https://twitter.com/InfoTikal" target="_blank"><img src="https://cdn-images.mailchimp.com/icons/social-block-v2/outline-color-twitter-96.png" alt="Twitter" width="48" style="width:48px;max-width:48px;display:block"></a></li> -->
+<!-- 							<li class="col-md-1"><a href="http://facturacion.tikal.mx//" target="_blank"><img src="https://cdn-images.mailchimp.com/icons/social-block-v2/outline-color-link-96.png" alt="Website" width="48" style="width:48px;max-width:48px;display:block"></a></li> -->
+<!-- 							<li class="col-md-1"><a href="mailto:info@tikal.mx" target="_blank"><img src="https://cdn-images.mailchimp.com/icons/social-block-v2/outline-color-forwardtofriend-96.png" alt="Email" width="48" style="width:48px;max-width:48px;display:block"></a></li>										 -->
+<!-- 						</ul>	 -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+				<div class="row">
+					<div class="col-md-12">
+						<div class="footer-content">
+							<div class="logo-footer"><img id="logo-footer" src="/images/logo-foot.png" alt=""></div><br><br>	
+							<p class="footertext">&copy; 2017 Derechos Reservados Tikal Tecnolog&iacute;as de la informaci&oacute;n S.A. de C.V.  Toluca, Estado de M&eacute;xico</p>
+						</div>
+					</div>																						
+				</div>
+			</div>
+	</div>
+				<!-- .footer end -->
+</footer>
+</html>

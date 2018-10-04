@@ -1,0 +1,193 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+	<context:component-scan
+		base-package="com.tikal.cacao.springController, com.tikal.cacao.springController.orm,
+		 com.tikal.cacao.sat.calculos, com.tikal.cacao.factura, com.tikal.cacao.factura.ws,
+		 com.tikal.cacao.service.impl" />
+		
+	<!-- Data source Cloud SQL Bean -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<!-- Production GoogleDriver -->
+<!-- 		<property name="driverClassName" value="com.mysql.jdbc.GoogleDriver" /> -->
+<!-- 		<property name="url" value="jdbc:google:mysql://stdsistema2:us-central1:std2sql/catalogos" /> -->
+<!-- 		<property name="username" value="ismael" /> -->
+<!-- 		<property name="password" value="nMVKLZ7yuj" /> -->
+		
+		<!-- Development Driver -->
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://192.168.100.200:3306/catalogos" />
+		<property name="username" value="admin" /> 
+		<property name="password" value="123456"/>
+		
+		<property name="validationQuery" value="SELECT 1"/>
+	</bean>
+	
+	<!-- Hibernate 4 SessionFactory Bean definition -->
+	<bean id="hibernate4AnnotatedSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.tikal.cacao.model.orm.Tipo</value>
+				<value>com.tikal.cacao.model.orm.Division</value>
+				<value>com.tikal.cacao.model.orm.Grupo</value>
+				<value>com.tikal.cacao.model.orm.Clase</value>
+				<value>com.tikal.cacao.model.orm.ProductoOServicio</value>
+				
+				<value>com.tikal.cacao.model.orm.UnidadDeMedida</value>
+				<value>com.tikal.cacao.model.orm.UsoDeCFDI</value>
+				<value>com.tikal.cacao.model.orm.RegimenFiscal</value>
+				<value>com.tikal.cacao.model.orm.FormaDePago</value>
+				<value>com.tikal.cacao.model.orm.Impuesto</value>
+				
+				<value>com.tikal.cacao.model.orm.Moneda</value>
+				<value>com.tikal.cacao.model.orm.TipoDeComprobante</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.show_sql">true</prop> <!-- false in production -->
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="tipoDAOH" class="com.tikal.cacao.dao.sqlimpl.TipoDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="divisionDAOH" class="com.tikal.cacao.dao.sqlimpl.DivisionDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="grupoDAOH" class="com.tikal.cacao.dao.sqlimpl.GrupoDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="claseDAOH" class="com.tikal.cacao.dao.sqlimpl.ClaseDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="productoServicioDAOH" class="com.tikal.cacao.dao.sqlimpl.ProductoOServicioDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="unidadDeMedidaDAOH" class="com.tikal.cacao.dao.sqlimpl.UnidadDeMedidaDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="usoDeCfdiDAOH" class="com.tikal.cacao.dao.sqlimpl.UsoDeCFDIDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="regimenFiscalDAOH" class="com.tikal.cacao.dao.sqlimpl.RegimenFiscalDAOHibernateImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="formaDePagoDAOH" class="com.tikal.cacao.dao.sqlimpl.FormaDePagoHibernateDAOImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="tipoDeComprobanteDAOH" class="com.tikal.cacao.dao.sqlimpl.TipoDeComprobanteHibernateDAOImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="impuestoDAOH" class="com.tikal.cacao.dao.sqlimpl.ImpuestoHibernateDAOImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
+	<bean id="monedaDAOH" class="com.tikal.cacao.dao.sqlimpl.MonedaHibernateDAOImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>	
+	
+	<!-- Beans DAOs GAE storage implementation -->
+	<bean id="empresasdao" class="com.tikal.cacao.dao.impl.EmpresasDAOImpl"></bean>
+	<bean id="regimenesdao" class="com.tikal.cacao.dao.impl.RegimenesDAOImpl"></bean>
+	<bean id="employeedao" class="com.tikal.cacao.dao.impl.EmpleadosDAOImpl"></bean>
+	<bean id="tarifasdao" class="com.tikal.cacao.dao.impl.TarifasDAOImpl"></bean>
+	<bean id="pagosdao" class="com.tikal.cacao.dao.impl.PagosDAOImpl"></bean>
+	<bean id="tipoDeducciondao" class="com.tikal.cacao.dao.impl.TipoDeduccionDAOImpl"></bean>
+	<bean id="tipoPercepciondao" class="com.tikal.cacao.dao.impl.TipoPercepcionDAOImpl"></bean>
+	<bean id="tipoRegimenCdao" class="com.tikal.cacao.dao.impl.TipoRegimenContratacionDAOImpl"></bean>
+	<bean id="cpTipoPercepciondao"
+		class="com.tikal.cacao.dao.impl.ContabilidadPropiaTipoPercepcionDAOImpl"></bean>
+	<bean id="cpTipoDeducciondao"
+		class="com.tikal.cacao.dao.impl.ContabilidadPropiaTipoDeduccionDAOImpl"></bean>
+	<bean class="com.tikal.cacao.dao.impl.BitacoraDAOImp"></bean>
+	<bean class="com.tikal.cacao.dao.impl.ContadorEmpleadosDAOImpl"></bean>
+	<bean class="com.tikal.cacao.dao.impl.FacturaDAOImpl"></bean>
+	<bean class="com.tikal.cacao.dao.impl.EmisorDAOImpl"></bean>
+	<bean class="com.tikal.cacao.dao.impl.ConceptosDAOImp"></bean>
+	<bean class="com.tikal.cacao.dao.impl.SerialDAOImp"></bean>
+	<bean class="com.tikal.cacao.dao.impl.ImagenDAOImp"/>
+	<bean class="com.tikal.cacao.dao.impl.ReporteRenglonDAOImpl"/>
+	<bean class="com.tikal.cacao.dao.impl.ComplementoRenglonDAOImp"/>
+	<bean class="com.tikal.cacao.dao.impl.ListaDeClavesDeClasesDAOImpl" />
+	<bean class="com.tikal.cacao.dao.impl.FacturaVttDAOImpl" />
+	<bean class="com.tikal.cacao.dao.impl.PagosFacturaVttDAOImp" />
+	<bean class="com.tikal.cacao.dao.impl.DatosDAOImp" />
+	<bean class="com.tikal.cacao.dao.impl.DomicilioCEDAOImp" />
+
+	<!-- Spring Controllers -->
+	<!-- <bean class="com.tikal.cacao.springController.EmpresasController"></bean> -->
+	<!-- <bean class="com.tikal.cacao.springController.EmpleadosController"></bean> -->
+	<!-- <bean class="com.tikal.cacao.springController.RegimenController"></bean> -->
+	<!-- <bean class="com.tikal.cacao.springController.PruebaController"></bean> -->
+	<!-- <context:component-scan base-package="com.tikal.cacao.sat.calculos"/> -->
+	<!-- Register Bean for Objectify's Entities -->
+	<bean class="com.tikal.cacao.util.EntityRegister" scope="singleton"></bean>
+	<bean class="com.tikal.cacao.util.TDESEncrypter" scope="singleton"/>
+
+	<bean id="usuariodao" class="com.tikal.cacao.security.UsuarioDAOImp"></bean>
+	<bean id="perfildao" class="com.tikal.cacao.security.PerfilDAOImp"></bean>
+	<bean class="com.tikal.cacao.security.CustomUsuarioServicio"></bean>
+
+	<!-- Beans Components -->
+	<!-- <bean class="com.tikal.cacao.sat.calculos.MapaRecursos" scope="singleton"></bean> -->
+	<bean class="com.tikal.cacao.sat.calculos.Nomina" scope="singleton"></bean>
+
+	<bean id="procesadorPSueldos" class="com.tikal.cacao.sat.calculos.ProcesadorSueldos" />
+	<bean id="procesadorPAguinaldo" class="com.tikal.cacao.sat.calculos.ProcesadorAguinaldo" />
+	<bean id="procesadorPGastosMDH"
+		class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionReembolsoGastosMDH" />
+	
+	
+	<bean id="procesadorPContribucionesPagadasPatron" class="com.tikal.cacao.sat.calculos.ProcesadorContribucionesPagadasPorPatron" 
+		/>
+	<bean id="procesadorPPremiosPuntualidad"
+		class="com.tikal.cacao.sat.calculos.ProcesadorPremiosPuntualidad" />
+	<bean id="procesadorPHorasExtra" class="com.tikal.cacao.sat.calculos.ProcesadorHorasExtra" />
+
+	<bean id="procesadorPSeguroVida" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionPrimaSeguroDeVida" 
+		/> <bean id="procesadorPSeguroGMM" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionSeguroGastosMedicosMayores" 
+		/> <bean id="procesadorPCuotaSindical" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionCuotaSindical" 
+		/> <bean id="procesadorPBecas" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionBecas" 
+		/> <bean id="procesadorPPrimaDominical" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionPrimaDominical" 
+		/> <bean id="procesadorPPrimaVacacional" class="com.tikal.cacao.sat.calculos.ProcesadorPrimaVacacional" 
+		/> <bean id="procesadorPReembolsoFuneral" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionReembolsoFuneral" 
+		/> <bean id="procesadorPCuotasIMSSPagadasPatron" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionCuotasIMSSPagadasPatron" 
+		/> <bean id="procesadorPComisiones" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionComisiones" 
+		/> <bean id="procesadorPPremiosAsistencia" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionPremiosAsistencia" 
+		/> <bean id="procesadorPIngresosAsimilados" class="com.tikal.cacao.sat.calculos.ProcesadorPercepcionIngresosAsimiladosASalarios" 
+		/>
+
+
+	<bean id="procesadorDSeguridadSocial"
+		class="com.tikal.cacao.sat.calculos.ProcesadorDeduccionSeguridadSocial" />
+	<bean id="procesadorDISR" class="com.tikal.cacao.sat.calculos.ProcesadorDeduccionISR" />
+	<bean id="procesadorDOtros" class="com.tikal.cacao.sat.calculos.ProcesadorDeduccionOtros" />
+	<bean id="procesadorDIncapacidad" class="com.tikal.cacao.sat.calculos.ProcesadorDeduccionIncapacidad" />
+	<bean id="procesadorDAusentismo" class="com.tikal.cacao.sat.calculos.ProcesadorDeduccionAusentismo" />
+	<mvc:annotation-driven />
+
+</beans>
